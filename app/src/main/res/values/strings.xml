@@ -1,0 +1,20 @@
+<resources>
+    <!-- Log in -->
+    <string name="app_name">Pueblos DB</string>
+    <string name="usuario">Usuario</string>
+    <string name="contraseña">Contraseña</string>
+    <string name="enter">Entrar</string>
+    <string name="no_cuenta_registar">¿No tienes una cuenta?</string>
+    <string name="register">Registrarme</string>
+
+    <!-- Register -->
+
+    <string name="nombres">Nombres</string>
+    <string name="apellidos">Apellidos</string>
+    <string name="crea_usuario">Nombre de Usuario</string>
+    <string name="crea_constraseña">Ingrese una Contraseña</string>
+    <string name="repite_constraseña">Repita la Contraseña</string>
+    <string name="registro_usuario">Registrar un nuevo usuario</string>
+
+    <!-- Home -->
+</resources>

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/light_coffee"
+    tools:context=".RegisterActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout3"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@drawable/rounded_layout_1"
+        app:layout_constraintBottom_toTopOf="@+id/guideline4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <EditText
+            android:id="@+id/nombres"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:background="@drawable/text_input"
+            android:ems="10"
+            android:hint="@string/nombres"
+            android:inputType="text"
+            app:layout_constraintBottom_toTopOf="@+id/apellidos"
+            app:layout_constraintEnd_toEndOf="@id/guideline6"
+            app:layout_constraintStart_toStartOf="@id/guideline5"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/apellidos"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:background="@drawable/text_input"
+            android:ems="10"
+            android:hint="@string/apellidos"
+            android:inputType="text"
+            app:layout_constraintBottom_toTopOf="@+id/usuario"
+            app:layout_constraintEnd_toEndOf="@id/guideline6"
+            app:layout_constraintStart_toStartOf="@id/guideline5"
+            app:layout_constraintTop_toBottomOf="@+id/nombres" />
+
+        <EditText
+            android:id="@+id/usuario"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:background="@drawable/text_input"
+            android:ems="10"
+            android:hint="@string/crea_usuario"
+            android:inputType="text"
+            app:layout_constraintBottom_toTopOf="@+id/contraseña"
+            app:layout_constraintEnd_toEndOf="@id/guideline6"
+            app:layout_constraintStart_toStartOf="@id/guideline5"
+            app:layout_constraintTop_toBottomOf="@+id/apellidos" />
+
+        <EditText
+            android:id="@+id/contraseña"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:background="@drawable/text_input"
+            android:ems="10"
+            android:hint="@string/crea_constraseña"
+            android:inputType="text"
+            app:layout_constraintBottom_toTopOf="@+id/conf_contraseña"
+            app:layout_constraintEnd_toEndOf="@id/guideline6"
+            app:layout_constraintStart_toStartOf="@id/guideline5"
+            app:layout_constraintTop_toBottomOf="@+id/usuario" />
+
+        <EditText
+            android:id="@+id/conf_contraseña"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:background="@drawable/text_input"
+            android:ems="10"
+            android:hint="@string/repite_constraseña"
+            android:inputType="date"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/guideline6"
+            app:layout_constraintStart_toStartOf="@id/guideline5"
+            app:layout_constraintTop_toBottomOf="@+id/contraseña" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.15
+    " />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.85
+    " />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <Button
+        android:id="@+id/crear_registro"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rounded_button_3"
+        android:onClick="Home"
+        android:text="@string/register"
+        android:textColor="@color/blue_sky"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout3" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.85" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
