@@ -24,8 +24,13 @@ public class SelectionActivity extends AppCompatActivity {
         });
     }
 
-    public void Register(View view) {
-        Intent register = new Intent(this, RegisterActivity.class);
-        startActivity(register);
+    public void Member(View view) {
+        Intent member = new Intent(this, RegisterActivity.class);
+        startActivity(member);
+    }
+
+    public void NonMember(View view) {
+        Intent nonMember = new Intent(this, HomeActivity.class);
+        startActivity(nonMember);
     }
 }

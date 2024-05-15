@@ -46,39 +46,43 @@
         android:id="@+id/btnSoyMiembro"
         android:layout_width="0dp"
         android:layout_height="100dp"
+        android:background="@drawable/rounded_button_3"
+        android:onClick="Member"
         android:text="@string/soy_miembro"
-        android:textSize="23sp"
         android:textAllCaps="false"
         android:textColor="@color/black"
-        android:background="@drawable/rounded_button_3"
-        app:layout_constraintTop_toTopOf="@id/backbeige"
+        android:textSize="23sp"
         app:layout_constraintBottom_toTopOf="@id/btnNOSoyMiembro"
         app:layout_constraintEnd_toEndOf="@id/guideline7"
-        app:layout_constraintStart_toStartOf="@id/guideline"/>
+        app:layout_constraintStart_toStartOf="@id/guideline"
+        app:layout_constraintTop_toTopOf="@id/backbeige" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnNOSoyMiembro"
         android:layout_width="0dp"
         android:layout_height="100dp"
+        android:background="@drawable/rounded_button_3"
+        android:onClick="NonMember"
         android:text="@string/no_soy_miembro"
-        android:textSize="23sp"
         android:textAllCaps="false"
         android:textColor="@color/black"
-        android:background="@drawable/rounded_button_3"
-        app:layout_constraintTop_toBottomOf="@+id/btnSoyMiembro"
+        android:textSize="23sp"
         app:layout_constraintBottom_toBottomOf="@id/backbeige"
         app:layout_constraintEnd_toEndOf="@id/guideline7"
-        app:layout_constraintStart_toStartOf="@id/guideline"/>
+        app:layout_constraintStart_toStartOf="@id/guideline"
+        app:layout_constraintTop_toBottomOf="@+id/btnSoyMiembro" />
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="130dp"
         android:layout_height="130dp"
+        android:importantForAccessibility="no"
         app:layout_constraintBottom_toTopOf="@+id/textView"
         app:layout_constraintEnd_toStartOf="@+id/guideline7"
+        app:layout_constraintHorizontal_bias="0.492"
         app:layout_constraintStart_toStartOf="@id/guideline"
         app:layout_constraintTop_toTopOf="@+id/backdarkblue"
-        app:srcCompat="@drawable/logo_cm" />
+        app:srcCompat="@drawable/logocm" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"

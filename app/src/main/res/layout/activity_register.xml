@@ -24,7 +24,7 @@
         android:layout_width="275dp"
         android:layout_height="75dp"
         android:background="@drawable/rounded_button_3"
-        android:onClick="Home"
+        android:onClick="Selection"
         android:text="@string/register"
         android:textColor="@color/white"
         android:textSize="20sp"

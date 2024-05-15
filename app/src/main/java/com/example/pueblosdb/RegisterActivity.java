@@ -24,8 +24,8 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
-    public void Home(View view) {
-        Intent home = new Intent(this, HomeActivity.class);
-        startActivity(home);
+    public void Selection(View view) {
+        Intent selection = new Intent(this, SelectionActivity.class);
+        startActivity(selection);
     }
 }
