@@ -9,12 +9,19 @@
 
     <!-- Register -->
 
+
+    <string name="title_register">¡Registra aquí tus datos!</string>
     <string name="nombres">Nombres</string>
     <string name="apellidos">Apellidos</string>
-    <string name="crea_usuario">Nombre de Usuario</string>
+    <string name="new_correo">Correo electrónico</string>
     <string name="crea_constraseña">Ingrese una Contraseña</string>
     <string name="repite_constraseña">Repita la Contraseña</string>
     <string name="registro_usuario">Registrar un nuevo usuario</string>
 
     <!-- Home -->
+
+    <!-- Selection -->
+    <string name="title_selection">Seleccione su relación con la Comunidad Indígena Muisca de Bosa</string>
+    <string name="soy_miembro">Soy Miembro</string>
+    <string name="no_soy_miembro">NO Soy Miembro</string>
 </resources>
