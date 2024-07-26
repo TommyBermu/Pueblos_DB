@@ -6,4 +6,8 @@
     </style>
 
     <style name="Theme.PueblosDB" parent="Base.Theme.PueblosDB" />
+
+    <style name="Splash.Theme" parent="Theme.PueblosDB">
+        <item name="android:windowBackground">@drawable/splashscreen</item>
+    </style>
 </resources>
