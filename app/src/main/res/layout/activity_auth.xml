@@ -24,7 +24,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:importantForAccessibility="no"
-            app:layout_constraintBottom_toTopOf="@+id/user"
+            app:layout_constraintBottom_toTopOf="@+id/email"
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintEnd_toEndOf="@id/guideline3"
             app:layout_constraintStart_toStartOf="@id/guideline2"
@@ -32,44 +32,35 @@
             app:srcCompat="@drawable/pueblosdb_imagen" />
 
         <EditText
-            android:id="@+id/user"
+            android:id="@+id/email"
             android:layout_width="0dp"
             android:layout_height="48dp"
             android:backgroundTint="@color/light_coffee"
+            android:drawableEnd="@drawable/ic_user"
+            android:drawableTint="@color/light_coffee"
             android:ems="10"
-            android:hint="@string/usuario"
+            android:hint="@string/email"
             android:importantForAutofill="no"
-            android:inputType="text"
+            android:inputType="textEmailAddress"
             android:textAlignment="viewStart"
             app:layout_constraintBottom_toTopOf="@+id/password_container"
             app:layout_constraintEnd_toEndOf="@id/guideline3"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@id/guideline2"
             app:layout_constraintTop_toBottomOf="@+id/imageLogo"
             tools:ignore="TextContrastCheck" />
 
-        <ImageView
-            android:id="@+id/imageUser"
-            android:layout_width="20dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="14dp"
-            android:importantForAccessibility="no"
-            app:layout_constraintEnd_toEndOf="@+id/user"
-            app:layout_constraintTop_toTopOf="@+id/user"
-            app:srcCompat="@drawable/ic_user"
-            app:tint="@color/light_coffee"
-            tools:ignore="ImageContrastCheck" />
-
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/password_container"
             android:layout_width="0dp"
-            android:layout_height="48dp"
+            android:layout_height="58dp"
             app:endIconMode="password_toggle"
             app:endIconTint="@color/light_coffee"
+            app:hintTextColor="@color/light_coffee"
             app:layout_constraintBottom_toTopOf="@+id/enter"
             app:layout_constraintEnd_toEndOf="@id/guideline3"
             app:layout_constraintStart_toStartOf="@id/guideline2"
-            app:layout_constraintTop_toBottomOf="@+id/user">
+            app:layout_constraintTop_toBottomOf="@+id/email">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/password"
@@ -87,8 +78,9 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:background="@drawable/rounded_button_1"
-            android:onClick="Enter"
+            android:onClick="SignIn"
             android:text="@string/enter"
+            android:textColor="@color/dark_blue"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/guideline3"
             app:layout_constraintStart_toStartOf="@id/guideline2"
@@ -127,7 +119,7 @@
         android:layout_width="220dp"
         android:layout_height="48dp"
         android:background="@drawable/rounded_button_2"
-        android:onClick="Register"
+        android:onClick="SignUp"
         android:text="@string/register"
         android:textColor="@color/light_beige"
         app:layout_constraintBottom_toBottomOf="parent"
