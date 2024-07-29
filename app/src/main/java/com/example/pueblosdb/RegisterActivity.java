@@ -14,11 +14,16 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.pueblosdb.clases.Comunero;
+import com.example.pueblosdb.clases.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public class RegisterActivity extends AppCompatActivity {
@@ -26,6 +31,7 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText tv1, tv2, tv3, tv4, tv5;
     private FirebaseAuth mAuth;
     private static final String TAG = "EmailPassword";
+    private final FirebaseFirestore db  = FirebaseFirestore.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,15 +53,14 @@ public class RegisterActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
     }
 
-    public void SignUp(View view) {
+    public void createAccount(View view) {
         try {
-
             String Email = tv3.getText().toString();
 
             String password;
             if (tv4.getText().toString().equals(tv5.getText().toString()))
                 password = tv4.getText().toString();
-            else throw new IllegalArgumentException("Las contraseñas no coinciden"); /* falta colocar que si son diferentes salga el mensaje en tiempo real*/
+            else throw new IllegalArgumentException("Las contraseñas no coinciden");
 
             String name = tv1.getText().toString();
             String surname = tv2.getText().toString();
@@ -63,6 +68,7 @@ public class RegisterActivity extends AppCompatActivity {
             if (Email.isEmpty() || password.isEmpty() || name.isEmpty() || surname.isEmpty())
                 throw new IllegalArgumentException("Requiere rellenar todos los campos");
 
+            //se crea el usuario
             mAuth.createUserWithEmailAndPassword(Email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
@@ -79,6 +85,14 @@ public class RegisterActivity extends AppCompatActivity {
                     }
                 }
             });
+
+            //se crea el documento donde van a estar los datos del usuario
+            HashMap <String, String> user = new HashMap<>();
+            user.put("nombre", name);
+            user.put("apellido", surname);
+            user.put("cargo", "comunero");
+            db.collection("users").document(Email).set(user);
+
         } catch (IllegalArgumentException e) {
             Log.w(TAG, "createUserWithEmail:failure", e);
             Toast.makeText(RegisterActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();

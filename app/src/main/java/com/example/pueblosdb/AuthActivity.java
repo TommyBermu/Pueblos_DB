@@ -14,10 +14,10 @@ import android.view.View;
 import android.content.Intent;
 import android.widget.*;
 
+import com.example.pueblosdb.clases.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.material.textfield.TextInputLayout;
 
-import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.android.gms.tasks.Task;
@@ -35,6 +35,7 @@ public class AuthActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         mAuth = FirebaseAuth.getInstance();
+
         setTheme(R.style.Theme_PueblosDB);
         if (mAuth.getCurrentUser() != null) {
             Intent home = new Intent(this, HomeActivity.class);
@@ -52,19 +53,14 @@ public class AuthActivity extends AppCompatActivity {
 
         tv1 = findViewById(R.id.email);
         tv2 = findViewById(R.id.password_container);
-
-        //firebase
-        FirebaseAnalytics mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
-        Bundle bundle = new Bundle();
-        bundle.putString("Message", "Integración de Firebase Completa!");
-        mFirebaseAnalytics.logEvent("InitScreen", bundle);
     }
 
-    public void SignIn(View view) {
-        try {
-            String Email = tv1.getText().toString();
-            String Password = Objects.requireNonNull(tv2.getEditText()).getText().toString();
+    public void signIn(View view) {
 
+        String Email = tv1.getText().toString();
+        String Password = Objects.requireNonNull(tv2.getEditText()).getText().toString();
+
+        try {
             if (Email.isEmpty() || Password.isEmpty())
                 throw new IllegalArgumentException("Requiere rellenar todos los campos");
 
@@ -90,7 +86,7 @@ public class AuthActivity extends AppCompatActivity {
         }
     }
 
-    public void SignUp(View view) {
+    public void signUp(View view) {
         Intent selection = new Intent(this, SelectionActivity.class);
         startActivity(selection);
     }
