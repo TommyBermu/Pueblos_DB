@@ -5,18 +5,24 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.HashMap;
 
 public class Comunero extends User {
     private String cargo;
 
     public Comunero(){}
 
-    public Comunero (String nombre, String apellido, String email, String cargo) {
-        super(nombre, apellido, email);
+    public Comunero (String nombre, String apellido, String cargo) {
+        super(nombre, apellido);
         this.cargo = cargo;
     }
 
@@ -29,19 +35,15 @@ public class Comunero extends User {
     }
 
     @Override
-    public void verInformacion(FirebaseFirestore db) {
-        db.collection("users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+    public void verInformacion(FirebaseFirestore db, String email) {
+
+        DocumentReference docRef = db.collection("users").document(email);
+        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    //tv2.setText(task.getResult().getDocuments().get(0).get("nombre").toString());
-                    //tv3.setText(task.getResult().getDocuments().get(0).get("apellido").toString());
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        Log.d("Query", document.getId() + " => " + document.getData());
-                    }
-                } else {
-                    Log.w("FailedQuery", "Error getting documents.", task.getException());
-                }
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                Comunero user = documentSnapshot.toObject(Comunero.class);
+                Log.d("Query", user.getNombre());
+                Log.d("Query", user.getApellidos());
             }
         });
     }

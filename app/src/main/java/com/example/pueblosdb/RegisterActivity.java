@@ -54,16 +54,14 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     public void createAccount(View view) {
+        String Email = tv3.getText().toString();
+        String name = tv1.getText().toString();
+        String surname = tv2.getText().toString();
         try {
-            String Email = tv3.getText().toString();
-
             String password;
             if (tv4.getText().toString().equals(tv5.getText().toString()))
                 password = tv4.getText().toString();
             else throw new IllegalArgumentException("Las contraseñas no coinciden");
-
-            String name = tv1.getText().toString();
-            String surname = tv2.getText().toString();
 
             if (Email.isEmpty() || password.isEmpty() || name.isEmpty() || surname.isEmpty())
                 throw new IllegalArgumentException("Requiere rellenar todos los campos");
@@ -75,6 +73,8 @@ public class RegisterActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         // Sign up success
                         Log.d(TAG, "createUserWithEmail:success");
+                        //se crea el documento donde van a estar los datos del usuario
+                        db.collection("users").document(Email).set(new Comunero(name, surname, "comunero"));
                         //ir a la home activity
                         Intent home = new Intent(RegisterActivity.this, HomeActivity.class);
                         startActivity(home);
@@ -85,14 +85,6 @@ public class RegisterActivity extends AppCompatActivity {
                     }
                 }
             });
-
-            //se crea el documento donde van a estar los datos del usuario
-            HashMap <String, String> user = new HashMap<>();
-            user.put("nombre", name);
-            user.put("apellido", surname);
-            user.put("cargo", "comunero");
-            db.collection("users").document(Email).set(user);
-
         } catch (IllegalArgumentException e) {
             Log.w(TAG, "createUserWithEmail:failure", e);
             Toast.makeText(RegisterActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();

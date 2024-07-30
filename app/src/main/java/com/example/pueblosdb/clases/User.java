@@ -5,20 +5,14 @@ import com.google.firebase.firestore.FirebaseFirestore;
 public abstract class User {
 
     // attributes
-    private String email;
     private String nombre;
     private String apellidos;
     //fecha de nacimiento
     public User(){}
 
-    public User(String nombre, String apellidos, String email) {
+    public User(String nombre, String apellidos) {
         this.nombre = nombre;
         this.apellidos = apellidos;
-        this.email = email;
-    }
-
-    public String getEmail() {
-        return email;
     }
 
     public String getNombre() {
@@ -37,5 +31,5 @@ public abstract class User {
         this.apellidos = apellidos;
     }
 
-    public abstract void verInformacion(FirebaseFirestore db);
+    public abstract void verInformacion(FirebaseFirestore db, String email);
 }

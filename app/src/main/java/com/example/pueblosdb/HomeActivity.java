@@ -15,6 +15,7 @@ import android.content.Intent;
 import android.widget.*;
 
 import com.example.pueblosdb.clases.Comunero;
+import com.example.pueblosdb.clases.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -24,6 +25,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.HashMap;
 import java.util.Objects;
 
 
@@ -33,6 +35,7 @@ public class HomeActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private TextView tv1, tv2, tv3;
     private final Comunero comunero = new Comunero();
+    private String Email;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,14 +51,17 @@ public class HomeActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         tv1 = findViewById(R.id.emailvisualizer);
+        Email = mAuth.getCurrentUser().getEmail();
+        tv1.setText(Email);
+
         tv2 = findViewById(R.id.namevisualizer);
         tv3 = findViewById(R.id.surnamevisualizer);
-
-        tv1.setText(Objects.requireNonNull(mAuth.getCurrentUser()).getEmail());
     }
 
     public void viewData(View view) {
-        comunero.verInformacion(db);
+        comunero.verInformacion(db, Email);
+        tv2.setText(comunero.getNombre());
+        tv3.setText(comunero.getApellidos());
     }
 
     public void logOut(View view) {
