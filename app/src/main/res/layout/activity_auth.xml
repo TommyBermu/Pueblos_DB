@@ -118,29 +118,30 @@
 
         <Button
             android:id="@+id/facebooksignin"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toStartOf="@+id/button3"
-            app:layout_constraintHorizontal_bias="0.5"
+            android:layout_width="62dp"
+            android:layout_height="62dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/facebook"
+            android:onClick="facebookSignIn"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/guideline3"
             app:layout_constraintStart_toEndOf="@+id/googlesignin"
             app:layout_constraintTop_toTopOf="@+id/guideline4" />
 
         <Button
             android:id="@+id/googlesignin"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_width="62dp"
+            android:layout_height="62dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/google"
+            android:onClick="googleSignIn"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/facebooksignin"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="@+id/guideline2"
-            app:layout_constraintTop_toTopOf="@+id/guideline4" />
-
-        <Button
-            android:id="@+id/button3"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toStartOf="@+id/guideline3"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/facebooksignin"
             app:layout_constraintTop_toTopOf="@+id/guideline4" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

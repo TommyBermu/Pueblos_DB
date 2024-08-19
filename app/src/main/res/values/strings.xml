@@ -25,4 +25,7 @@
     <string name="title_selection">Seleccione su relación con la Comunidad Indígena Muisca de Bosa</string>
     <string name="soy_miembro">Soy Miembro</string>
     <string name="no_soy_miembro">NO Soy Miembro</string>
+
+    <!-- Firebase -->
+    <string name="prefs_file">com.example.pueblosdb.PREFERENCE_FILE_KEY</string>
 </resources>

@@ -1,6 +1,7 @@
 package com.example.pueblosdb;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -20,6 +21,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
@@ -29,7 +31,6 @@ import java.util.Objects;
 public class RegisterActivity extends AppCompatActivity {
 
     private EditText tv1, tv2, tv3, tv4, tv5;
-    private FirebaseAuth mAuth;
     private static final String TAG = "EmailPassword";
     private final FirebaseFirestore db  = FirebaseFirestore.getInstance();
 
@@ -49,8 +50,6 @@ public class RegisterActivity extends AppCompatActivity {
         tv3 = findViewById(R.id.correo);
         tv4 = findViewById(R.id.password_created);
         tv5 = findViewById(R.id.password_created_confirmed);
-
-        mAuth = FirebaseAuth.getInstance();
     }
 
     public void createAccount(View view) {
@@ -67,17 +66,21 @@ public class RegisterActivity extends AppCompatActivity {
                 throw new IllegalArgumentException("Requiere rellenar todos los campos");
 
             //se crea el usuario
-            mAuth.createUserWithEmailAndPassword(Email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+            FirebaseAuth.getInstance().createUserWithEmailAndPassword(Email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (task.isSuccessful()) {
                         // Sign up success
                         Log.d(TAG, "createUserWithEmail:success");
+
                         //se crea el documento donde van a estar los datos del usuario
                         db.collection("users").document(Email).set(new Comunero(name, surname, "comunero"));
-                        //ir a la home activity
-                        Intent home = new Intent(RegisterActivity.this, HomeActivity.class);
-                        startActivity(home);
+                        //enviar un código de verificación al email
+                        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                        user.sendEmailVerification();
+                        Toast.makeText(RegisterActivity.this, "Verifique su correo electrónico y luego inicie sesión", Toast.LENGTH_LONG).show();
+                        Intent verify = new Intent(RegisterActivity.this, AuthActivity.class);
+                        startActivity(verify);
                     } else {
                         // If sign up fails, display a message to the user.
                         Log.w(TAG, "createUserWithEmail:failure", task.getException());

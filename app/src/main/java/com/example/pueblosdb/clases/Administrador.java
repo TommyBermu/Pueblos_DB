@@ -1,4 +1,4 @@
 package com.example.pueblosdb.clases;
 
-public class Administrador {
+public class Administrador extends Comunero{
 }
