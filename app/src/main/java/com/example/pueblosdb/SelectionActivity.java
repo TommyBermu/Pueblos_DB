@@ -10,7 +10,13 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.pueblosdb.clases.User;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 public class SelectionActivity extends AppCompatActivity {
+    private String name, surname, Email;
+    private final FirebaseFirestore db  = FirebaseFirestore.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,15 +28,25 @@ public class SelectionActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        Bundle bundle = getIntent().getExtras();
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        Email = mAuth.getCurrentUser().getEmail();
+        name = bundle.getString("Nombres");
+        surname = bundle.getString("Apellidos");
     }
 
     public void Member(View view) {
-        Intent member = new Intent(this, RegisterActivity.class);
-        startActivity(member);
+        createUser("Comunero");
     }
 
     public void NonMember(View view) {
-        Intent nonMember = new Intent(this, HomeActivity.class);
-        startActivity(nonMember);
+        createUser("Externo");
+    }
+
+    public void createUser(String cargo){
+        db.collection("users").document(Email).set(new User(name, surname, cargo));
+        Intent auth = new Intent(this, AuthActivity.class);
+        startActivity(auth);
     }
 }

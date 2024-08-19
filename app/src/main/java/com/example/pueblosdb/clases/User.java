@@ -17,19 +17,27 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Objects;
 
-public abstract class User {
+public class User {
 
     // attributes
     protected String nombre;
     protected String apellidos;
-    protected SharedPreferences prefs;
+    protected String cargo;
     //fecha de nacimiento
     public User(){}
 
-    public User(String nombre, String apellidos) {
+    public User(String nombre, String apellidos, String cargo) {
         this.nombre = nombre;
         this.apellidos = apellidos;
-        this.prefs = prefs;
+        this.cargo = cargo;
+    }
+
+    public String getCargo() {
+        return cargo;
+    }
+
+    public void setCargo(String cargo) {
+        this.cargo = cargo;
     }
 
     public String getNombre() {
@@ -48,5 +56,5 @@ public abstract class User {
         this.apellidos = apellidos;
     }
 
-    public abstract void verInformacion(FirebaseFirestore db, String email);
+    public void verInformacion(){};
 }

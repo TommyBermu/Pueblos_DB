@@ -197,12 +197,12 @@
         android:layout_height="wrap_content"
         android:onClick="viewData"
         android:text="ver mis datos"
+        app:layout_constraintBottom_toBottomOf="@id/guideline2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.2"
-        app:layout_constraintVertical_bias="0.95"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="@id/guideline2"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.95" />
 
     <TextView
         android:id="@+id/surnamevisualizer"
