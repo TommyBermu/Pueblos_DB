@@ -8,6 +8,8 @@
     android:background="@color/light_beige"
     tools:context=".HomeActivity">
 
+    <!--Hola-->
+
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline1"
         android:layout_width="wrap_content"
