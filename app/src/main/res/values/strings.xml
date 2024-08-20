@@ -20,6 +20,8 @@
     <string name="registro_usuario">Registrar un nuevo usuario</string>
 
     <!-- Home -->
+    <string name="open">Open Navigation Drawer</string>
+    <string name="close">Close Navigation Drawer</string>
 
     <!-- Selection -->
     <string name="title_selection">Seleccione su relación con la Comunidad Indígena Muisca de Bosa</string>
@@ -28,4 +30,8 @@
 
     <!-- Firebase -->
     <string name="prefs_file">com.example.pueblosdb.PREFERENCE_FILE_KEY</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="profile_fragment">Profile fragment</string>
+    <string name="home_fragment"> Home fragment</string>
 </resources>

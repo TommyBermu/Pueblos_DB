@@ -112,12 +112,7 @@ public class AuthActivity extends AppCompatActivity {
                             docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                 @Override
                                 public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                    User user = documentSnapshot.toObject(User.class);
-                                    SharedPreferences.Editor prefsEditor = getSharedPreferences(getString(R.string.prefs_file), MODE_PRIVATE).edit();
-                                    prefsEditor.putString("name", user.getNombre());
-                                    prefsEditor.putString("surname", user.getApellidos());
-                                    prefsEditor.putString("surname", user.getCargo());
-                                    prefsEditor.apply();
+                                    agregarPreferencias(documentSnapshot);
                                 }
                             });
                             //ir a la home activity
@@ -145,7 +140,12 @@ public class AuthActivity extends AppCompatActivity {
         activityResultLauncher.launch(intent);
     }
 
+
+
     public void facebookSignIn(View view){
+        Toast.makeText(AuthActivity.this, "Funcionalidad no disponible", Toast.LENGTH_SHORT).show();
+        /* //TODO esperar a que facebook se le de la gana de volver a implementar las cuentas de prueba para poder probar el login con facebook
+
         LoginManager.getInstance().logInWithReadPermissions(AuthActivity.this, Collections.singletonList("email"));
 
         LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
@@ -154,7 +154,7 @@ public class AuthActivity extends AppCompatActivity {
                 AccessToken token = loginResult.getAccessToken();
 
                 AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
-                createUser(credential);
+                authUser(credential);
             }
 
             @Override
@@ -167,6 +167,7 @@ public class AuthActivity extends AppCompatActivity {
                 Toast.makeText(AuthActivity.this, exception.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+      */
     }
 
     private final ActivityResultLauncher<Intent> activityResultLauncher =
@@ -186,7 +187,7 @@ public class AuthActivity extends AppCompatActivity {
                                     GoogleSignInAccount account = task.getResult(ApiException.class);
                                     if (account != null){
                                         AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
-                                        createUser(credential);
+                                        authUser(credential);
                                     }
                                 } catch (Exception e){
                                     Toast.makeText(AuthActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -196,7 +197,7 @@ public class AuthActivity extends AppCompatActivity {
                     }
             );
 
-    private void createUser(AuthCredential credential){
+    private void authUser(AuthCredential credential){
         FirebaseAuth.getInstance().signInWithCredential(credential).addOnCompleteListener(AuthActivity.this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -210,6 +211,9 @@ public class AuthActivity extends AppCompatActivity {
                             if (task.isSuccessful()) {
                                 DocumentSnapshot document = task.getResult();
                                 if (document.exists()) {
+
+                                    agregarPreferencias(document);
+
                                     Intent home = new Intent(AuthActivity.this, HomeActivity.class);
                                     startActivity(home);
                                 } else {
@@ -228,6 +232,14 @@ public class AuthActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void agregarPreferencias(DocumentSnapshot document) {
+        User user = document.toObject(User.class);
+        SharedPreferences.Editor prefsEditor = getSharedPreferences(getString(R.string.prefs_file), MODE_PRIVATE).edit();
+        prefsEditor.putString("name", user.getNombre());
+        prefsEditor.putString("surname", user.getApellidos());
+        prefsEditor.apply();
     }
 
     public void signUp(View view) {
