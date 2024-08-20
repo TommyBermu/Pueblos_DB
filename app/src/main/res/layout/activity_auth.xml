@@ -36,7 +36,7 @@
             android:layout_width="0dp"
             android:layout_height="48dp"
             android:backgroundTint="@color/light_coffee"
-            android:drawableEnd="@drawable/ic_user"
+            android:drawableEnd="@drawable/baseline_person_24"
             android:drawableTint="@color/light_coffee"
             android:ems="10"
             android:hint="@string/email"

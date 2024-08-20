@@ -8,28 +8,14 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.pueblosdb.clases.Comunero;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.util.Objects;
-
-public class GoogleRegisterActivity extends AppCompatActivity {
+public class AppRegisterActivity extends AppCompatActivity {
 
     private EditText tv1, tv2;
-    private FirebaseAuth mAuth;
-    private String Email;
-    private final FirebaseFirestore db  = FirebaseFirestore.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,26 +30,24 @@ public class GoogleRegisterActivity extends AppCompatActivity {
 
         tv1 = findViewById(R.id.nombre);
         tv2 = findViewById(R.id.apellido);
-        mAuth = FirebaseAuth.getInstance();
-        Email = mAuth.getCurrentUser().getEmail();
     }
 
-    public void createDocument(View view){
+    public void setAtributes(View view){
         try {
             String name = tv1.getText().toString();
             String surname = tv2.getText().toString();
-
             if (name.isEmpty() || surname.isEmpty())
                 throw new IllegalArgumentException("Requiere rellenar todos los campos");
 
             //se crea el usuario el docuemnto en la base de datos
-            db.collection("users").document(Email).set(new Comunero(name, surname, "comunero"));
-            Intent home = new Intent(GoogleRegisterActivity.this, HomeActivity.class);
-            startActivity(home);
+            Intent selection = new Intent(AppRegisterActivity.this, SelectionActivity.class);
+            selection.putExtra("Nombres", name);
+            selection.putExtra("Apellidos", surname);
+            startActivity(selection);
 
         } catch (IllegalArgumentException e) {
             Log.w("EmailPassword", "createDocument: failure", e);
-            Toast.makeText(GoogleRegisterActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(AppRegisterActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 }

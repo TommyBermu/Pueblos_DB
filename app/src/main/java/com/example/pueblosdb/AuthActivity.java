@@ -8,7 +8,6 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -17,23 +16,33 @@ import android.util.Log;
 import android.view.View;
 import android.content.Intent;
 import android.widget.*;
-
-import com.example.pueblosdb.clases.Comunero;
+import com.example.pueblosdb.clases.User;
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Objects;
 
 public class AuthActivity extends AppCompatActivity {
@@ -42,8 +51,9 @@ public class AuthActivity extends AppCompatActivity {
     private TextInputLayout tv2;
     private FirebaseAuth mAuth;
     private static final String TAG = "EmailPassword";
-    private final FirebaseFirestore db  = FirebaseFirestore.getInstance();
     private GoogleSignInClient gsc;
+    private final FirebaseFirestore db  = FirebaseFirestore.getInstance();
+    private final CallbackManager callbackManager = CallbackManager.Factory.create();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,8 +105,16 @@ public class AuthActivity extends AppCompatActivity {
                         try {
                             if (!FirebaseAuth.getInstance().getCurrentUser().isEmailVerified())
                                 throw new IllegalArgumentException("Verifique su correo electrónico");
+
                             // Sign in success
                             Log.d(TAG, "signInWithEmail: success");
+                            DocumentReference docRef = db.collection("users").document(Email);
+                            docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                @Override
+                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                    agregarPreferencias(documentSnapshot);
+                                }
+                            });
                             //ir a la home activity
                             Intent home = new Intent(AuthActivity.this, HomeActivity.class);
                             startActivity(home);
@@ -122,6 +140,36 @@ public class AuthActivity extends AppCompatActivity {
         activityResultLauncher.launch(intent);
     }
 
+
+
+    public void facebookSignIn(View view){
+        Toast.makeText(AuthActivity.this, "Funcionalidad no disponible", Toast.LENGTH_SHORT).show();
+        /* //TODO esperar a que facebook se le de la gana de volver a implementar las cuentas de prueba para poder probar el login con facebook
+
+        LoginManager.getInstance().logInWithReadPermissions(AuthActivity.this, Collections.singletonList("email"));
+
+        LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                AccessToken token = loginResult.getAccessToken();
+
+                AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
+                authUser(credential);
+            }
+
+            @Override
+            public void onCancel() {
+                // App code
+            }
+
+            @Override
+            public void onError(@NonNull FacebookException exception) {
+                Toast.makeText(AuthActivity.this, exception.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+      */
+    }
+
     private final ActivityResultLauncher<Intent> activityResultLauncher =
             registerForActivityResult(
                     new ActivityResultContracts.StartActivityForResult(),
@@ -131,32 +179,15 @@ public class AuthActivity extends AppCompatActivity {
                             int result = o.getResultCode();
                             Intent data = o.getData();
 
-                        if (result == RESULT_OK){
+                            callbackManager.onActivityResult(1, result, data);
+
+                            if (result == RESULT_OK){
                                 Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
                                 try {
                                     GoogleSignInAccount account = task.getResult(ApiException.class);
-
                                     if (account != null){
-
                                         AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
-                                        FirebaseAuth.getInstance().signInWithCredential(credential).addOnCompleteListener(AuthActivity.this, new OnCompleteListener<AuthResult>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                                if (task.isSuccessful()) {
-                                                    // Sign in success
-                                                    Log.d(TAG, "signInWithGoogle: success");
-                                                    //ir a la register activity
-                                                    Intent home = new Intent(AuthActivity.this, GoogleRegisterActivity.class);
-                                                    startActivity(home);
-
-                                                } else {
-                                                    // If sign in fails, display a message to the user.
-                                                    Log.w(TAG, "signInWithGoogle: failure", task.getException());
-                                                    Toast.makeText(AuthActivity.this, Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
-                                                }
-                                            }
-                                        });
-
+                                        authUser(credential);
                                     }
                                 } catch (Exception e){
                                     Toast.makeText(AuthActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -166,12 +197,53 @@ public class AuthActivity extends AppCompatActivity {
                     }
             );
 
-    public void facebookSignIn(View view){
+    private void authUser(AuthCredential credential){
+        FirebaseAuth.getInstance().signInWithCredential(credential).addOnCompleteListener(AuthActivity.this, new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                    // Sign in success
+                    Log.d(TAG, "signInWithApp: success");
+                    //ir a la google register activity si ho nay datos en la db
+                    db.collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getEmail()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if (task.isSuccessful()) {
+                                DocumentSnapshot document = task.getResult();
+                                if (document.exists()) {
 
+                                    agregarPreferencias(document);
+
+                                    Intent home = new Intent(AuthActivity.this, HomeActivity.class);
+                                    startActivity(home);
+                                } else {
+                                    Intent gra = new Intent(AuthActivity.this, AppRegisterActivity.class);
+                                    startActivity(gra);
+                                }
+                            } else {
+                                Log.d(TAG, "get failed with ", task.getException());
+                            }
+                        }
+                    });
+                } else {
+                    // If sign in fails, display a message to the user.
+                    Log.w(TAG, "signInWithApp: failure", task.getException());
+                    Toast.makeText(AuthActivity.this, Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    private void agregarPreferencias(DocumentSnapshot document) {
+        User user = document.toObject(User.class);
+        SharedPreferences.Editor prefsEditor = getSharedPreferences(getString(R.string.prefs_file), MODE_PRIVATE).edit();
+        prefsEditor.putString("name", user.getNombre());
+        prefsEditor.putString("surname", user.getApellidos());
+        prefsEditor.apply();
     }
 
     public void signUp(View view) {
-        Intent selection = new Intent(this, SelectionActivity.class);
-        startActivity(selection);
+        Intent register = new Intent(this, RegisterActivity.class);
+        startActivity(register);
     }
 }
