@@ -20,6 +20,7 @@
     <string name="registro_usuario">Registrar un nuevo usuario</string>
 
     <!-- Home -->
+    <string name="hola">Sapo</string>
 
     <!-- Selection -->
     <string name="title_selection">Seleccione su relación con la Comunidad Indígena Muisca de Bosa</string>
@@ -28,10 +29,4 @@
 
     <!-- Firebase -->
     <string name="prefs_file">com.example.pueblosdb.PREFERENCE_FILE_KEY</string>
-
-    <!-- Facebook -->
-    <string name="facebook_app_id">871203491591802</string>
-    <string name="fb_login_protocol_scheme">fb871203491591802</string>
-    <string name="facebook_client_token">48fcfcc92ad3cf887c06ce8509c1eecd</string>
-
 </resources>
