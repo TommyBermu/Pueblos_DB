@@ -15,7 +15,7 @@
             android:title="Contact Us"/>
     </group>
     <item
-        android:title="Zona de Riesgo">
+        android:title="Zona de riesgo">
 
         <menu>
             <item android:id="@+id/logout_menu"
