@@ -62,8 +62,6 @@ public class AuthActivity extends AppCompatActivity {
         setTheme(R.style.Theme_PueblosDB);
 
         mAuth = FirebaseAuth.getInstance();
-        SharedPreferences.Editor prefs = getSharedPreferences(getString(R.string.prefs_file), MODE_PRIVATE).edit().clear();
-        prefs.apply();
 
         if (mAuth.getCurrentUser() != null && mAuth.getCurrentUser().isEmailVerified()) {
             Intent home = new Intent(this, HomeActivity.class);

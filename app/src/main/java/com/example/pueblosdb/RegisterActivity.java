@@ -37,7 +37,7 @@ public class RegisterActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
+        ///
         tv1 = findViewById(R.id.nombres);
         tv2 = findViewById(R.id.apellidos);
         tv3 = findViewById(R.id.correo);

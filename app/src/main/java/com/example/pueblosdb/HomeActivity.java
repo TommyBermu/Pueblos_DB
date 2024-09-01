@@ -20,12 +20,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
-import com.facebook.login.LoginManager;
+//import com.facebook.login.LoginManager;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class HomeActivity extends AppCompatActivity  {
     private DrawerLayout drawerLayout;
     private final FirebaseFirestore db  = FirebaseFirestore.getInstance();
     private FirebaseAuth mAuth;
@@ -42,7 +42,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
+        ///
         mAuth = FirebaseAuth.getInstance();
         Email = mAuth.getCurrentUser().getEmail();
         tv1 = findViewById(R.id.emailvisualizer);
@@ -52,6 +52,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         //Navigation menu
         //TODO reemplazar en el xml el constraintLayout por DrawerLayout, porque no funciona con el constraintLayout
+        /*
         drawerLayout = findViewById(R.id.main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -69,9 +70,11 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     drawerLayout.closeDrawer(GravityCompat.START);
                 }
             }
-        });
+        });*/
     }
 
+
+    /*
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
@@ -96,7 +99,18 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
+    }*/
+
+    public void gotoMyProfile(View view){
+        Intent intent = new Intent(this, MyProfile.class);
+        startActivity(intent);
     }
+
+    public void gotoFileSolicitude(View view){
+        Intent intent = new Intent(this, FileSolicitude.class);
+        startActivity(intent);
+    }
+
 
     public void viewData(View view) {
         //comunero.verInformacion(db, Email);
@@ -108,7 +122,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     public void logOut(View view) {
         SharedPreferences.Editor prefs = getSharedPreferences(getString(R.string.prefs_file), MODE_PRIVATE).edit();
         prefs.clear().apply();
-        LoginManager.getInstance().logOut();
+        //LoginManager.getInstance().logOut();
         mAuth.signOut();
         Intent auth = new Intent(this, AuthActivity.class);
         startActivity(auth);
