@@ -1,5 +1,8 @@
 package com.example.pueblosdb.clases;
 
+import static android.content.Context.MODE_PRIVATE;
+import static androidx.core.content.ContextCompat.startActivity;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
@@ -9,7 +12,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.example.pueblosdb.AuthActivity;
-import com.example.pueblosdb.HomeActivity;
+import com.example.pueblosdb.MainActivity;
+import com.example.pueblosdb.R;
+import com.facebook.login.LoginManager;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -22,21 +27,21 @@ public class User {
     // attributes
     protected String nombre;
     protected String apellidos;
-    protected String cargo;
+    protected Cargo cargo;
     //fecha de nacimiento
     public User(){}
 
-    public User(String nombre, String apellidos, String cargo) {
+    public User(String nombre, String apellidos, Cargo cargo) {
         this.nombre = nombre;
         this.apellidos = apellidos;
         this.cargo = cargo;
     }
 
-    public String getCargo() {
+    public Cargo getCargo() {
         return cargo;
     }
 
-    public void setCargo(String cargo) {
+    public void setCargo(Cargo cargo) {
         this.cargo = cargo;
     }
 
@@ -57,4 +62,8 @@ public class User {
     }
 
     public void verInformacion(){};
+
+    static public void salir(){
+
+    }
 }

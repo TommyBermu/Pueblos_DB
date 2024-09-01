@@ -1,6 +1,7 @@
 package com.example.pueblosdb;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 
@@ -10,7 +11,9 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.pueblosdb.clases.Cargo;
 import com.example.pueblosdb.clases.User;
+import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -37,16 +40,24 @@ public class SelectionActivity extends AppCompatActivity {
     }
 
     public void Member(View view) {
-        createUser("Comunero");
+        createUser(Cargo.COMUNERO);
     }
 
     public void NonMember(View view) {
-        createUser("Externo");
+        createUser(Cargo.EXTERNO);
     }
 
-    public void createUser(String cargo){
+    public void createUser(Cargo cargo){
         db.collection("users").document(Email).set(new User(name, surname, cargo));
-        Intent auth = new Intent(this, AuthActivity.class);
+        salir();
+    }
+
+    private void salir() {
+        SharedPreferences.Editor editor = getSharedPreferences(getString(R.string.prefs_file), MODE_PRIVATE).edit();
+        editor.clear().apply();
+        LoginManager.getInstance().logOut();
+        FirebaseAuth.getInstance().signOut();
+        Intent auth = new Intent(getApplicationContext(), AuthActivity.class);
         startActivity(auth);
     }
 }

@@ -29,6 +29,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthCredential;
@@ -60,13 +61,11 @@ public class AuthActivity extends AppCompatActivity {
 
         //SplashScreen
         setTheme(R.style.Theme_PueblosDB);
-
+        //TODO hacer que RegisterActivity, AppRegisterActivity y SelectionActivity se vuelvan fragments de AuthActivity (para mejorar rendimiento y disminuir Intents)
         mAuth = FirebaseAuth.getInstance();
-        SharedPreferences.Editor prefs = getSharedPreferences(getString(R.string.prefs_file), MODE_PRIVATE).edit().clear();
-        prefs.apply();
 
         if (mAuth.getCurrentUser() != null && mAuth.getCurrentUser().isEmailVerified()) {
-            Intent home = new Intent(this, HomeActivity.class);
+            Intent home = new Intent(this, MainActivity.class);
             startActivity(home);
         }
 
@@ -108,6 +107,7 @@ public class AuthActivity extends AppCompatActivity {
 
                             // Sign in success
                             Log.d(TAG, "signInWithEmail: success");
+                            //a veces no se conecta pero es por el internet xd
                             DocumentReference docRef = db.collection("users").document(Email);
                             docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                 @Override
@@ -116,7 +116,7 @@ public class AuthActivity extends AppCompatActivity {
                                 }
                             });
                             //ir a la home activity
-                            Intent home = new Intent(AuthActivity.this, HomeActivity.class);
+                            Intent home = new Intent(AuthActivity.this, MainActivity.class);
                             startActivity(home);
                         } catch (IllegalArgumentException e) {
                             Toast.makeText(AuthActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -213,8 +213,7 @@ public class AuthActivity extends AppCompatActivity {
                                 if (document.exists()) {
 
                                     agregarPreferencias(document);
-
-                                    Intent home = new Intent(AuthActivity.this, HomeActivity.class);
+                                    Intent home = new Intent(AuthActivity.this, MainActivity.class);
                                     startActivity(home);
                                 } else {
                                     Intent gra = new Intent(AuthActivity.this, AppRegisterActivity.class);
@@ -239,7 +238,9 @@ public class AuthActivity extends AppCompatActivity {
         SharedPreferences.Editor prefsEditor = getSharedPreferences(getString(R.string.prefs_file), MODE_PRIVATE).edit();
         prefsEditor.putString("name", user.getNombre());
         prefsEditor.putString("surname", user.getApellidos());
+        prefsEditor.putString("cargo", user.getCargo().toString());
         prefsEditor.apply();
+        prefsEditor.commit();
     }
 
     public void signUp(View view) {

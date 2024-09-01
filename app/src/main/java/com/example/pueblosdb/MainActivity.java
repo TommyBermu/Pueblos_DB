@@ -3,6 +3,7 @@ package com.example.pueblosdb;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import androidx.activity.EdgeToEdge;
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,53 +15,44 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.view.MenuItem;
-import android.view.View;
-import android.content.Intent;
-import android.widget.TextView;
+
+import android.view.WindowManager;
 import android.widget.Toast;
-
-import androidx.activity.OnBackPressedCallback;
-import com.facebook.login.LoginManager;
 import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.FirebaseFirestore;
 
-public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawerLayout;
-    private final FirebaseFirestore db  = FirebaseFirestore.getInstance();
-    private FirebaseAuth mAuth;
-    private TextView tv1, tv2, tv3;
-    private String Email;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_home);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        setContentView(R.layout.activity_main);
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.drawer_layout), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
 
-        mAuth = FirebaseAuth.getInstance();
-        Email = mAuth.getCurrentUser().getEmail();
-        tv1 = findViewById(R.id.emailvisualizer);
-        tv1.setText(Email);
-        tv2 = findViewById(R.id.namevisualizer);
-        tv3 = findViewById(R.id.surnamevisualizer);
-
-        //Navigation menu
-        //TODO reemplazar en el xml el constraintLayout por DrawerLayout, porque no funciona con el constraintLayout
-        drawerLayout = findViewById(R.id.main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        drawerLayout = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        ActionBarDrawerToggle toogle = new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.open,R.string.close);
+        ActionBarDrawerToggle toogle = new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.open_nav,R.string.close_nav);
         drawerLayout.addDrawerListener(toogle);
         toogle.syncState();
+
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
+            navigationView.setCheckedItem(R.id.home_menu);
+        }
 
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(false) {
             @Override
@@ -77,12 +69,10 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
 
         if (id == R.id.home_menu) {
-            Intent home = new Intent(this, HomeActivity.class);
-            startActivity(home);
+            Toast.makeText(this, "Home", Toast.LENGTH_SHORT).show();
 
         } else if (id == R.id.profile_menu) {
-                Intent profile = new Intent(this, ProfileActivity.class);
-                startActivity(profile);
+            Toast.makeText(this, "Profile", Toast.LENGTH_SHORT).show();
 
         } else if (id == R.id.whatsapp_menu) {
             Toast.makeText(this, "Contact Us", Toast.LENGTH_SHORT).show();
@@ -96,21 +86,5 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    public void viewData(View view) {
-        //comunero.verInformacion(db, Email);
-        SharedPreferences prefs = getSharedPreferences(getString(R.string.prefs_file), MODE_PRIVATE);
-        tv2.setText(prefs.getString("name", "No hay datos"));
-        tv3.setText(prefs.getString("surname", "No hay datos"));
-    }
-
-    public void logOut(View view) {
-        SharedPreferences.Editor prefs = getSharedPreferences(getString(R.string.prefs_file), MODE_PRIVATE).edit();
-        prefs.clear().apply();
-        LoginManager.getInstance().logOut();
-        mAuth.signOut();
-        Intent auth = new Intent(this, AuthActivity.class);
-        startActivity(auth);
     }
 }
