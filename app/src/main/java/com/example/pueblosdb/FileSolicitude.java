@@ -129,9 +129,4 @@ public class FileSolicitude extends AppCompatActivity {
                 });
 
     }
-
-    public void gotoHome(View view){
-        Intent intent = new Intent(this, HomeActivity.class);
-        startActivity(intent);
-    }
 }

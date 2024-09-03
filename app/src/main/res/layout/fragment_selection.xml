@@ -1,14 +1,116 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".SelectionFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:orientation="vertical">
+
+
+        <View
+            android:id="@+id/backdarkblue"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/dark_blue"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="-27dp" />
+
+        <View
+            android:id="@+id/backbeige"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@drawable/rounded_layout_2"
+            app:layout_constraintTop_toBottomOf="@+id/guideline8"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:layout_editor_absoluteX="16dp" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:text="@string/title_selection"
+            android:textAlignment="center"
+            android:textColor="@color/light_beige"
+            android:textSize="23sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/backbeige"
+            app:layout_constraintEnd_toEndOf="@id/backdarkblue"
+            app:layout_constraintStart_toStartOf="@id/backdarkblue"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.85" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnSoyMiembro"
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:background="@drawable/rounded_button_3"
+            android:onClick="Member"
+            android:text="@string/soy_miembro"
+            android:textAllCaps="false"
+            android:textColor="@color/black"
+            android:textSize="23sp"
+            app:layout_constraintBottom_toTopOf="@id/btnNOSoyMiembro"
+            app:layout_constraintEnd_toEndOf="@id/guideline7"
+            app:layout_constraintStart_toStartOf="@id/guideline"
+            app:layout_constraintTop_toTopOf="@id/backbeige" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnNOSoyMiembro"
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:background="@drawable/rounded_button_3"
+            android:onClick="NonMember"
+            android:text="@string/no_soy_miembro"
+            android:textAllCaps="false"
+            android:textColor="@color/black"
+            android:textSize="23sp"
+            app:layout_constraintBottom_toBottomOf="@id/backbeige"
+            app:layout_constraintEnd_toEndOf="@id/guideline7"
+            app:layout_constraintStart_toStartOf="@id/guideline"
+            app:layout_constraintTop_toBottomOf="@+id/btnSoyMiembro" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="130dp"
+            android:layout_height="130dp"
+            android:importantForAccessibility="no"
+            app:layout_constraintBottom_toTopOf="@+id/textView"
+            app:layout_constraintEnd_toStartOf="@+id/guideline7"
+            app:layout_constraintHorizontal_bias="0.492"
+            app:layout_constraintStart_toStartOf="@id/guideline"
+            app:layout_constraintTop_toTopOf="@+id/backdarkblue"
+            app:srcCompat="@drawable/logocm" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.25" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.75" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.401487" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>

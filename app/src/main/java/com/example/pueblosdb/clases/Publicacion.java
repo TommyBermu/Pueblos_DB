@@ -1,17 +1,60 @@
 package com.example.pueblosdb.clases;
 
-public class Publicacion {
-    String imagen;
-    String link;
-    String hora_publicacion;
-    String hora_finalizacion;
-    String descripcion;
+import java.util.Date;
 
-    public Publicacion(String imagen, String link, String hora_publicacion, String hora_finalizacion, String descripcion) {
-        this.imagen = imagen;
-        this.link = link;
-        this.hora_publicacion = hora_publicacion;
-        this.hora_finalizacion = hora_finalizacion;
+public class Publicacion {
+    private String titulo, link_imagen, descripcion;
+    private Date fecha_finalizacion;
+    private int id;
+
+    public Publicacion() {
+    }
+
+    public Publicacion(String titulo, String link_imagen, String descripcion, Date fecha_finalizacion, int id) {
+        this.titulo = titulo;
+        this.link_imagen = link_imagen;
         this.descripcion = descripcion;
+        this.fecha_finalizacion = fecha_finalizacion;
+        this.id = id;
+    }
+
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
+
+    public String getLink_imagen() {
+        return link_imagen;
+    }
+
+    public void setLink_imagen(String link_imagen) {
+        this.link_imagen = link_imagen;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public Date getFecha_finalizacion() {
+        return fecha_finalizacion;
+    }
+
+    public void setFecha_finalizacion(Date fecha_finalizacion) {
+        this.fecha_finalizacion = fecha_finalizacion;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

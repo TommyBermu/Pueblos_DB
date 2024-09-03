@@ -10,10 +10,10 @@ import android.view.ViewGroup;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link RequestFragment#newInstance} factory method to
+ * Use the {@link GroupsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class RequestFragment extends Fragment {
+public class GroupsFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -24,7 +24,7 @@ public class RequestFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public RequestFragment() {
+    public GroupsFragment() {
         // Required empty public constructor
     }
 
@@ -34,11 +34,11 @@ public class RequestFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment RequestFragment.
+     * @return A new instance of fragment GroupsFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static RequestFragment newInstance(String param1, String param2) {
-        RequestFragment fragment = new RequestFragment();
+    public static GroupsFragment newInstance(String param1, String param2) {
+        GroupsFragment fragment = new GroupsFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -59,6 +59,6 @@ public class RequestFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_request, container, false);
+        return inflater.inflate(R.layout.fragment_groups, container, false);
     }
 }

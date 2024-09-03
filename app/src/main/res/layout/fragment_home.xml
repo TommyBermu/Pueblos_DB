@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -12,182 +13,41 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <Button
-            android:id="@+id/btnchangecarpet"
-            android:layout_width="0dp"
-            android:layout_height="48dp"
-            android:background="@drawable/rounded_button_2"
-            android:text="Solicitar cambio de carpeta"
-            android:textAllCaps="false"
-            android:textColor="@color/light_beige"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toTopOf="@+id/btnjoingroup_requirement"
-            app:layout_constraintEnd_toEndOf="@+id/guideline4"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="@+id/guideline3"
-            app:layout_constraintTop_toBottomOf="@+id/Title1" />
-
-        <Button
-            android:id="@+id/btnjoingroup_requirement"
-            android:layout_width="0dp"
-            android:layout_height="48dp"
-            android:background="@drawable/rounded_button_2"
-            android:text="Solicitar ingreso a un grupo"
-            android:textAllCaps="false"
-            android:textColor="@color/light_beige"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toTopOf="@+id/btnfinance_status"
-            app:layout_constraintEnd_toEndOf="@+id/guideline4"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="@+id/guideline3"
-            app:layout_constraintTop_toBottomOf="@+id/btnchangecarpet" />
-
-        <Button
-            android:id="@+id/btnfinance_status"
-            android:layout_width="0dp"
-            android:layout_height="48dp"
-            android:background="@drawable/rounded_button_2"
-            android:text="Estado financiero"
-            android:textAllCaps="false"
-            android:textColor="@color/light_beige"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toTopOf="@+id/deleteaccountbutton"
-            app:layout_constraintEnd_toEndOf="@+id/guideline4"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="@+id/guideline3"
-            app:layout_constraintTop_toBottomOf="@+id/btnjoingroup_requirement" />
-
-        <Button
-            android:id="@+id/deleteaccountbutton"
-            android:layout_width="0dp"
-            android:layout_height="48dp"
-            android:background="@drawable/rounded_button_2"
-            android:text="Eliminar Cuenta"
-            android:textColor="@color/white"
-            android:textSize="15sp"
-            app:layout_constraintBottom_toTopOf="@+id/logoutbutton"
-            app:layout_constraintEnd_toStartOf="@+id/guideline4"
-            app:layout_constraintStart_toStartOf="@+id/guideline3"
-            app:layout_constraintTop_toBottomOf="@+id/btnfinance_status" />
-
-        <Button
-            android:id="@+id/logoutbutton"
-            android:layout_width="0dp"
-            android:layout_height="48dp"
-            android:background="@drawable/rounded_button_2"
-            android:text="Salir de la cuenta"
-            android:textColor="@color/white"
-            android:textSize="15sp"
-            app:layout_constraintBottom_toTopOf="@+id/watchmydata"
-            app:layout_constraintEnd_toStartOf="@+id/guideline4"
-            app:layout_constraintStart_toStartOf="@+id/guideline3"
-            app:layout_constraintTop_toBottomOf="@+id/deleteaccountbutton" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.1" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.7" />
-
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.1" />
+            app:layout_constraintGuide_percent="0.05" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.9" />
+            app:layout_constraintGuide_percent="0.95" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:background="@drawable/rounded_layout_4"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/guideline2" />
 
         <TextView
-            android:id="@+id/Title1"
+            android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="15dp"
-            android:fontFamily="sans-serif"
-            android:text="Hola, ¿Qué deseas hacer?"
-            android:textColor="@color/dark_blue"
-            android:textSize="25sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/guideline1" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:text="Convocatorias y Eventos"
-            android:textColor="@color/light_beige"
+            android:textColor="@color/dark_grey"
             android:textSize="24dp"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/guideline4"
             app:layout_constraintStart_toStartOf="@id/guideline3"
-            app:layout_constraintTop_toTopOf="@id/guideline2"
-            app:layout_constraintVertical_bias="0.1" />
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/namevisualizer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="name"
-            app:layout_constraintBottom_toBottomOf="@+id/guideline2"
-            app:layout_constraintEnd_toStartOf="@+id/surnamevisualizer"
-            app:layout_constraintStart_toEndOf="@id/watchmydata"
-            app:layout_constraintTop_toTopOf="@id/watchmydata"
-            app:layout_constraintVertical_bias="0.1" />
-
-        <Button
-            android:id="@+id/watchmydata"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="ver mis datos"
-            app:layout_constraintBottom_toBottomOf="@id/guideline2"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.2"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.95" />
-
-        <TextView
-            android:id="@+id/surnamevisualizer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="apellido"
-            app:layout_constraintBottom_toBottomOf="@+id/guideline2"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/namevisualizer"
-            app:layout_constraintTop_toTopOf="@id/watchmydata"
-            app:layout_constraintVertical_bias="0.1" />
-
-        <TextView
-            android:id="@+id/emailvisualizer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:text="email"
-            app:layout_constraintBottom_toBottomOf="@+id/guideline2"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/watchmydata"
-            app:layout_constraintTop_toBottomOf="@+id/namevisualizer" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/guideline4"
+            app:layout_constraintStart_toStartOf="@+id/guideline3"
+            app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>
