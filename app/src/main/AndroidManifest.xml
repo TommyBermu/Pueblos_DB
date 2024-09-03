@@ -16,9 +16,6 @@
         android:theme="@style/Theme.PueblosDB"
         tools:targetApi="31">
         <activity
-            android:name=".DialogBoxFileSolicitude"
-            android:exported="false" />
-        <activity
             android:name=".GroupSolicitude"
             android:exported="false" />
         <activity
