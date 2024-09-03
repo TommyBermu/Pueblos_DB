@@ -57,12 +57,10 @@ public class LogInFragment extends Fragment {
     private final FirebaseFirestore db  = FirebaseFirestore.getInstance();
     private final CallbackManager callbackManager = CallbackManager.Factory.create();
 
-    // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
@@ -70,15 +68,6 @@ public class LogInFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment LogInFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static LogInFragment newInstance(String param1, String param2) {
         LogInFragment fragment = new LogInFragment();
         Bundle args = new Bundle();
@@ -233,32 +222,30 @@ public class LogInFragment extends Fragment {
       */
     }
 
-    private final ActivityResultLauncher<Intent> activityResultLauncher =
-            registerForActivityResult(
-                    new ActivityResultContracts.StartActivityForResult(),
-                    new ActivityResultCallback<ActivityResult>() {
-                        @Override
-                        public void onActivityResult(ActivityResult o) {
-                            int result = o.getResultCode();
-                            Intent data = o.getData();
+    private final ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult o) {
+                    int result = o.getResultCode();
+                    Intent data = o.getData();
 
-                            callbackManager.onActivityResult(1, result, data);
+                    callbackManager.onActivityResult(1, result, data);
 
-                            if (result == RESULT_OK){
-                                Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-                                try {
-                                    GoogleSignInAccount account = task.getResult(ApiException.class);
-                                    if (account != null){
-                                        AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
-                                        authUser(credential);
-                                    }
-                                } catch (Exception e){
-                                    Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                                }
+                    if (result == RESULT_OK){
+                        Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+                        try {
+                            GoogleSignInAccount account = task.getResult(ApiException.class);
+                            if (account != null){
+                                AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
+                                authUser(credential);
                             }
+                        } catch (Exception e){
+                            Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     }
-            );
+                }
+            });
 
     private void authUser(AuthCredential credential){
         FirebaseAuth.getInstance().signInWithCredential(credential).addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {

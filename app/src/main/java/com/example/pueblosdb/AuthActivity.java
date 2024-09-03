@@ -10,27 +10,21 @@ import androidx.core.view.WindowInsetsCompat;
 
 import android.content.Intent;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 
 public class AuthActivity extends AppCompatActivity {
+    SharedPreferences prefs;
+    FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         //SplashScreen
         setTheme(R.style.Theme_PueblosDB);
 
         //quita el StatusBar
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
-        SharedPreferences prefs = getSharedPreferences(getString(R.string.prefs_file), MODE_PRIVATE);
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-
-        if (mAuth.getCurrentUser() != null && mAuth.getCurrentUser().isEmailVerified() && prefs.getString("email", null) != null){
-            Intent home = new Intent(this, MainActivity.class);
-            startActivity(home);
-        }
 
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
@@ -41,8 +35,25 @@ public class AuthActivity extends AppCompatActivity {
             return insets;
         });
 
+        prefs = getSharedPreferences(getString(R.string.prefs_file), MODE_PRIVATE);
+        mAuth = FirebaseAuth.getInstance();
+
+        if (mAuth.getCurrentUser() != null && mAuth.getCurrentUser().isEmailVerified() && prefs.getString("email", null) != null){
+            Intent home = new Intent(this, MainActivity.class);
+            startActivity(home);
+        }
+
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new LogInFragment()).commit();
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (mAuth.getCurrentUser() != null && mAuth.getCurrentUser().isEmailVerified() && prefs.getString("email", null) != null){
+            Intent home = new Intent(this, MainActivity.class);
+            startActivity(home);
         }
     }
 }

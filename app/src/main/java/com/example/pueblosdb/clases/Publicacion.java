@@ -5,7 +5,6 @@ import java.util.Date;
 public class Publicacion {
     private String titulo, link_imagen, descripcion;
     private Date fecha_finalizacion;
-    private int id;
 
     public Publicacion() {
     }
@@ -15,7 +14,6 @@ public class Publicacion {
         this.link_imagen = link_imagen;
         this.descripcion = descripcion;
         this.fecha_finalizacion = fecha_finalizacion;
-        this.id = id;
     }
 
     public String getTitulo() {
@@ -48,13 +46,5 @@ public class Publicacion {
 
     public void setFecha_finalizacion(Date fecha_finalizacion) {
         this.fecha_finalizacion = fecha_finalizacion;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 }

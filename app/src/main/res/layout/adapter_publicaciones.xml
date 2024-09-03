@@ -33,11 +33,11 @@
         android:textSize="20sp"/>
 
     <TextView
-        android:id="@+id/id_publication"
+        android:id="@+id/end_date_publication"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:text="id"
+        android:text="Fecha de finalizacion: "
         android:textSize="20sp"/>
     
     <View

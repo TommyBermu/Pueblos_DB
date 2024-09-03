@@ -53,7 +53,6 @@ public class FileSolicitude extends AppCompatActivity {
     private Uri selectedPdfUri2;
     private int activeEditText = 0;
 
-    private final FirebaseFirestore db  = FirebaseFirestore.getInstance();
     private FirebaseAuth mAuth;
     private String Name, Surname, Email;
 
@@ -81,8 +80,7 @@ public class FileSolicitude extends AppCompatActivity {
 
         editText2 = findViewById(R.id.etSelectFileLetter);
 
-        storageReference = FirebaseStorage.getInstance().getReference();
-        databaseReference = FirebaseDatabase.getInstance().getReference("uploadPDF");
+        ;
 
         //Llama al formato de custom_dialog
         View alertCustomDialog = LayoutInflater.from(FileSolicitude.this).inflate(R.layout.custom_dialog, null);
@@ -99,8 +97,11 @@ public class FileSolicitude extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 dialog.cancel();
+                Toast.makeText(FileSolicitude.this, "Solicitud enviada, redirigiendo al Home", Toast.LENGTH_SHORT).show();
+                /*
                 Intent intent = new Intent(FileSolicitude.this, HomeActivity.class);
                 startActivity(intent);
+                */
             }
         });
 
