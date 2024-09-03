@@ -29,8 +29,6 @@ public class HomeActivity extends AppCompatActivity  {
     private DrawerLayout drawerLayout;
     private final FirebaseFirestore db  = FirebaseFirestore.getInstance();
     private FirebaseAuth mAuth;
-    private TextView tv1, tv2, tv3;
-    private String Email;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,11 +42,11 @@ public class HomeActivity extends AppCompatActivity  {
         });
         ///
         mAuth = FirebaseAuth.getInstance();
-        Email = mAuth.getCurrentUser().getEmail();
-        tv1 = findViewById(R.id.emailvisualizer);
-        tv1.setText(Email);
-        tv2 = findViewById(R.id.namevisualizer);
-        tv3 = findViewById(R.id.surnamevisualizer);
+        //Email = mAuth.getCurrentUser().getEmail();
+        //tv1 = findViewById(R.id.emailvisualizer);
+        //tv1.setText(Email);
+        //tv2 = findViewById(R.id.namevisualizer);
+        //tv3 = findViewById(R.id.surnamevisualizer);
 
         //Navigation menu
         //TODO reemplazar en el xml el constraintLayout por DrawerLayout, porque no funciona con el constraintLayout
@@ -109,14 +107,6 @@ public class HomeActivity extends AppCompatActivity  {
     public void gotoFileSolicitude(View view){
         Intent intent = new Intent(this, FileSolicitude.class);
         startActivity(intent);
-    }
-
-
-    public void viewData(View view) {
-        //comunero.verInformacion(db, Email);
-        SharedPreferences prefs = getSharedPreferences(getString(R.string.prefs_file), MODE_PRIVATE);
-        tv2.setText(prefs.getString("name", "No hay datos"));
-        tv3.setText(prefs.getString("surname", "No hay datos"));
     }
 
     public void logOut(View view) {

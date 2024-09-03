@@ -96,10 +96,11 @@
             android:textColor="@color/dark_blue"
             android:textSize="25sp"
             android:layout_margin="15dp"
-            app:layout_constraintBottom_toTopOf="@+id/btnchangecarpet"
+            app:layout_constraintBottom_toTopOf="@+id/guideline2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/guideline1" />
+            app:layout_constraintTop_toBottomOf="@+id/guideline1"
+            app:layout_constraintVertical_bias="0.05"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -171,35 +172,10 @@
             app:layout_constraintTop_toBottomOf="@+id/btnjoingroup_requirement"
             app:layout_constraintStart_toStartOf="@+id/guideline3"
             app:layout_constraintEnd_toEndOf="@+id/guideline4"
-            app:layout_constraintBottom_toTopOf="@+id/btnvirtual_library"/>
+            app:layout_constraintBottom_toTopOf="@id/guideline2"/>
 
-        <Button
-            android:id="@+id/btnvirtual_library"
-            android:layout_width="0dp"
-            android:layout_height="48dp"
-            android:background="@drawable/rounded_button_2"
-            android:textColor="@color/light_beige"
-            android:text="Biblioteca virtual"
-            android:textAllCaps="false"
-            android:textSize="16sp"
-            app:layout_constraintTop_toBottomOf="@+id/btnfinance_status"
-            app:layout_constraintStart_toStartOf="@+id/guideline3"
-            app:layout_constraintEnd_toEndOf="@+id/guideline4"
-            app:layout_constraintBottom_toTopOf="@+id/btnvirtual_store"/>
 
-        <Button
-            android:id="@+id/btnvirtual_store"
-            android:layout_width="0dp"
-            android:layout_height="48dp"
-            android:background="@drawable/rounded_button_2"
-            android:textColor="@color/light_beige"
-            android:text="Tienda virtual"
-            android:textAllCaps="false"
-            android:textSize="16sp"
-            app:layout_constraintTop_toBottomOf="@+id/btnvirtual_library"
-            app:layout_constraintStart_toStartOf="@+id/guideline3"
-            app:layout_constraintEnd_toEndOf="@+id/guideline4"
-            app:layout_constraintBottom_toTopOf="@+id/watchmydata"/>
+
 
         <Button
             android:id="@+id/logoutbutton"
@@ -218,52 +194,5 @@
             app:layout_constraintHorizontal_bias="0.1"
             app:layout_constraintVertical_bias="0.95"/>
 
-        <TextView
-            android:id="@+id/namevisualizer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="name"
-            app:layout_constraintTop_toTopOf="@id/watchmydata"
-            app:layout_constraintEnd_toStartOf="@+id/surnamevisualizer"
-            app:layout_constraintBottom_toBottomOf="@+id/guideline2"
-            app:layout_constraintVertical_bias="0.1"
-            app:layout_constraintStart_toEndOf="@id/watchmydata"
-            />
-
-        <Button
-            android:id="@+id/watchmydata"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:onClick="viewData"
-            android:text="ver mis datos"
-            app:layout_constraintBottom_toBottomOf="@id/guideline2"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.2"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.95" />
-
-        <TextView
-            android:id="@+id/surnamevisualizer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="apellido"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="@+id/guideline2"
-            app:layout_constraintStart_toEndOf="@id/namevisualizer"
-            app:layout_constraintVertical_bias="0.1"
-            app:layout_constraintTop_toTopOf="@id/watchmydata" />
-
-        <TextView
-            android:id="@+id/emailvisualizer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="email"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_margin="10dp"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/watchmydata"
-            app:layout_constraintBottom_toBottomOf="@+id/guideline2"
-            app:layout_constraintTop_toBottomOf="@+id/namevisualizer" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.drawerlayout.widget.DrawerLayout>
