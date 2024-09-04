@@ -1,7 +1,15 @@
 [versions]
 agp = "8.5.1"
 facebookLogin = "latest.release"
+firebaseAdmin = "9.2.0"
 firebaseBom = "33.1.2"
+firebaseCore = "21.1.1"
+firebaseMessaging = "24.0.1"
+firebaseUiDatabaseVersion = "8.0.2"
+firebaseUiFirestore = "4.1.0"
+firebaseUiFirestoreVersion = "8.0.2"
+firebaseUiStorage = "8.0.2"
+flexbox = "2.0.1"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
@@ -9,14 +17,27 @@ appcompat = "1.7.0"
 material = "1.12.0"
 activity = "1.9.1"
 constraintlayout = "2.1.4"
+materialVersion = "1.0.0"
+picasso = "2.8"
 playServicesAuth = "20.7.0"
+googleGmsGoogleServices = "4.4.2"
+firebaseDatabase = "21.0.0"
+firebaseStorage = "21.0.0"
 
 [libraries]
 facebook-login = { module = "com.facebook.android:facebook-login", version.ref = "facebookLogin" }
+firebase-admin = { module = "com.google.firebase:firebase-admin", version.ref = "firebaseAdmin" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 firebase-auth = { module = "com.google.firebase:firebase-auth" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
+firebase-core = { module = "com.google.firebase:firebase-core", version.ref = "firebaseCore" }
 firebase-firestore = { module = "com.google.firebase:firebase-firestore" }
+firebase-messaging = { module = "com.google.firebase:firebase-messaging", version.ref = "firebaseMessaging" }
+firebase-ui-firestore = { module = "com.firebaseui:firebase-ui-firestore", version.ref = "firebaseUiFirestore" }
+firebase-ui-firestore-v802 = { module = "com.firebaseui:firebase-ui-firestore", version.ref = "firebaseUiFirestoreVersion" }
+firebase-ui-storage = { module = "com.firebaseui:firebase-ui-storage", version.ref = "firebaseUiStorage" }
+firebaseui-firebase-ui-database = { module = "com.firebaseui:firebase-ui-database", version.ref = "firebaseUiDatabaseVersion" }
+flexbox = { module = "com.google.android:flexbox", version.ref = "flexbox" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -24,8 +45,13 @@ appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "a
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+material-v100 = { module = "com.google.android.material:material", version.ref = "materialVersion" }
+picasso = { module = "com.squareup.picasso:picasso", version.ref = "picasso" }
 play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth" }
+firebase-database = { group = "com.google.firebase", name = "firebase-database", version.ref = "firebaseDatabase" }
+firebase-storage = { group = "com.google.firebase", name = "firebase-storage", version.ref = "firebaseStorage" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
+googleGmsGoogleServices = { id = "com.google.gms.google-services", version.ref = "googleGmsGoogleServices" }
 

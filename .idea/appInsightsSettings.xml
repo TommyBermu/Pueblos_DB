@@ -9,11 +9,17 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.example.pueblosdb" />
+                  <option name="mobileSdkAppId" value="1:607968658227:android:a63c70c5a1d9612f767446" />
+                  <option name="projectId" value="pueblosdb" />
+                  <option name="projectNumber" value="607968658227" />
                 </ConnectionSetting>
+              </option>
+              <option name="failureTypes">
+                <list>
+                  <option value="ANR" />
+                  <option value="NON_FATAL" />
+                </list>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />
               <option name="timeIntervalDays" value="THIRTY_DAYS" />

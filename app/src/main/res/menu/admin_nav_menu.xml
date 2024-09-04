@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+    <group android:checkableBehavior="single">
+        <item android:id="@+id/folder_change_menu"
+            android:icon="@drawable/baseline_folder_shared_24"
+            android:title="Cambio de Carpeta"/>
+        <item android:id="@+id/group_join_menu"
+            android:icon="@drawable/baseline_groups_24"
+            android:title="Grupos"/>
+        <item android:id="@+id/finance_status_menu"
+            android:icon="@drawable/baseline_monetization_on_24"
+            android:title="Finanzas"/>
+    </group>
+    <item
+        android:title="Opciones Avanzadas">
+
+        <menu>
+            <item android:id="@+id/logout_menu"
+                android:icon="@drawable/baseline_logout_24"
+                android:title="Salir de la Cuenta"/>
+        </menu>
+    </item>
+    <item
+        android:title="Admin Options">
+        <menu>
+            <item android:id="@+id/admin_options_menu"
+                android:icon="@drawable/baseline_admin_panel_settings_24"
+                android:title="Opciones de Administrador"/>
+            <item android:id="@+id/create_publication_menu"
+                android:icon="@drawable/baseline_publish_24"
+                android:title="Crear una Publicación"/>
+        </menu>
+    </item>
+</menu>

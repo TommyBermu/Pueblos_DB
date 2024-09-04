@@ -14,4 +14,4 @@ app/build
 .cxx
 local.properties
 google-services.json
-secret.xml
+/app/src/main/res/values/secrets.xml

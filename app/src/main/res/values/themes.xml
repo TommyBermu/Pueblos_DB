@@ -1,13 +1,28 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.PueblosDB" parent="Theme.AppCompat.Light.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    <style name="Theme.PueblosDB" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <!-- Status Bar color. -->
+        <item name="android:statusBarColor">@color/light_beige</item>"
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/light_blue</item>
+        <item name="colorPrimaryVariant">@color/light_blue</item>
+        <item name="colorOnPrimary">@color/dark_grey</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/light_coffee</item>
+        <item name="colorSecondaryVariant">@color/light_beige</item>
+        <item name="colorOnSecondary">@color/white</item>
     </style>
-
-    <style name="Theme.PueblosDB" parent="Base.Theme.PueblosDB" />
 
     <style name="Splash.Theme" parent="Theme.PueblosDB">
         <item name="android:windowBackground">@drawable/splashscreen</item>
+    </style>
+    
+    <style name="DialogAnimation">
+        <item name="android:windowEnterAnimation">@anim/slide_in</item>
+        <item name="android:windowExitAnimation">@anim/slide_out</item>
+    </style>
+
+    <style name="BottomNavigationViewStyle" prarent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="android:background">@drawable/rounded_layout_6</item>
     </style>
 </resources>
