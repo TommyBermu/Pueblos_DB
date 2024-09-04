@@ -14,11 +14,11 @@ import com.example.pueblosdb.R;
 
 import java.util.ArrayList;
 
-public class PublicacionesAdapter extends RecyclerView.Adapter<PublicacionesAdapter.PublicacionViewHolder> {
+public class PublicacionAdapter extends RecyclerView.Adapter<PublicacionAdapter.PublicacionViewHolder> {
     private ArrayList<Publicacion> mPublicaciones;
     private Context mContext;
 
-    public PublicacionesAdapter(ArrayList<Publicacion> mPublicaciones, Context mContext) {
+    public PublicacionAdapter(ArrayList<Publicacion> mPublicaciones, Context mContext) {
         this.mPublicaciones = mPublicaciones;
         this.mContext = mContext;
     }

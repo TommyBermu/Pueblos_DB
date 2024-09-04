@@ -1,8 +1,7 @@
 package com.example.pueblosdb;
 
 import static android.content.Context.MODE_PRIVATE;
-
-import android.app.Activity;
+import static android.app.Activity.RESULT_OK;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,12 +9,10 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +20,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-
 import com.example.pueblosdb.clases.putPDF;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -88,8 +84,7 @@ public class ChangeFolderFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_change_folder, container, false);
 
         //Llamar a la info de la persona
-        prefs = requireActivity().getSharedPreferences(getString(R.string.prefs_file), MODE_PRIVATE);;
-        //
+        prefs = requireActivity().getSharedPreferences(getString(R.string.prefs_file), MODE_PRIVATE);
 
         editText = view.findViewById(R.id.etSelectFile);
         btn = view.findViewById(R.id.btnSendFile);
@@ -146,7 +141,7 @@ public class ChangeFolderFragment extends Fragment {
     private final ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
-                if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
+                if (result.getResultCode() == RESULT_OK && result.getData() != null) {
                     Uri selectedPdfUri = result.getData().getData();
                     // Manejar el URI del archivo PDF seleccionado
                     if (activeEditText == 1) {

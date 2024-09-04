@@ -1,14 +1,8 @@
 package com.example.pueblosdb;
 
-import static android.content.Context.MODE_PRIVATE;
-
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,26 +10,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.pueblosdb.clases.Publicacion;
-import com.example.pueblosdb.clases.PublicacionesAdapter;
-import com.facebook.login.LoginManager;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.EmailAuthProvider;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+import com.example.pueblosdb.clases.PublicacionAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
@@ -48,7 +30,7 @@ public class HomeFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private ArrayList<Publicacion> publicaciones;
-    private PublicacionesAdapter adapter;
+    private PublicacionAdapter adapter;
 
     private DatabaseReference root = FirebaseDatabase.getInstance().getReference().child("publications");
 
@@ -89,7 +71,7 @@ public class HomeFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
         publicaciones = new ArrayList<>();
-        adapter = new PublicacionesAdapter(publicaciones, requireActivity());
+        adapter = new PublicacionAdapter(publicaciones, requireActivity());
 
         recyclerView.setAdapter(adapter);
         root.addValueEventListener(new ValueEventListener() {

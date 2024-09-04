@@ -24,6 +24,13 @@ public class AuthActivity extends AppCompatActivity {
         //SplashScreen
         setTheme(R.style.Theme_PueblosDB);
 
+        prefs = getSharedPreferences(getString(R.string.prefs_file), MODE_PRIVATE);
+        mAuth = FirebaseAuth.getInstance();
+        if (mAuth.getCurrentUser() != null && mAuth.getCurrentUser().isEmailVerified() && prefs.getString("email", null) != null){
+            Intent home = new Intent(this, MainActivity.class);
+            startActivity(home);
+        }
+
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_auth);
@@ -32,14 +39,6 @@ public class AuthActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
-        prefs = getSharedPreferences(getString(R.string.prefs_file), MODE_PRIVATE);
-        mAuth = FirebaseAuth.getInstance();
-
-        if (mAuth.getCurrentUser() != null && mAuth.getCurrentUser().isEmailVerified() && prefs.getString("email", null) != null){
-            Intent home = new Intent(this, MainActivity.class);
-            startActivity(home);
-        }
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new LogInFragment()).commit();
