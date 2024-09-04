@@ -25,6 +25,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.Objects;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link ProfileFragment#newInstance} factory method to
@@ -71,7 +73,7 @@ public class ProfileFragment extends Fragment {
 
         User = FirebaseAuth.getInstance().getCurrentUser();
 
-        prefs = getActivity().getSharedPreferences(getString(R.string.prefs_file), MODE_PRIVATE);
+        prefs = requireActivity().getSharedPreferences(getString(R.string.prefs_file), MODE_PRIVATE);
         tv1 = view.findViewById(R.id.emailvisualizer);
         tv1.setText(prefs.getString("email", "No hay datos"));
         tv2 = view.findViewById(R.id.namevisualizer);
@@ -86,7 +88,7 @@ public class ProfileFragment extends Fragment {
         changeEmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
                 View dialogView = getLayoutInflater().inflate(R.layout.dialog_change_email, null);
 
                 builder.setView(dialogView);
@@ -97,7 +99,7 @@ public class ProfileFragment extends Fragment {
                 emailConfirm.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(getActivity(), "Falta implementar el cambio de email:p", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(requireActivity(), "Falta implementar el cambio de email:p", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -107,7 +109,7 @@ public class ProfileFragment extends Fragment {
         changePassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
                 View dialogView = getLayoutInflater().inflate(R.layout.dialog_change_password, null);
 
                 builder.setView(dialogView);
@@ -118,7 +120,7 @@ public class ProfileFragment extends Fragment {
                 emailConfirm.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(getActivity(), "Falta implementar el cambio de contraseña :p", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(requireActivity(), "Falta implementar el cambio de contraseña :p", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -128,7 +130,7 @@ public class ProfileFragment extends Fragment {
         saveChanges.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity(), "Falta implementar el cambio de Datos :p", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireActivity(), "Falta implementar el cambio de Datos :p", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -144,7 +146,7 @@ public class ProfileFragment extends Fragment {
     }
 
     public void deleteAccount(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_delete, null);
 
         builder.setView(dialogView);
@@ -161,7 +163,7 @@ public class ProfileFragment extends Fragment {
                     AuthCredential credential = EmailAuthProvider.getCredential(etv1.getText().toString(), ptv2.getText().toString());
                     reauthenticate(credential, dialog);
                 }catch (IllegalArgumentException e){
-                    Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(requireActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -176,14 +178,14 @@ public class ProfileFragment extends Fragment {
                     User.delete().addOnCompleteListener(new OnCompleteListener<Void>(){
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
-                            db.collection("users").document(User.getEmail()).delete();
-                            Toast.makeText(getActivity(), "Cuenta eliminada", Toast.LENGTH_SHORT).show();
-                            ((MainActivity)getActivity()).salir();
+                            db.collection("users").document(Objects.requireNonNull(User.getEmail())).delete();
+                            Toast.makeText(requireActivity(), "Cuenta eliminada", Toast.LENGTH_SHORT).show();
+                            ((MainActivity)requireActivity()).salir();
                         }
                     });
 
                 } else {
-                    Toast.makeText(getActivity(), "Error al autenticar la cuenta", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(requireActivity(), "Error al autenticar la cuenta", Toast.LENGTH_SHORT).show();
                 }
                 dialog.dismiss();
             }

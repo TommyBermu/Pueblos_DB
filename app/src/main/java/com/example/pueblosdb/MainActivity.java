@@ -26,6 +26,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.pueblosdb.clases.Cargo;
 import com.facebook.login.LoginManager;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -74,6 +75,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawerLayout = findViewById(R.id.drawer_layout);
 
         NavigationView navigationView = findViewById(R.id.nav_view);
+
+        if (prefs.getString("cargo", "No hay datos").equals(Cargo.ADMIN.toString())){
+            navigationView.getMenu().clear();
+            navigationView.inflateMenu(R.menu.admin_nav_menu);
+        }
+
         navigationView.setNavigationItemSelectedListener(this);
 
         ActionBarDrawerToggle toogle = new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.open_nav,R.string.close_nav);

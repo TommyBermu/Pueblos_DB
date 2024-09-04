@@ -23,4 +23,15 @@
                 android:title="Salir de la Cuenta"/>
         </menu>
     </item>
+    <item
+        android:title="Admin Options">
+        <menu>
+            <item android:id="@+id/admin_options_menu"
+                android:icon="@drawable/baseline_admin_panel_settings_24"
+                android:title="Opciones de Administrador"/>
+            <item android:id="@+id/create_publication_menu"
+                android:icon="@drawable/baseline_publish_24"
+                android:title="Crear una Publicación"/>
+        </menu>
+    </item>
 </menu>

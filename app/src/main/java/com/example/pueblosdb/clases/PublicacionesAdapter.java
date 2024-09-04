@@ -1,5 +1,6 @@
 package com.example.pueblosdb.clases;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,21 +9,18 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.bumptech.glide.Glide;
 import com.example.pueblosdb.R;
-import com.firebase.ui.database.FirebaseRecyclerOptions;
 
-public class PublicacionesAdapter extends FirebaseRecyclerAdapter<Publicacion, PublicacionesAdapter.PublicacionViewHolder> {
-    
-    public PublicacionesAdapter(@NonNull FirebaseRecyclerOptions<Publicacion> options) {
-        super(options);
-    }
+import java.util.ArrayList;
 
-    @Override
-    protected void onBindViewHolder(@NonNull PublicacionViewHolder holder, int position, @NonNull Publicacion model) {
-        holder.title.setText(model.getTitulo());
-        holder.description.setText(model.getDescripcion());
-        holder.id.setText(String.valueOf(model.getId()));
+public class PublicacionesAdapter extends RecyclerView.Adapter<PublicacionesAdapter.PublicacionViewHolder> {
+    private ArrayList<Publicacion> mPublicaciones;
+    private Context mContext;
+
+    public PublicacionesAdapter(ArrayList<Publicacion> mPublicaciones, Context mContext) {
+        this.mPublicaciones = mPublicaciones;
+        this.mContext = mContext;
     }
 
     @NonNull
@@ -32,11 +30,27 @@ public class PublicacionesAdapter extends FirebaseRecyclerAdapter<Publicacion, P
         return new PublicacionViewHolder(view);
     }
 
+    @Override
+    public void onBindViewHolder(@NonNull PublicacionViewHolder holder, int position) {
+
+        Glide.with(mContext).load(mPublicaciones.get(position).getLink_imagen()).into(holder.image);
+        Publicacion publicacion = mPublicaciones.get(position);
+
+        holder.title.setText(publicacion.getTitulo());
+        holder.description.setText(publicacion.getDescripcion());
+        holder.fecha.setText("Fecha de finalización: " + publicacion.getFecha_finalizacion().toString());
+    }
+
+    @Override
+    public int getItemCount() {
+        return mPublicaciones.size();
+    }
+
     public class PublicacionViewHolder extends RecyclerView.ViewHolder {
-        TextView title;
         ImageView image;
+        TextView title;
         TextView description;
-        TextView id;
+        TextView fecha;
 
         public PublicacionViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -44,7 +58,7 @@ public class PublicacionesAdapter extends FirebaseRecyclerAdapter<Publicacion, P
             title = itemView.findViewById(R.id.title_publication);
             image = itemView.findViewById(R.id.image_publication);
             description = itemView.findViewById(R.id.description_publication);
-            id = itemView.findViewById(R.id.id_publication);
+            fecha = itemView.findViewById(R.id.end_date_publication);
         }
     }
 }

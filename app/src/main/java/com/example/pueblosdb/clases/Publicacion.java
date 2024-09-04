@@ -9,7 +9,7 @@ public class Publicacion {
     public Publicacion() {
     }
 
-    public Publicacion(String titulo, String link_imagen, String descripcion, Date fecha_finalizacion, int id) {
+    public Publicacion(String titulo, String link_imagen, String descripcion, Date fecha_finalizacion) {
         this.titulo = titulo;
         this.link_imagen = link_imagen;
         this.descripcion = descripcion;

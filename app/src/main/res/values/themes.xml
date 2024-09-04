@@ -21,8 +21,7 @@
         <item name="android:windowExitAnimation">@anim/slide_out</item>
     </style>
 
-    <style name="BottomNavigationViewStyle" prarent="Theme.MaterialComponents.BottomNavigationView">
+    <style name="BottomNavigationViewStyle" prarent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="android:background">@drawable/rounded_layout_6</item>
     </style>
-
 </resources>

@@ -20,11 +20,9 @@ public class AuthActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         //SplashScreen
         setTheme(R.style.Theme_PueblosDB);
-
-        //quita el StatusBar
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);

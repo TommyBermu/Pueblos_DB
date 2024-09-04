@@ -27,8 +27,9 @@ import android.widget.Toast;
 import com.example.pueblosdb.clases.putPDF;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -39,21 +40,19 @@ import com.google.firebase.storage.UploadTask;
  * create an instance of this fragment.
  */
 public class ChangeFolderFragment extends Fragment {
+    SharedPreferences prefs;
 
     EditText editText, editText2;
     Button btn, btnDialog;
     AlertDialog dialog;
 
-    StorageReference storageReference;
-    DatabaseReference databaseReference;
+    StorageReference storageReference = FirebaseStorage.getInstance().getReference("uploadPDF");
+    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("uploadPDF");
 
 
     private Uri selectedPdfUri1;
     private Uri selectedPdfUri2;
     private int activeEditText = 0;
-
-    private FirebaseAuth mAuth;
-    private String Name, Surname, Email;
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -88,12 +87,8 @@ public class ChangeFolderFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_change_folder, container, false);
 
-        mAuth = FirebaseAuth.getInstance();
         //Llamar a la info de la persona
-        SharedPreferences prefs = getActivity().getSharedPreferences(getString(R.string.prefs_file), MODE_PRIVATE);
-        Name =  prefs.getString("name", "No hay dato");
-        Surname = prefs.getString("surname", "No hay dato");
-        Email = mAuth.getCurrentUser().getEmail();
+        prefs = requireActivity().getSharedPreferences(getString(R.string.prefs_file), MODE_PRIVATE);;
         //
 
         editText = view.findViewById(R.id.etSelectFile);
@@ -101,13 +96,13 @@ public class ChangeFolderFragment extends Fragment {
         editText2 = view.findViewById(R.id.etSelectFileLetter);
 
         //Llama al formato de custom_dialog
-        View alertCustomDialog = LayoutInflater.from(getActivity()).inflate(R.layout.custom_dialog, null);
+        View alertCustomDialog = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_succes, null);
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
 
         //Se aplica el formato al dialog
         alertDialog.setView(alertCustomDialog);
 
-        btnDialog = (Button) alertCustomDialog.findViewById(R.id.btnEntendido);
+        btnDialog = alertCustomDialog.findViewById(R.id.btnEntendido);
 
         dialog = alertDialog.create();
 
@@ -115,7 +110,7 @@ public class ChangeFolderFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 dialog.cancel();
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
+                requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
             }
         });
 
@@ -148,10 +143,10 @@ public class ChangeFolderFragment extends Fragment {
     }
 
 
-    private ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
+    private final ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
-                if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null && result.getData().getData() != null) {
+                if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
                     Uri selectedPdfUri = result.getData().getData();
                     // Manejar el URI del archivo PDF seleccionado
                     if (activeEditText == 1) {
@@ -168,13 +163,15 @@ public class ChangeFolderFragment extends Fragment {
                         public void onClick(View v) {
                             //uploadPDFFileFirebase(result.getData().getData());
                             if (selectedPdfUri1 != null && selectedPdfUri2 != null) {
-                                uploadPDFFileFirebase(selectedPdfUri1, editText, Name, Surname, Email);
-                                uploadPDFFileFirebase(selectedPdfUri2, editText2, Name, Surname, Email);
-                                ///
-                                //sale cuadro de texto
-                                //tu solicitud ha sido enviada
-                                //el personal de la administración estará revisando tu solicitud
-                                //boton ok (volver al home)
+                                uploadPDFFileFirebase("documentos", selectedPdfUri1, editText);
+                                uploadPDFFileFirebase("cartas", selectedPdfUri2, editText2);
+
+                                /*
+                                sale cuadro de texto
+                                tu solicitud ha sido enviada
+                                el personal de la administración estará revisando tu solicitud
+                                boton ok (volver al home)
+                                */
 
                                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                                 dialog.show();
@@ -188,7 +185,7 @@ public class ChangeFolderFragment extends Fragment {
             }
     );
 
-    private void uploadPDFFileFirebase(Uri data, EditText editText, String name, String surname, String email) {
+    private void uploadPDFFileFirebase(String path, Uri data, EditText editText) {
         ProgressBar progressBar = new ProgressBar(getActivity());
         progressBar.setIndeterminate(true);
         final AlertDialog alertDialog = new AlertDialog.Builder(getActivity())
@@ -197,7 +194,7 @@ public class ChangeFolderFragment extends Fragment {
         alertDialog.show();
 
         String filename = editText.getText().toString();
-        StorageReference reference = storageReference.child("uploadPDF"+System.currentTimeMillis()+".pdf");
+        StorageReference reference = storageReference.child(path).child("uploadPDF"+System.currentTimeMillis()+".pdf");
         reference.putFile(data)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
@@ -206,7 +203,7 @@ public class ChangeFolderFragment extends Fragment {
                         while(!uriTask.isComplete());
                         Uri uri = uriTask.getResult();
 
-                        putPDF putPDF = new putPDF(filename, uri.toString(), name, surname, email);
+                        putPDF putPDF = new putPDF(filename, uri.toString(), prefs.getString("name", "No hay datos"), prefs.getString("surname", "No hay datos"), prefs.getString("email", "No hay datos"));
                         databaseReference.child(databaseReference.push().getKey()).setValue(putPDF);
                         Toast.makeText(getActivity(), "Files Uploaded", Toast.LENGTH_SHORT).show();
                         alertDialog.dismiss();
