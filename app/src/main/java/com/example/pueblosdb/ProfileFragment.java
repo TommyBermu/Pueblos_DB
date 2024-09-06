@@ -26,6 +26,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.FirebaseUserMetadata;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+
 public class ProfileFragment extends Fragment {
     private SharedPreferences prefs;
     private FirebaseUser user;
@@ -106,7 +109,7 @@ public class ProfileFragment extends Fragment {
         saveChanges.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(requireActivity(), "Falta implementar el cambio de Datos :p", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireActivity(), prefs.getStringSet("inscripciones", new HashSet<String>()).toString(), Toast.LENGTH_SHORT).show();
             }
         });
 

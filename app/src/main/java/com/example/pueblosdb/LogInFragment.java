@@ -260,6 +260,7 @@ public class LogInFragment extends Fragment {
         prefsEditor.putString("name", user.getNombre());
         prefsEditor.putString("surname", user.getApellidos());
         prefsEditor.putString("cargo", user.getCargo().toString());
+        prefsEditor.putStringSet("inscripciones", user.getInscripciones());
         prefsEditor.apply();
     }
 

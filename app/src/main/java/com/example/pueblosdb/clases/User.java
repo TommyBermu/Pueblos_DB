@@ -1,11 +1,13 @@
 package com.example.pueblosdb.clases;
 
+import static android.content.Context.MODE_PRIVATE;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import com.example.pueblosdb.AuthActivity;
+import com.example.pueblosdb.R;
 import com.facebook.login.LoginManager;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -14,7 +16,9 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
+import java.util.HashMap;
 import java.util.Objects;
+import java.util.Set;
 
 public class User {
 
@@ -22,13 +26,15 @@ public class User {
     protected String nombre;
     protected String apellidos;
     protected Cargo cargo;
+    protected HashMap<String, Boolean> inscripciones;
     //fecha de nacimiento
     public User(){}
 
-    public User(String nombre, String apellidos, Cargo cargo) {
+    public User(String nombre, String apellidos, Cargo cargo, HashMap<String, Boolean> inscripciones) {
         this.nombre = nombre;
         this.apellidos = apellidos;
         this.cargo = cargo;
+        this.inscripciones = inscripciones;
     }
 
     public Cargo getCargo() {
@@ -55,10 +61,26 @@ public class User {
         this.apellidos = apellidos;
     }
 
+    public Set<String> getInscripciones() {
+        return inscripciones.keySet();
+    }
+
+    public void setInscripciones(HashMap<String, Boolean> inscripciones) {
+        this.inscripciones = inscripciones;
+    }
+
     public enum Cargo {
         EXTERNO,
         COMUNERO,
         ADMIN
+    }
+
+    public static void inscribirse(){
+
+    }
+
+    static public void createUser(){
+
     }
 
     static public void deleteUser(AuthCredential credential, Context context, SharedPreferences prefs, @NonNull FirebaseUser user){
@@ -71,7 +93,7 @@ public class User {
                         public void onSuccess(Void unused) {
                             FirebaseFirestore.getInstance().collection("users").document(Objects.requireNonNull(user.getEmail())).delete();
                             Toast.makeText(context, "Cuenta eliminada", Toast.LENGTH_SHORT).show();
-                            User.logOut(context, prefs);
+                            logOut(context);
                         }
                     });
                 } else {
@@ -81,8 +103,8 @@ public class User {
         });
     }
 
-    static public void logOut(Context context, @NonNull SharedPreferences prefs){
-        SharedPreferences.Editor editor = prefs.edit();
+    public static void logOut(Context context){
+        SharedPreferences.Editor editor = context.getSharedPreferences(context.getString(R.string.prefs_file), MODE_PRIVATE).edit();
         editor.clear().apply();
         LoginManager.getInstance().logOut();
         FirebaseAuth.getInstance().signOut();

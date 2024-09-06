@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.finance_status_menu) {
             replaceFragment(new FinanceFragment());
         } else if (id == R.id.logout_menu) {
-            User.logOut(this, prefs);
+            User.logOut(this);
         }else if (id == R.id.admin_options_menu) {
             replaceFragment(new AdminOptionsFragment());
         } else if (id == R.id.create_publication_menu) {

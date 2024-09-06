@@ -39,8 +39,11 @@ import com.google.firebase.firestore.SetOptions;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public class HomeFragment extends Fragment implements PublicacionClickListener {
     private SharedPreferences prefs;
@@ -48,7 +51,7 @@ public class HomeFragment extends Fragment implements PublicacionClickListener {
     private PublicacionAdapter adapter;
 
     private final FirebaseFirestore db  = FirebaseFirestore.getInstance();
-    private final DatabaseReference root = FirebaseDatabase.getInstance().getReference().child("publications");
+    private final DatabaseReference root = FirebaseDatabase.getInstance().getReference();
 
     public HomeFragment() {
         // Required empty public constructor
@@ -67,11 +70,12 @@ public class HomeFragment extends Fragment implements PublicacionClickListener {
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
+
         publicaciones = new ArrayList<>();
         adapter = new PublicacionAdapter(publicaciones, requireActivity(), this);
-
         recyclerView.setAdapter(adapter);
-        root.addValueEventListener(new ValueEventListener() {
+
+        root.child("publications").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()){
@@ -92,7 +96,9 @@ public class HomeFragment extends Fragment implements PublicacionClickListener {
     @Override
     public void onItemCliked(int position) {
         String titulo = publicaciones.get(position).getTitulo();
-        if (prefs.getBoolean(titulo, false)) {
+
+        if (!prefs.getStringSet("inscripciones", new HashSet<String>()).contains(titulo)) { // si titulo no está en el keyset de inscripciones
+
             AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
             View dialogView = getLayoutInflater().inflate(R.layout.dialog_confirm, null);
 
@@ -106,15 +112,28 @@ public class HomeFragment extends Fragment implements PublicacionClickListener {
                 @Override
                 public void onClick(View v) {
                     Map<String, Boolean> mapa = new HashMap<>();
-                    mapa.put(prefs.getString("email", "invalido"), false);
+                    mapa.put(prefs.getString("email", "invalido"), false); //false porque, aunque se incriba, no significa que sea aceptado
 
+                    // se agrega la inscripcion a la convocatoria en la base de datos
                     db.collection("convocatorias").document(titulo).set(mapa, SetOptions.merge()).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
+
+                                // primero se agrega a las preferencias que ya está inscrito en la convocatoria
                                 SharedPreferences.Editor prefsEditor = prefs.edit();
-                                prefsEditor.putBoolean(titulo, true);
+                                HashSet<String> set = new HashSet<>(prefs.getStringSet("inscripciones", new HashSet<String>()));
+                                set.add(titulo);
+                                prefsEditor.putStringSet("inscripciones", set);
                                 prefsEditor.apply();
+
+                                // luego se actualiza en el firebase un atributo del ususario que diga en qué convocatorias está inscrito
+                                Map<String, HashMap<String, Boolean>> convs = new HashMap<>(); // es un mapa que guarda mapas de convocatorias (el equivalente al atributo inscipciones del User)
+                                HashMap<String, Boolean> inscripciones = new HashMap<String, Boolean>();
+                                inscripciones.put(titulo,false);
+                                convs.put("inscripciones", inscripciones);
+                                db.collection("users").document(prefs.getString("email", "invaldo")).set(convs, SetOptions.merge());
+
                                 Toast.makeText(requireActivity(), "Te has inscrito en: " + titulo, Toast.LENGTH_SHORT).show();
                             } else {
                                 Toast.makeText(requireActivity(), "Algo ha salido mal, intenta de nuevo más tarde", Toast.LENGTH_SHORT).show();
@@ -134,5 +153,9 @@ public class HomeFragment extends Fragment implements PublicacionClickListener {
         } else {
             Toast.makeText(requireActivity(), "Ya te has inscrito en: " + titulo, Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public void inscribirse(){
+
     }
 }

@@ -158,8 +158,9 @@ public class ChangeFolderFragment extends Fragment {
                         prefs.getString("name", "No hay datos"),
                         prefs.getString("surname", "No hay datos"),
                         prefs.getString("email", "No hay datos"));
-
-                databaseReference.child(databaseReference.push().getKey()).setValue(putPDF);
+                String path = databaseReference.push().getKey();
+                assert path != null;
+                databaseReference.child(path).setValue(putPDF);
             }
         });
     }

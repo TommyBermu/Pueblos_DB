@@ -26,18 +26,17 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.example.pueblosdb.clases.Publicacion;
-import com.example.pueblosdb.clases.User;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 
@@ -45,7 +44,7 @@ public class PublishFragment extends Fragment {
     private ImageButton imageButton;
     private Uri imageUri;
     private EditText title, description;
-    private String end_date;
+    private String end_date, titulo;
     private TextView show_date;
     private DatePickerDialog.OnDateSetListener mDateSetListener;
 
@@ -83,7 +82,8 @@ public class PublishFragment extends Fragment {
         publish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (imageUri != null && !title.getText().toString().isEmpty() && !description.getText().toString().isEmpty() && end_date != null){
+                titulo = title.getText().toString();
+                if (imageUri != null && !titulo.isEmpty() && !description.getText().toString().isEmpty() && end_date != null){
                     uploadTofirebase(imageUri);
                 } else {
                     Toast.makeText(getContext(), "Please select an image or fill all the fields", Toast.LENGTH_SHORT).show();
@@ -109,8 +109,19 @@ public class PublishFragment extends Fragment {
         mDateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                SimpleDateFormat sdf_end = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
                 end_date = dayOfMonth + "/" + (month+1) + "/" + year;
-                show_date.setText(end_date);
+                try {
+                    if (sdf_end.parse(end_date).after(new Date())){
+                        show_date.setText(end_date);
+                    } else {
+                        Toast.makeText(requireActivity(), "Seleccione una fecha a partir de mañana.", Toast.LENGTH_SHORT).show();
+                        show_date.setText("");
+                        end_date = null;
+                    }
+                } catch (ParseException e) {
+                    throw new RuntimeException(e);
+                }
             }
         };
     }
@@ -136,15 +147,16 @@ public class PublishFragment extends Fragment {
                 fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
-                        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
+                        SimpleDateFormat sdf_start = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.US);
                         String modelId = root.push().getKey();
                         assert modelId != null;
+
                         root.child(modelId).setValue(new Publicacion(
-                                title.getText().toString(),
+                                titulo,
                                 uri.toString(),
                                 description.getText().toString(),
                                 end_date,
-                                dateFormat.format(Calendar.getInstance().getTime())));
+                                sdf_start.format(new Date())));
 
                         Toast.makeText(getContext(), "Publicación creada", Toast.LENGTH_SHORT).show();
                         imageButton.setImageResource(R.drawable.baseline_add_photo_alternate_270);

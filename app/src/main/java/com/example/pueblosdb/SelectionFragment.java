@@ -19,6 +19,9 @@ import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.HashMap;
+import java.util.HashSet;
+
 public class SelectionFragment extends Fragment {
     private String name, surname, Email;
     private final FirebaseFirestore db  = FirebaseFirestore.getInstance();
@@ -69,12 +72,12 @@ public class SelectionFragment extends Fragment {
     }
 
     public void createUser(User.Cargo cargo){
-        db.collection("users").document(Email).set(new User(name, surname, cargo));
+        db.collection("users").document(Email).set(new User(name, surname, cargo, new HashMap<String, Boolean>()));
         //salir de la cuenta para ir al AuthActivity
-        SharedPreferences.Editor editor = getActivity().getSharedPreferences(getString(R.string.prefs_file), MODE_PRIVATE).edit();
+        SharedPreferences.Editor editor = requireActivity().getSharedPreferences(getString(R.string.prefs_file), MODE_PRIVATE).edit();
         editor.clear().apply();
         LoginManager.getInstance().logOut();
         FirebaseAuth.getInstance().signOut();
-        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new LogInFragment()).commit();
+        requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new LogInFragment()).commit();
     }
 }

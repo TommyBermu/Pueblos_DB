@@ -1,14 +1,13 @@
 package com.example.pueblosdb.clases;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Locale;
 
 public class Publicacion implements Comparable<Publicacion> {
     private String titulo, link_imagen, descripcion;
     private String fecha_publicacion, fecha_finalizacion;
+    //private Tipo tipo; TODO implementar en el futuro
 
     public Publicacion() {
     }
@@ -19,6 +18,11 @@ public class Publicacion implements Comparable<Publicacion> {
         this.descripcion = descripcion;
         this.fecha_finalizacion = fecha_finalizacion;
         this.fecha_publicacion = fecha_publicacion;
+    }
+
+    public enum Tipo {
+        CONVOCATORIA,
+        ANUNCIO
     }
 
     public String getTitulo() {
@@ -58,17 +62,17 @@ public class Publicacion implements Comparable<Publicacion> {
         this.fecha_publicacion = fecha_publicacion;
     }
 
-    public Date getFecha_publicacion() throws ParseException {
-        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
-        return dateFormat.parse(fecha_publicacion);
+    public String getFecha_publicacion() throws ParseException {
+        return this.fecha_publicacion;
     }
 
     @Override
     public int compareTo(Publicacion o) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.US);
         try {
-            if (this.getFecha_publicacion().before(o.getFecha_publicacion())){
+            if (dateFormat.parse(this.getFecha_publicacion()).before(dateFormat.parse(o.getFecha_publicacion()))){
                 return 1;
-            }else if (this.getFecha_publicacion().after(o.getFecha_publicacion())){
+            }else if (dateFormat.parse(this.getFecha_publicacion()).after(dateFormat.parse(o.getFecha_publicacion()))){
                 return -1;
             }
         } catch (ParseException e) {
