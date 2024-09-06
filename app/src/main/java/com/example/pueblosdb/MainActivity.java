@@ -18,19 +18,15 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import android.view.MenuItem;
 import android.view.WindowManager;
-import com.example.pueblosdb.clases.Cargo;
-import com.facebook.login.LoginManager;
+import com.example.pueblosdb.clases.User;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.FirebaseFirestore;
-
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawerLayout;
     private FirebaseAuth mAuth;
     private SharedPreferences prefs;
-    private final FirebaseFirestore db  = FirebaseFirestore.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         NavigationView navigationView = findViewById(R.id.nav_view);
 
-        if (prefs.getString("cargo", "No hay datos").equals(Cargo.ADMIN.toString())){
+        if (prefs.getString("cargo", "No hay datos").equals(User.Cargo.ADMIN.toString())){
             navigationView.getMenu().clear();
             navigationView.inflateMenu(R.menu.admin_nav_menu);
         }
@@ -116,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.finance_status_menu) {
             replaceFragment(new FinanceFragment());
         } else if (id == R.id.logout_menu) {
-            salir();
+            User.logOut(this, prefs);
         }else if (id == R.id.admin_options_menu) {
             replaceFragment(new AdminOptionsFragment());
         } else if (id == R.id.create_publication_menu) {
@@ -125,15 +121,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    protected void salir() {
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.clear().apply();
-        LoginManager.getInstance().logOut();
-        mAuth.signOut();
-        Intent auth = new Intent(this, AuthActivity.class);
-        startActivity(auth);
     }
 
     private void replaceFragment(Fragment fragment){

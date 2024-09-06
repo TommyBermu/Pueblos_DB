@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_nav_graph"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.example.pueblosdb.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" />
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.example.pueblosdb.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/marketFragment"
+        android:name="com.example.pueblosdb.MarketFragment"
+        android:label="fragment_market"
+        tools:layout="@layout/fragment_market" />
+    <fragment
+        android:id="@+id/libraryFragment"
+        android:name="com.example.pueblosdb.LibraryFragment"
+        android:label="fragment_library"
+        tools:layout="@layout/fragment_library" />
+    <fragment
+        android:id="@+id/changeFolderFragment"
+        android:name="com.example.pueblosdb.ChangeFolderFragment"
+        android:label="fragment_change_folder"
+        tools:layout="@layout/fragment_change_folder" />
+    <fragment
+        android:id="@+id/groupsFragment"
+        android:name="com.example.pueblosdb.GroupsFragment"
+        android:label="fragment_groups"
+        tools:layout="@layout/fragment_groups" />
+    <fragment
+        android:id="@+id/financeFragment"
+        android:name="com.example.pueblosdb.FinanceFragment"
+        android:label="fragment_finance"
+        tools:layout="@layout/fragment_finance" />
+    <fragment
+        android:id="@+id/adminOptionsFragment"
+        android:name="com.example.pueblosdb.AdminOptionsFragment"
+        android:label="fragment_admin_options"
+        tools:layout="@layout/fragment_admin_options" />
+    <fragment
+        android:id="@+id/publishFragment"
+        android:name="com.example.pueblosdb.PublishFragment"
+        android:label="fragment_publish"
+        tools:layout="@layout/fragment_publish" />
+</navigation>

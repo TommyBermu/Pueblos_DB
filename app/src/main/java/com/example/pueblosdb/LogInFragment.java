@@ -12,6 +12,7 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -43,11 +44,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Objects;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link LogInFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class LogInFragment extends Fragment {
     private EditText tv1;
     private TextInputLayout tv2;
@@ -57,38 +53,19 @@ public class LogInFragment extends Fragment {
     private final FirebaseFirestore db  = FirebaseFirestore.getInstance();
     private final CallbackManager callbackManager = CallbackManager.Factory.create();
 
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    private String mParam1;
-    private String mParam2;
-
     public LogInFragment() {
         // Required empty public constructor
     }
 
-    public static LogInFragment newInstance(String param1, String param2) {
-        LogInFragment fragment = new LogInFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_login, container, false);
+        return inflater.inflate(R.layout.fragment_login, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
         mAuth = FirebaseAuth.getInstance();
         tv1 = view.findViewById(R.id.email);
         tv2 = view.findViewById(R.id.password_container);
@@ -130,7 +107,6 @@ public class LogInFragment extends Fragment {
                 signUp();
             }
         });
-        return view;
     }
 
     public void signIn() throws IllegalArgumentException {
@@ -141,7 +117,7 @@ public class LogInFragment extends Fragment {
             if (Email.isEmpty() || Password.isEmpty())
                 throw new IllegalArgumentException("Requiere rellenar todos los campos");
 
-            mAuth.signInWithEmailAndPassword(Email, Password).addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
+            mAuth.signInWithEmailAndPassword(Email, Password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (task.isSuccessful()) {
@@ -248,7 +224,7 @@ public class LogInFragment extends Fragment {
             });
 
     private void authUser(AuthCredential credential){
-        FirebaseAuth.getInstance().signInWithCredential(credential).addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
+        FirebaseAuth.getInstance().signInWithCredential(credential).addOnCompleteListener(requireActivity(), new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
@@ -264,7 +240,7 @@ public class LogInFragment extends Fragment {
                                 Intent main = new Intent(getActivity(), MainActivity.class);
                                 startActivity(main);
                             } else {
-                                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AppRegisterFragment()).commit();
+                                replaceFragment(new AppRegisterFragment());
                             }
                         }
                     });
@@ -285,10 +261,13 @@ public class LogInFragment extends Fragment {
         prefsEditor.putString("surname", user.getApellidos());
         prefsEditor.putString("cargo", user.getCargo().toString());
         prefsEditor.apply();
-        prefsEditor.commit();
     }
 
     public void signUp() {
-        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new RegisterFragment()).commit();
+        replaceFragment(new RegisterFragment());
+    }
+
+    private void replaceFragment(Fragment fragment){
+        requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
     }
 }

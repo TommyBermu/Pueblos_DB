@@ -12,6 +12,8 @@ import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,65 +26,44 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.example.pueblosdb.clases.Publicacion;
+import com.example.pueblosdb.clases.User;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import java.text.ParseException;
+
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
+import java.util.Locale;
 
 
 public class PublishFragment extends Fragment {
     private ImageButton imageButton;
     private Uri imageUri;
     private EditText title, description;
-
-    private Date date;
+    private String end_date;
     private TextView show_date;
     private DatePickerDialog.OnDateSetListener mDateSetListener;
 
-    private DatabaseReference root;
-    private StorageReference reference;
-
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    private String mParam1;
-    private String mParam2;
+    private final DatabaseReference root = FirebaseDatabase.getInstance().getReference("publications");
+    private final StorageReference reference = FirebaseStorage.getInstance().getReference("publications");
 
     public PublishFragment() {
         // Required empty public constructor
     }
 
-    public static PublishFragment newInstance(String param1, String param2) {
-        PublishFragment fragment = new PublishFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_publish, container, false);
+        return inflater.inflate(R.layout.fragment_publish, container, false);
+    }
 
-        root = FirebaseDatabase.getInstance().getReference("publications");
-        reference = FirebaseStorage.getInstance().getReference("publications");
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
         title = view.findViewById(R.id.title);
         description = view.findViewById(R.id.description);
@@ -102,7 +83,7 @@ public class PublishFragment extends Fragment {
         publish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (imageUri != null && !title.getText().toString().isEmpty() && !description.getText().toString().isEmpty() && date != null){
+                if (imageUri != null && !title.getText().toString().isEmpty() && !description.getText().toString().isEmpty() && end_date != null){
                     uploadTofirebase(imageUri);
                 } else {
                     Toast.makeText(getContext(), "Please select an image or fill all the fields", Toast.LENGTH_SHORT).show();
@@ -128,16 +109,10 @@ public class PublishFragment extends Fragment {
         mDateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                try {
-                    date = new SimpleDateFormat("dd-MM-yyyy").parse(dayOfMonth + "-" + (month+1) + "-" + year);
-                } catch (ParseException e) {
-                    throw new RuntimeException(e);
-                }
-                show_date.setText(dayOfMonth + "/" + (month+1) + "/" + year);
+                end_date = dayOfMonth + "/" + (month+1) + "/" + year;
+                show_date.setText(end_date);
             }
         };
-
-        return view;
     }
 
     private final ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
@@ -161,11 +136,20 @@ public class PublishFragment extends Fragment {
                 fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
-                        Publicacion publicacion = new Publicacion(title.getText().toString(), uri.toString(), description.getText().toString(), date);
+                        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
                         String modelId = root.push().getKey();
-                        root.child(modelId).setValue(publicacion);
+                        assert modelId != null;
+                        root.child(modelId).setValue(new Publicacion(
+                                title.getText().toString(),
+                                uri.toString(),
+                                description.getText().toString(),
+                                end_date,
+                                dateFormat.format(Calendar.getInstance().getTime())));
+
                         Toast.makeText(getContext(), "Publicación creada", Toast.LENGTH_SHORT).show();
                         imageButton.setImageResource(R.drawable.baseline_add_photo_alternate_270);
+                        title.setText("");
+                        description.setText("");
                     }
                 });
             }
