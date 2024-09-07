@@ -24,7 +24,6 @@ import java.util.HashSet;
 
 public class SelectionFragment extends Fragment {
     private String name, surname, Email;
-    private final FirebaseFirestore db  = FirebaseFirestore.getInstance();
 
     public SelectionFragment() {
         // Required empty public constructor
@@ -71,8 +70,9 @@ public class SelectionFragment extends Fragment {
         });
     }
 
-    public void createUser(User.Cargo cargo){
-        db.collection("users").document(Email).set(new User(name, surname, cargo, new HashMap<String, Boolean>()));
+    public void createUser(User.Cargo cargo) {
+        FirebaseFirestore.getInstance().collection("users").document(Email).set(new User(name, surname, cargo, new HashMap<String, Boolean>()));
+
         //salir de la cuenta para ir al AuthActivity
         SharedPreferences.Editor editor = requireActivity().getSharedPreferences(getString(R.string.prefs_file), MODE_PRIVATE).edit();
         editor.clear().apply();

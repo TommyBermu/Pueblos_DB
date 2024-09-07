@@ -136,7 +136,7 @@ public class HomeFragment extends Fragment implements PublicacionClickListener {
 
                                 Toast.makeText(requireActivity(), "Te has inscrito en: " + titulo, Toast.LENGTH_SHORT).show();
                             } else {
-                                Toast.makeText(requireActivity(), "Algo ha salido mal, intenta de nuevo más tarde", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(requireActivity(), "Algo ha salido mal: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         }
                     });

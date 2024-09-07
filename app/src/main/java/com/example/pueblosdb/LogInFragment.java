@@ -80,7 +80,7 @@ public class LogInFragment extends Fragment {
         enter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                signIn();
+                User.logIn(tv1.getText().toString(), tv2.getEditText().getText().toString(), requireActivity());
             }
         });
 
@@ -107,59 +107,6 @@ public class LogInFragment extends Fragment {
                 signUp();
             }
         });
-    }
-
-    public void signIn() throws IllegalArgumentException {
-
-        String Email = tv1.getText().toString();
-        String Password = Objects.requireNonNull(tv2.getEditText()).getText().toString();
-        try {
-            if (Email.isEmpty() || Password.isEmpty())
-                throw new IllegalArgumentException("Requiere rellenar todos los campos");
-
-            mAuth.signInWithEmailAndPassword(Email, Password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                @Override
-                public void onComplete(@NonNull Task<AuthResult> task) {
-                    if (task.isSuccessful()) {
-                        try {
-                            if (!FirebaseAuth.getInstance().getCurrentUser().isEmailVerified())
-                                throw new IllegalArgumentException("Verifique su correo electrónico");
-
-                            // Sign in success
-                            Log.d(TAG, "signInWithEmail: success");
-
-                            //a veces no se conecta pero es por el android studio xd
-                           db.collection("users").document(Email).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                @Override
-                                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                    Log.d(TAG, "onSuccess: added Preferences");
-                                    agregarPreferencias(documentSnapshot, Email);
-                                    //ir a la Main activity si se recuperó el docuemto correctamente
-                                    Intent main = new Intent(getActivity(), MainActivity.class);
-                                    startActivity(main);
-                                }
-                            }).addOnFailureListener(new OnFailureListener() {
-                               @Override
-                               public void onFailure(@NonNull Exception e) {
-                                   Log.d(TAG, "onFailure: Logging out");
-                                   Toast.makeText(getActivity(), "Error al iniciar sesión, verifique su conexión a internet o intente nuevamente", Toast.LENGTH_LONG).show();
-                                   FirebaseAuth.getInstance().signOut();
-                               }
-                           });
-                        } catch (IllegalArgumentException e) {
-                            Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    } else {
-                        // If sign in fails, display a message to the user.
-                        Log.w(TAG, "signInWithEmail: failure", task.getException());
-                        Toast.makeText(getActivity(), Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
-        } catch (IllegalArgumentException e) {
-            Log.w(TAG, "signInWithEmail:failure", e);
-            Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
     }
 
     public void googleSignIn(){
@@ -236,7 +183,7 @@ public class LogInFragment extends Fragment {
                         @Override
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
                             if (documentSnapshot.exists()) {
-                                agregarPreferencias(documentSnapshot, Email);
+                                User.agregarPreferencias(documentSnapshot, Email, requireActivity());
                                 Intent main = new Intent(getActivity(), MainActivity.class);
                                 startActivity(main);
                             } else {
@@ -251,17 +198,6 @@ public class LogInFragment extends Fragment {
                 }
             }
         });
-    }
-
-    private void agregarPreferencias(DocumentSnapshot document, String email) {
-        User user = document.toObject(User.class);
-        SharedPreferences.Editor prefsEditor = getActivity().getSharedPreferences(getString(R.string.prefs_file), MODE_PRIVATE).edit();
-        prefsEditor.putString("email", email);
-        prefsEditor.putString("name", user.getNombre());
-        prefsEditor.putString("surname", user.getApellidos());
-        prefsEditor.putString("cargo", user.getCargo().toString());
-        prefsEditor.putStringSet("inscripciones", user.getInscripciones());
-        prefsEditor.apply();
     }
 
     public void signUp() {
