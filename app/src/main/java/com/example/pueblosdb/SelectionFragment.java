@@ -2,25 +2,26 @@ package com.example.pueblosdb;
 
 import static android.content.Context.MODE_PRIVATE;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentResultListener;
-
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import com.example.pueblosdb.clases.User;
 import com.facebook.login.LoginManager;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
-
 import java.util.HashMap;
-import java.util.HashSet;
 
 public class SelectionFragment extends Fragment {
     private String name, surname, Email;
@@ -71,13 +72,6 @@ public class SelectionFragment extends Fragment {
     }
 
     public void createUser(User.Cargo cargo) {
-        FirebaseFirestore.getInstance().collection("users").document(Email).set(new User(name, surname, cargo, new HashMap<String, Boolean>()));
-
-        //salir de la cuenta para ir al AuthActivity
-        SharedPreferences.Editor editor = requireActivity().getSharedPreferences(getString(R.string.prefs_file), MODE_PRIVATE).edit();
-        editor.clear().apply();
-        LoginManager.getInstance().logOut();
-        FirebaseAuth.getInstance().signOut();
-        requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new LogInFragment()).commit();
+        User.createUser(requireActivity(), cargo, name, surname, Email);
     }
 }

@@ -187,7 +187,7 @@ public class LogInFragment extends Fragment {
                                 Intent main = new Intent(getActivity(), MainActivity.class);
                                 startActivity(main);
                             } else {
-                                replaceFragment(new AppRegisterFragment());
+                                User.replaceFragment(requireActivity(), new AppRegisterFragment());
                             }
                         }
                     });
@@ -201,10 +201,6 @@ public class LogInFragment extends Fragment {
     }
 
     public void signUp() {
-        replaceFragment(new RegisterFragment());
-    }
-
-    private void replaceFragment(Fragment fragment){
-        requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+        User.replaceFragment(requireActivity(), new RegisterFragment());
     }
 }

@@ -7,7 +7,11 @@ import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+
 import com.example.pueblosdb.AuthActivity;
+import com.example.pueblosdb.LogInFragment;
 import com.example.pueblosdb.MainActivity;
 import com.example.pueblosdb.R;
 import com.facebook.login.LoginManager;
@@ -82,11 +86,29 @@ public class User {
         //TODO hacer que se inscriba en un grupo o en una convocatoria (debe pasar parámetros respectivos)
     }
 
-    public static void createUser(){
 
+    public static void createUser(FragmentActivity context, Cargo cargo, String name, String surname, String Email) {
+        final String TAG = "CreateUser:EmailPassword";
+        FirebaseFirestore.getInstance().collection("users").document(Email).set(new User(name, surname, cargo, new HashMap<String, Boolean>())).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()){
+                    Log.d(TAG, "onSucces: docuemnto creado correctamente");
+                    logOut(context);
+                    replaceFragment(context, new LogInFragment());
+                } else {
+                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                    assert user != null : "No hay usuario registrado";
+                    user.delete();
+                    Log.e(TAG, "onFailure: " + task.getException().getMessage());
+                }
+            }
+        });
     }
 
-    public static void deleteUser(AuthCredential credential, Context context, SharedPreferences prefs, @NonNull FirebaseUser user){
+    public static void deleteUser(AuthCredential credential, FragmentActivity context){
+        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        assert user != null : "User is null";
         user.reauthenticate(credential).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
@@ -94,7 +116,8 @@ public class User {
                     user.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void unused) {
-                            FirebaseFirestore.getInstance().collection("users").document(Objects.requireNonNull(user.getEmail())).delete();
+                            FirebaseFirestore.getInstance().collection("users").document(user.getEmail()).delete();
+                            //sale que puede ser NULL porque se puede iniciar sesión con telefono, pero eso no está implementado.
                             Toast.makeText(context, "Cuenta eliminada", Toast.LENGTH_SHORT).show();
                             logOut(context);
                         }
@@ -106,57 +129,55 @@ public class User {
         });
     }
 
-    public static void logIn(String Email, String Password, Context context){
-        try {
-            if (Email.isEmpty() || Password.isEmpty()) {
-                throw new IllegalArgumentException("Requiere rellenar todos los campos");
-            }
-            FirebaseAuth.getInstance().signInWithEmailAndPassword(Email, Password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                @Override
-                public void onComplete(@NonNull Task<AuthResult> task) {
-                    if (task.isSuccessful()) {
-                        try {
-                            if (!FirebaseAuth.getInstance().getCurrentUser().isEmailVerified())
-                                throw new IllegalArgumentException("Verifique su correo electrónico");
+    public static void logIn(String Email, String Password, FragmentActivity context){
+        final FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        final String TAG = "LogIn:EmailPassword";
 
-                            // Sign in success
-                            Log.d("EmailPassword", "signInWithEmail: success");
-
-                            //a veces no se conecta pero es por el android studio xd
-                            FirebaseFirestore.getInstance().collection("users").document(Email).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                @Override
-                                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                    Log.d("EmailPassword", "onSuccess: added Preferences");
-                                    agregarPreferencias(documentSnapshot, Email, context);
-                                    //ir a la Main activity si se recuperó el docuemto correctamente
-                                    Intent main = new Intent(context, MainActivity.class);
-                                    context.startActivity(main);
-                                }
-                            }).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Log.d("EmailPassword", "onFailure: Logging out");
-                                    Toast.makeText(context, "Error al iniciar sesión, verifique su conexión a internet o intente nuevamente", Toast.LENGTH_LONG).show();
-                                    FirebaseAuth.getInstance().signOut();
-                                }
-                            });
-                        } catch (IllegalArgumentException e) {
-                            Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    } else {
-                        // If sign in fails, display a message to the user.
-                        Log.w("EmailPassword", "signInWithEmail: failure", task.getException());
-                        Toast.makeText(context, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
-        } catch (IllegalArgumentException e) {
-            Log.w("EmailPassword", "signInWithEmail:failure", e);
-            Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
+        if (Email.isEmpty() || Password.isEmpty()) {
+            Log.w(TAG, "failure: requiere llenar todos lo campos");
+            Toast.makeText(context, "requiere llenar todos lo campos", Toast.LENGTH_SHORT).show();
+            return;
         }
+
+        mAuth.signInWithEmailAndPassword(Email, Password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                    if (!mAuth.getCurrentUser().isEmailVerified()) {
+                        //lo mismo, sale que puede ser NULL porque puede estar registrado con telefono, pero eso no está implementado.
+                        Log.w(TAG, "Email is not verified");
+                        Toast.makeText(context, "Email is not verified", Toast.LENGTH_SHORT).show();
+                        mAuth.signOut();
+                        return;
+                    }
+                    Log.d(TAG, "LogInWithEmailAndPassword: success");
+                    //a veces no se conecta pero es por el android studio xd
+                    FirebaseFirestore.getInstance().collection("users").document(Email).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if (task.isSuccessful()){
+                                // si se recuperó el docuemto correctamente, agergar las preferencias e ir a la Main activity
+                                Log.d(TAG, "onSuccess: added Preferences");
+                                agregarPreferencias(task.getResult(), Email, context);
+                                Intent main = new Intent(context, MainActivity.class);
+                                context.startActivity(main);
+                            }
+                            else {
+                                Log.e(TAG, "onFailure: Logging out", task.getException());
+                                Toast.makeText(context, "Error al iniciar sesión, verifique su conexión a internet o intente nuevamente", Toast.LENGTH_LONG).show();
+                                mAuth.signOut();
+                            }
+                        }
+                    });
+                } else {
+                    Log.e(TAG, "signInWithEmail: failure", task.getException());
+                    Toast.makeText(context, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
-    public static void logOut(Context context){
+    public static void logOut(FragmentActivity context){
         SharedPreferences.Editor editor = context.getSharedPreferences(context.getString(R.string.prefs_file), MODE_PRIVATE).edit();
         editor.clear().apply();
         LoginManager.getInstance().logOut();
@@ -165,7 +186,7 @@ public class User {
         context.startActivity(auth);
     }
 
-    public static void agregarPreferencias(DocumentSnapshot document, String email, Context context) {
+    public static void agregarPreferencias(DocumentSnapshot document, String email, FragmentActivity context) {
         User user = document.toObject(User.class);
         SharedPreferences.Editor prefsEditor = context.getSharedPreferences(context.getString(R.string.prefs_file), MODE_PRIVATE).edit();
         prefsEditor.putString("email", email);
@@ -174,5 +195,9 @@ public class User {
         prefsEditor.putString("cargo", user.getCargo().toString());
         prefsEditor.putStringSet("inscripciones", user.getInscripciones().keySet());
         prefsEditor.apply();
+    }
+
+    public static void replaceFragment(FragmentActivity context, Fragment fragment){
+        context.getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
     }
 }

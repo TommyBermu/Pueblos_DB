@@ -31,7 +31,6 @@ import java.util.HashSet;
 
 public class ProfileFragment extends Fragment {
     private SharedPreferences prefs;
-    private FirebaseUser user;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -45,8 +44,6 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        user = FirebaseAuth.getInstance().getCurrentUser();
 
         prefs = requireActivity().getSharedPreferences(getString(R.string.prefs_file), MODE_PRIVATE);
         TextView tv1 = view.findViewById(R.id.emailvisualizer);
@@ -134,7 +131,7 @@ public class ProfileFragment extends Fragment {
                         EditText ptv2 = dialogView.findViewById(R.id.password_dialog);
                         try{
                             AuthCredential credential = EmailAuthProvider.getCredential(etv1.getText().toString(), ptv2.getText().toString());
-                            User.deleteUser(credential, requireActivity(), prefs, user);
+                            User.deleteUser(credential, requireActivity());
                             dialog.cancel();
                         }catch (IllegalArgumentException e){
                             Toast.makeText(requireActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
