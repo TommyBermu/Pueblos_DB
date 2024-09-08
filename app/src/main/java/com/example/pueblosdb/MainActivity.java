@@ -56,9 +56,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         NavigationView navigationView = findViewById(R.id.nav_view);
 
-        if (prefs.getString("cargo", "No hay datos").equals(User.Cargo.ADMIN.toString())){
+        if (prefs.getString("cargo", User.Cargo.EXTERNO.toString()).equals(User.Cargo.ADMIN.toString())){
             navigationView.getMenu().clear();
             navigationView.inflateMenu(R.menu.admin_nav_menu);
+        }
+        if (prefs.getString("cargo", User.Cargo.EXTERNO.toString()).equals(User.Cargo.EXTERNO.toString())){
+            navigationView.getMenu().clear();
+            navigationView.inflateMenu(R.menu.ext_nav_menu);
         }
 
         navigationView.setNavigationItemSelectedListener(this);
@@ -94,7 +98,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 replaceFragment(new LibraryFragment());
 
             } else if (id == R.id.profile_bottom_menu){
-                replaceFragment(new ProfileFragment());
+                if (prefs.getString("cargo", User.Cargo.EXTERNO.toString()).equals(User.Cargo.EXTERNO.toString()))
+                    replaceFragment(new UserProfileFragment());
+                else
+                    replaceFragment(new ComuProfileFragment());
             }
             return true;
         });

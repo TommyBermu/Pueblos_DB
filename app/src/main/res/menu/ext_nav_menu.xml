@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+    <item
+        android:title="Opciones Avanzadas">
+        <menu>
+            <item android:id="@+id/logout_menu"
+                android:icon="@drawable/baseline_logout_24"
+                android:title="Salir de la Cuenta"/>
+        </menu>
+    </item>
+</menu>

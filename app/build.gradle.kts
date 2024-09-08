@@ -38,7 +38,7 @@ android {
 }
 
 dependencies {
-
+    //implementation(libs.play.services.pay)
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)

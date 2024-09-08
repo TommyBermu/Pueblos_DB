@@ -22,23 +22,19 @@ import android.widget.Toast;
 import com.example.pueblosdb.clases.User;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.FirebaseUserMetadata;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 
-public class ProfileFragment extends Fragment {
+public class UserProfileFragment extends Fragment {
     private SharedPreferences prefs;
 
-    public ProfileFragment() {
+    public UserProfileFragment() {
         // Required empty public constructor
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_profile, container, false);
+        return inflater.inflate(R.layout.fragment_user_profile, container, false);
     }
 
     @Override
@@ -46,17 +42,17 @@ public class ProfileFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         prefs = requireActivity().getSharedPreferences(getString(R.string.prefs_file), MODE_PRIVATE);
-        TextView tv1 = view.findViewById(R.id.emailvisualizer);
+        TextView tv1 = view.findViewById(R.id.user_emailvisualizer);
         tv1.setText(prefs.getString("email", "No hay datos"));
-        TextView tv2 = view.findViewById(R.id.namevisualizer);
+        TextView tv2 = view.findViewById(R.id.user_namevisualizer);
         tv2.setText(prefs.getString("name", "No hay datos"));
-        TextView tv3 = view.findViewById(R.id.surnamevisualizer);
+        TextView tv3 = view.findViewById(R.id.user_surnamevisualizer);
         tv3.setText(prefs.getString("surname", "No hay datos"));
-        TextView tv4 = view.findViewById(R.id.showCargo);
+        TextView tv4 = view.findViewById(R.id.user_showCargo);
         tv4.setText(prefs.getString("cargo", "No hay datos"));
 
 
-        Button changeEmail = view.findViewById(R.id.changeEmail);
+        Button changeEmail = view.findViewById(R.id.user_changeEmail);
         changeEmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -79,7 +75,7 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        Button changePassword = view.findViewById(R.id.changePassword);
+        Button changePassword = view.findViewById(R.id.user_changePassword);
         changePassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -102,7 +98,7 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        Button saveChanges = view.findViewById(R.id.saveChanges);
+        Button saveChanges = view.findViewById(R.id.user_saveChanges);
         saveChanges.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -110,7 +106,7 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        Button deleteAccount = view.findViewById(R.id.deleteAccount);
+        Button deleteAccount = view.findViewById(R.id.user_deleteAccount);
         deleteAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
