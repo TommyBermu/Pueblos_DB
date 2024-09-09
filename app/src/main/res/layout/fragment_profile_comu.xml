@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/light_beige"
-    tools:context=".ComuProfileFragment">
+    tools:context=".ProfileComuFragment">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -23,7 +23,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="-27dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/pueblosdb_half_logo" />
@@ -41,31 +40,32 @@
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/surnamevisualizer"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/imageView3" />
 
 
             <EditText
                 android:id="@+id/namevisualizer"
-                android:layout_width="180dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
                 android:textSize="20sp"
+                android:hint="Nombres"
                 app:layout_constraintEnd_toStartOf="@+id/surnamevisualizer"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/guideline12"
                 app:layout_constraintTop_toTopOf="@+id/surnamevisualizer" />
 
             <EditText
                 android:id="@+id/surnamevisualizer"
-                android:layout_width="180dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
                 android:gravity="center_horizontal"
                 android:textSize="20sp"
+                android:hint="Apellidos"
                 app:layout_constraintBottom_toTopOf="@+id/emailvisualizer"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/guideline13"
                 app:layout_constraintStart_toEndOf="@+id/namevisualizer"
                 app:layout_constraintTop_toBottomOf="@+id/Title" />
 
@@ -112,14 +112,73 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="20dp"
-                android:text="Otros datos"
+                android:text="Datos Personales"
                 android:textAlignment="center"
                 android:textColor="#000000"
                 android:textSize="20sp"
-                app:layout_constraintBottom_toTopOf="@+id/saveChanges"
+                app:layout_constraintBottom_toTopOf="@+id/surnameMother"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/showCargo" />
+
+            <EditText
+                android:id="@+id/nameMother"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:hint="Nombres Madre"
+                app:layout_constraintEnd_toStartOf="@+id/surnameMother"
+                app:layout_constraintStart_toStartOf="@+id/guideline12"
+                app:layout_constraintTop_toTopOf="@+id/surnameMother" />
+
+            <EditText
+                android:id="@+id/surnameMother"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:hint="Apellidos Madre"
+                android:inputType="text"
+                app:layout_constraintBottom_toTopOf="@id/surnameFather"
+                app:layout_constraintEnd_toEndOf="@+id/guideline13"
+                app:layout_constraintStart_toEndOf="@+id/nameMother"
+                app:layout_constraintTop_toBottomOf="@+id/otherInfo" />
+
+            <EditText
+                android:id="@+id/nameFather"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:hint="Nombres Padre"
+                app:layout_constraintEnd_toStartOf="@+id/surnameFather"
+                app:layout_constraintStart_toStartOf="@+id/guideline12"
+                app:layout_constraintTop_toTopOf="@+id/surnameFather" />
+
+            <EditText
+                android:id="@+id/surnameFather"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:hint="Apellidos Padre"
+                android:inputType="text"
+                app:layout_constraintBottom_toTopOf="@id/birthdayDate"
+                app:layout_constraintEnd_toEndOf="@+id/guideline13"
+                app:layout_constraintStart_toEndOf="@+id/nameFather"
+                app:layout_constraintTop_toBottomOf="@+id/surnameMother" />
+
+            <EditText
+                android:id="@+id/birthdayDate"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:inputType="date"
+                android:hint="Fecha de Nacimiento"
+                app:layout_constraintBottom_toTopOf="@id/saveChanges"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/surnameFather" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/saveChanges"
@@ -132,7 +191,7 @@
                 app:layout_constraintBottom_toTopOf="@+id/changePassword"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/otherInfo" />
+                app:layout_constraintTop_toBottomOf="@+id/birthdayDate" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/changePassword"
@@ -160,6 +219,21 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/changePassword" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline12"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.05" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline13"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.95" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

@@ -1,7 +1,6 @@
 package com.example.pueblosdb.clases;
 
 import static android.content.Context.MODE_PRIVATE;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
@@ -9,14 +8,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
-
 import com.example.pueblosdb.AuthActivity;
 import com.example.pueblosdb.LogInFragment;
 import com.example.pueblosdb.MainActivity;
 import com.example.pueblosdb.R;
 import com.facebook.login.LoginManager;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
@@ -26,7 +23,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
-import java.util.Objects;
 
 public class User {
     // attributes
@@ -34,7 +30,12 @@ public class User {
     private String apellidos;
     private Cargo cargo;
     private HashMap<String, Boolean> inscripciones;
-    //fecha de nacimiento
+    //Date fecha de nacimiento
+    //String profesion
+    //String clan
+    //String carpeta
+    //boolean sexo
+
     public User(){}
 
     public User(String nombre, String apellidos, Cargo cargo, HashMap<String, Boolean> inscripciones) {

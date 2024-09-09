@@ -12,9 +12,9 @@
         tools:layout="@layout/fragment_home" />
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.example.pueblosdb.UserProfileFragment"
+        android:name="com.example.pueblosdb.ProfileUserFragment"
         android:label="fragment_profile"
-        tools:layout="@layout/fragment_user_profile" />
+        tools:layout="@layout/fragment_profile_user" />
     <fragment
         android:id="@+id/marketFragment"
         android:name="com.example.pueblosdb.MarketFragment"

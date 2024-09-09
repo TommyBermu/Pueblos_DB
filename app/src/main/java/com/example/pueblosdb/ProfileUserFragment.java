@@ -2,7 +2,6 @@ package com.example.pueblosdb;
 
 import static android.content.Context.MODE_PRIVATE;
 
-import android.app.AlertDialog;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -11,7 +10,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-
+import android.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,18 +25,16 @@ import com.google.firebase.auth.EmailAuthProvider;
 
 import java.util.HashSet;
 
-
-public class ComuProfileFragment extends Fragment {
+public class ProfileUserFragment extends Fragment {
     private SharedPreferences prefs;
 
-    public ComuProfileFragment() {
+    public ProfileUserFragment() {
         // Required empty public constructor
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_comu_profile, container, false);
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_profile_user, container, false);
     }
 
     @Override
@@ -45,17 +42,17 @@ public class ComuProfileFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         prefs = requireActivity().getSharedPreferences(getString(R.string.prefs_file), MODE_PRIVATE);
-        TextView tv1 = view.findViewById(R.id.emailvisualizer);
+        TextView tv1 = view.findViewById(R.id.user_emailvisualizer);
         tv1.setText(prefs.getString("email", "No hay datos"));
-        TextView tv2 = view.findViewById(R.id.namevisualizer);
+        TextView tv2 = view.findViewById(R.id.user_namevisualizer);
         tv2.setText(prefs.getString("name", "No hay datos"));
-        TextView tv3 = view.findViewById(R.id.surnamevisualizer);
+        TextView tv3 = view.findViewById(R.id.user_surnamevisualizer);
         tv3.setText(prefs.getString("surname", "No hay datos"));
-        TextView tv4 = view.findViewById(R.id.showCargo);
+        TextView tv4 = view.findViewById(R.id.user_showCargo);
         tv4.setText(prefs.getString("cargo", "No hay datos"));
 
 
-        Button changeEmail = view.findViewById(R.id.changeEmail);
+        Button changeEmail = view.findViewById(R.id.user_changeEmail);
         changeEmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -78,7 +75,7 @@ public class ComuProfileFragment extends Fragment {
             }
         });
 
-        Button changePassword = view.findViewById(R.id.changePassword);
+        Button changePassword = view.findViewById(R.id.user_changePassword);
         changePassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -101,7 +98,7 @@ public class ComuProfileFragment extends Fragment {
             }
         });
 
-        Button saveChanges = view.findViewById(R.id.saveChanges);
+        Button saveChanges = view.findViewById(R.id.user_saveChanges);
         saveChanges.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -109,7 +106,7 @@ public class ComuProfileFragment extends Fragment {
             }
         });
 
-        Button deleteAccount = view.findViewById(R.id.deleteAccount);
+        Button deleteAccount = view.findViewById(R.id.user_deleteAccount);
         deleteAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -141,6 +138,4 @@ public class ComuProfileFragment extends Fragment {
             }
         });
     }
-
-
 }

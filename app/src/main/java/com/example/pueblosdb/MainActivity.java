@@ -99,9 +99,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             } else if (id == R.id.profile_bottom_menu){
                 if (prefs.getString("cargo", User.Cargo.EXTERNO.toString()).equals(User.Cargo.EXTERNO.toString()))
-                    replaceFragment(new UserProfileFragment());
+                    replaceFragment(new ProfileUserFragment());
                 else
-                    replaceFragment(new ComuProfileFragment());
+                    replaceFragment(new ProfileComuFragment());
             }
             return true;
         });
