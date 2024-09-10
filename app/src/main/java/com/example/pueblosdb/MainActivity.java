@@ -9,15 +9,18 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.GravityCompat;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.core.view.WindowInsetsControllerCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import android.view.MenuItem;
+import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Toast;
+
 import com.example.pueblosdb.clases.User;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
@@ -33,11 +36,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
 
-        //quita el StatusBar y el NavigationBar
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        Window window = getWindow();
+        // quita el StatusBar
+        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        // pone el Navigation Bar de color azul oscuro
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.setNavigationBarColor(ContextCompat.getColor(this, R.color.dark_blue));
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+        /* esto es para quitar el NavigationBar ,tambien hay que quitar la opcion de (android:fitsSystemWindows="true") en el activity_main.xml para que funcione bien sin la barra
         WindowInsetsControllerCompat controller = new WindowInsetsControllerCompat(getWindow(), getWindow().getDecorView());
         controller.hide(WindowInsetsCompat.Type.systemBars());
         controller.setSystemBarsBehavior(WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
+        */
 
         setContentView(R.layout.activity_main);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.drawer_layout), (v, insets) -> {
@@ -111,12 +123,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.folder_change_menu) {
+        if (id == R.id.folder_change_menu && canAccess()) {
             replaceFragment(new ChangeFolderFragment());
-        } else if (id == R.id.group_join_menu) {
+        } else if (id == R.id.group_join_menu && canAccess()) {
             replaceFragment(new GroupsFragment());
 
-        } else if (id == R.id.finance_status_menu) {
+        } else if (id == R.id.finance_status_menu && canAccess()) {
             replaceFragment(new FinanceFragment());
         } else if (id == R.id.logout_menu) {
             User.logOut(this);
@@ -130,10 +142,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
-    private void replaceFragment(Fragment fragment){
-        User.replaceFragment(this, fragment);
-    }
-
     @Override
     protected void onStart() {
         super.onStart();
@@ -142,5 +150,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Intent auth = new Intent(this, AuthActivity.class);
             startActivity(auth);
         }
+    }
+
+    private boolean canAccess(){
+        if (prefs.getBoolean("completeInfo", false))
+            return true;
+        Toast.makeText(this, "Debe completar la información primero", Toast.LENGTH_SHORT).show();
+        replaceFragment(new ProfileComuFragment());
+        return false;
+    }
+
+    private void replaceFragment(Fragment fragment){
+        User.replaceFragment(this, fragment);
     }
 }

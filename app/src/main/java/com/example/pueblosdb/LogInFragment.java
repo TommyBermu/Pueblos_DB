@@ -80,7 +80,7 @@ public class LogInFragment extends Fragment {
         enter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                User.logIn(tv1.getText().toString(), tv2.getEditText().getText().toString(), requireActivity());
+                User.logIn(requireActivity(), tv1.getText().toString(), tv2.getEditText().getText().toString());
             }
         });
 

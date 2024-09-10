@@ -127,7 +127,7 @@ public class ProfileUserFragment extends Fragment {
                         EditText ptv2 = dialogView.findViewById(R.id.password_dialog);
                         try{
                             AuthCredential credential = EmailAuthProvider.getCredential(etv1.getText().toString(), ptv2.getText().toString());
-                            User.deleteUser(credential, requireActivity());
+                            User.deleteUser(requireActivity(), credential);
                             dialog.cancel();
                         }catch (IllegalArgumentException e){
                             Toast.makeText(requireActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();

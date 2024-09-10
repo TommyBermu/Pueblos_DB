@@ -20,9 +20,12 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
+import java.util.Map;
 
 public class User {
     // attributes
@@ -30,19 +33,16 @@ public class User {
     private String apellidos;
     private Cargo cargo;
     private HashMap<String, Boolean> inscripciones;
-    //Date fecha de nacimiento
-    //String profesion
-    //String clan
-    //String carpeta
-    //boolean sexo
+    private Boolean completeInfo;
 
     public User(){}
 
-    public User(String nombre, String apellidos, Cargo cargo, HashMap<String, Boolean> inscripciones) {
+    public User(String nombre, String apellidos, Cargo cargo, HashMap<String, Boolean> inscripciones, Boolean completeInfo) {
         this.nombre = nombre;
         this.apellidos = apellidos;
         this.cargo = cargo;
         this.inscripciones = inscripciones;
+        this.completeInfo = completeInfo;
     }
 
     public Cargo getCargo() {
@@ -77,6 +77,14 @@ public class User {
         this.inscripciones = inscripciones;
     }
 
+    public Boolean isCompleteInfo() {
+        return completeInfo;
+    }
+
+    public void setCompleteInfo(Boolean completeInfo) {
+        this.completeInfo = completeInfo;
+    }
+
     public enum Cargo {
         EXTERNO,
         COMUNERO,
@@ -90,24 +98,21 @@ public class User {
 
     public static void createUser(FragmentActivity context, Cargo cargo, String name, String surname, String Email) {
         final String TAG = "CreateUser:EmailPassword";
-        FirebaseFirestore.getInstance().collection("users").document(Email).set(new User(name, surname, cargo, new HashMap<String, Boolean>())).addOnCompleteListener(new OnCompleteListener<Void>() {
+        FirebaseFirestore.getInstance().collection("users").document(Email).set(new User(name, surname, cargo, new HashMap<String, Boolean>(), false)).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()){
                     Log.d(TAG, "onSucces: docuemnto creado correctamente");
                     logOut(context);
-                    replaceFragment(context, new LogInFragment());
                 } else {
-                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                    assert user != null : "No hay usuario registrado";
-                    user.delete();
-                    Log.e(TAG, "onFailure: " + task.getException().getMessage());
+                    FirebaseAuth.getInstance().getCurrentUser().delete();
+                    Log.e(TAG, "onFailure, no se pudo crear el documento, se elimina el usuario : " + task.getException().getMessage());
                 }
             }
         });
     }
 
-    public static void deleteUser(AuthCredential credential, FragmentActivity context){
+    public static void deleteUser(FragmentActivity context, AuthCredential credential){
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         assert user != null : "User is null";
         user.reauthenticate(credential).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -130,7 +135,60 @@ public class User {
         });
     }
 
-    public static void logIn(String Email, String Password, FragmentActivity context){
+    public static void updateInfo(String nombres, String apellidos){
+        String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+        DocumentReference docRef = FirebaseFirestore.getInstance().collection("users").document(email);
+        docRef.update("nombre", nombres);
+        docRef.update("apellidos", apellidos);
+
+    }
+
+    public static void updateInfo(FragmentActivity context ,String nombres, String apellidos, String naneMadre, String surnameMadre, String namePadre, String surnamePadre, String fechaNacimiento, String sexo, String clan, String prefesion){
+        String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+        SharedPreferences prefs = context.getSharedPreferences(context.getString(R.string.prefs_file), MODE_PRIVATE);
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        Map<String, Object> info = new HashMap<>();
+        info.put("nombre Madre", naneMadre);
+        info.put("apellidos Madre", surnameMadre);
+        info.put("nombre Padre", namePadre);
+        info.put("apellidos Padre", surnamePadre);
+        info.put("fecha de nacimiento", fechaNacimiento);
+        info.put("sexo", sexo);
+        info.put("clan", clan);
+        info.put("profesion", prefesion);
+
+        if (prefs.getBoolean("completeInfo", false)){
+            db.collection("info_comunero").document(email).update(info).addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void unused) {
+                    DocumentReference docRef = db.collection("users").document(email);
+                    docRef.update("nombre", nombres);
+                    docRef.update("apellidos", apellidos);
+                    Toast.makeText(context, "Datos guardados correctamente", Toast.LENGTH_SHORT).show();
+                }
+            });
+        } else {
+            db.collection("info_comunero").document(email).set(info).addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void unused) {
+                    DocumentReference docRef = db.collection("users").document(email);
+                    docRef.update("nombre", nombres);
+                    docRef.update("apellidos", apellidos);
+                    docRef.update("completeInfo", true);
+                    SharedPreferences.Editor editor = prefs.edit();
+                    editor.putBoolean("completeInfo", true);
+                    for (String key : info.keySet()){
+                        editor.putString(key, (String)info.get(key));
+                    }
+                    editor.apply();
+                    Toast.makeText(context, "Datos guardados correctamente", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+    }
+
+    public static void logIn(FragmentActivity context, String Email, String Password){
         final FirebaseAuth mAuth = FirebaseAuth.getInstance();
         final String TAG = "LogIn:EmailPassword";
 
@@ -195,6 +253,20 @@ public class User {
         prefsEditor.putString("surname", user.getApellidos());
         prefsEditor.putString("cargo", user.getCargo().toString());
         prefsEditor.putStringSet("inscripciones", user.getInscripciones().keySet());
+        prefsEditor.putBoolean("completeInfo", user.isCompleteInfo());
+
+        if (!user.getCargo().equals(Cargo.EXTERNO) && user.isCompleteInfo()){
+            FirebaseFirestore.getInstance().collection("info_comunero").document(email).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    Map<String, Object> info = documentSnapshot.getData();
+                    for (String key : info.keySet()){
+                        prefsEditor.putString(key, (String)info.get(key));
+                    }
+                    prefsEditor.apply();
+                }
+            });
+        }
         prefsEditor.apply();
     }
 

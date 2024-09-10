@@ -3,6 +3,9 @@
     <style name="Theme.PueblosDB" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Status Bar color. -->
         <item name="android:statusBarColor">@color/light_beige</item>"
+        <!-- Navigation Bar color. -->
+        <item name="android:navigationBarColor">@color/dark_blue</item>
+
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/light_blue</item>
         <item name="colorPrimaryVariant">@color/light_blue</item>

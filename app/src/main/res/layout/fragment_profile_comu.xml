@@ -49,8 +49,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
-                android:textSize="20sp"
                 android:hint="Nombres"
+                android:textSize="20sp"
                 app:layout_constraintEnd_toStartOf="@+id/surnamevisualizer"
                 app:layout_constraintStart_toStartOf="@+id/guideline12"
                 app:layout_constraintTop_toTopOf="@+id/surnamevisualizer" />
@@ -62,8 +62,8 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
                 android:gravity="center_horizontal"
-                android:textSize="20sp"
                 android:hint="Apellidos"
+                android:textSize="20sp"
                 app:layout_constraintBottom_toTopOf="@+id/emailvisualizer"
                 app:layout_constraintEnd_toEndOf="@+id/guideline13"
                 app:layout_constraintStart_toEndOf="@+id/namevisualizer"
@@ -112,7 +112,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="20dp"
-                android:text="Datos Personales"
+                android:text="Otros Datos Personales"
                 android:textAlignment="center"
                 android:textColor="#000000"
                 android:textSize="20sp"
@@ -125,8 +125,8 @@
                 android:id="@+id/nameMother"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:inputType="text"
                 android:hint="Nombres Madre"
+                android:inputType="text"
                 app:layout_constraintEnd_toStartOf="@+id/surnameMother"
                 app:layout_constraintStart_toStartOf="@+id/guideline12"
                 app:layout_constraintTop_toTopOf="@+id/surnameMother" />
@@ -148,8 +148,8 @@
                 android:id="@+id/nameFather"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:inputType="text"
                 android:hint="Nombres Padre"
+                android:inputType="text"
                 app:layout_constraintEnd_toStartOf="@+id/surnameFather"
                 app:layout_constraintStart_toStartOf="@+id/guideline12"
                 app:layout_constraintTop_toTopOf="@+id/surnameFather" />
@@ -167,18 +167,95 @@
                 app:layout_constraintStart_toEndOf="@+id/nameFather"
                 app:layout_constraintTop_toBottomOf="@+id/surnameMother" />
 
-            <EditText
+            <TextView
                 android:id="@+id/birthdayDate"
                 android:layout_width="200dp"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
-                android:inputType="date"
+                android:background="@drawable/rounded_layout_5"
                 android:hint="Fecha de Nacimiento"
-                app:layout_constraintBottom_toTopOf="@id/saveChanges"
+                android:gravity="center"
+                android:textSize="15sp"
+                app:layout_constraintBottom_toTopOf="@id/viewSexo"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/surnameFather" />
+
+            <TextView
+                android:id="@+id/viewClan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:text="Clan"
+                android:textAlignment="center"
+                android:textColor="#000000"
+                app:layout_constraintStart_toStartOf="@+id/clanSpinner"
+                app:layout_constraintTop_toTopOf="@+id/viewSexo" />
+
+            <TextView
+                android:id="@+id/viewSexo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:text="Sexo"
+                android:textAlignment="center"
+                android:textColor="#000000"
+                app:layout_constraintBottom_toTopOf="@id/radioGroup"
+                app:layout_constraintStart_toStartOf="@+id/radioGroup"
+                app:layout_constraintTop_toBottomOf="@+id/birthdayDate" />
+
+            <RadioGroup
+                android:id="@+id/radioGroup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                app:layout_constraintBottom_toTopOf="@id/profession"
+                app:layout_constraintEnd_toStartOf="@+id/clanSpinner"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/viewSexo">
+
+                <RadioButton
+                    android:id="@+id/radioButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Femenino" />
+
+                <RadioButton
+                    android:id="@+id/radioButton2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Masculino" />
+
+                <RadioButton
+                    android:id="@+id/radioButton3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Otro" />
+            </RadioGroup>
+
+            <Spinner
+                android:id="@+id/clanSpinner"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/radioGroup"
+                app:layout_constraintTop_toTopOf="@+id/radioGroup" />
+
+            <EditText
+                android:id="@+id/profession"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:hint="Profesion"
+                app:layout_constraintBottom_toTopOf="@id/saveChanges"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/saveChanges"
@@ -191,7 +268,7 @@
                 app:layout_constraintBottom_toTopOf="@+id/changePassword"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/birthdayDate" />
+                app:layout_constraintTop_toBottomOf="@+id/profession" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/changePassword"
@@ -233,7 +310,6 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 app:layout_constraintGuide_percent="0.95" />
-
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
