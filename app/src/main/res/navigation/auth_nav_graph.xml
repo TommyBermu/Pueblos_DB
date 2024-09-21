@@ -22,22 +22,11 @@
         android:name="com.example.pueblosdb.AppRegisterFragment"
         android:label="fragment_app_register"
         tools:layout="@layout/fragment_app_register" >
-        <action
-            android:id="@+id/action_appRegisterFragment_to_selectionFragment"
-            app:destination="@id/selectionFragment" />
     </fragment>
     <fragment
         android:id="@+id/registerFragment"
         android:name="com.example.pueblosdb.RegisterFragment"
         android:label="fragment_register"
         tools:layout="@layout/fragment_register" >
-        <action
-            android:id="@+id/action_registerFragment_to_selectionFragment"
-            app:destination="@id/selectionFragment" />
     </fragment>
-    <fragment
-        android:id="@+id/selectionFragment"
-        android:name="com.example.pueblosdb.SelectionFragment"
-        android:label="fragment_selection"
-        tools:layout="@layout/fragment_selection" />
 </navigation>

@@ -2,6 +2,7 @@ package com.example.pueblosdb;
 
 import static android.content.Context.MODE_PRIVATE;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -153,9 +154,5 @@ public class HomeFragment extends Fragment implements PublicacionClickListener {
         } else {
             Toast.makeText(requireActivity(), "Ya te has inscrito en: " + titulo, Toast.LENGTH_SHORT).show();
         }
-    }
-
-    public void inscribirse(){
-
     }
 }

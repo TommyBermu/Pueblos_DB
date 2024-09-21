@@ -15,6 +15,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.api.Auth;
+
 public class AppRegisterFragment extends Fragment {
     private EditText tv1, tv2;
     private Button setatributes;
@@ -45,12 +47,8 @@ public class AppRegisterFragment extends Fragment {
                     if (name.isEmpty() || surname.isEmpty())
                         throw new IllegalArgumentException("Requiere rellenar todos los campos");
 
-                    //se crea el usuario el docuemnto en la base de datos
-                    Bundle bundle = new Bundle();
-                    bundle.putString("Nombres", name);
-                    bundle.putString("Apellidos", surname);
-                    getActivity().getSupportFragmentManager().setFragmentResult("key", bundle);
-                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SelectionFragment()).commit();
+                    //sale el cuadro de díalogo para seleccionar la relacion con la comunidad
+                    ((AuthActivity) requireActivity()).createUser(name, surname);
 
                 } catch (IllegalArgumentException e) {
                     Log.w("EmailPassword", "createDocument: failure", e);

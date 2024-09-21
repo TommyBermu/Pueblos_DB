@@ -26,7 +26,7 @@ import com.google.firebase.auth.EmailAuthProvider;
 import java.util.HashSet;
 
 public class ProfileUserFragment extends Fragment {
-    private SharedPreferences prefs;
+    private User usuario;
 
     public ProfileUserFragment() {
         // Required empty public constructor
@@ -40,16 +40,16 @@ public class ProfileUserFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        usuario = ((MainActivity) requireActivity()).getUsuario();
 
-        prefs = requireActivity().getSharedPreferences(getString(R.string.prefs_file), MODE_PRIVATE);
         TextView tv1 = view.findViewById(R.id.user_emailvisualizer);
-        tv1.setText(prefs.getString("email", "No hay datos"));
+        tv1.setText(usuario.getEmail());
         TextView tv2 = view.findViewById(R.id.user_namevisualizer);
-        tv2.setText(prefs.getString("name", "No hay datos"));
+        tv2.setText(usuario.getNombre());
         TextView tv3 = view.findViewById(R.id.user_surnamevisualizer);
-        tv3.setText(prefs.getString("surname", "No hay datos"));
+        tv3.setText(usuario.getApellidos());
         TextView tv4 = view.findViewById(R.id.user_showCargo);
-        tv4.setText(prefs.getString("cargo", "No hay datos"));
+        tv4.setText(usuario.getCargo().toString());
 
 
         Button changeEmail = view.findViewById(R.id.user_changeEmail);
@@ -102,7 +102,7 @@ public class ProfileUserFragment extends Fragment {
         saveChanges.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(requireActivity(), prefs.getStringSet("inscripciones", new HashSet<String>()).toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireActivity(), usuario.getInscripciones().keySet().toString(), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -127,7 +127,7 @@ public class ProfileUserFragment extends Fragment {
                         EditText ptv2 = dialogView.findViewById(R.id.password_dialog);
                         try{
                             AuthCredential credential = EmailAuthProvider.getCredential(etv1.getText().toString(), ptv2.getText().toString());
-                            User.deleteUser(requireActivity(), credential);
+                            usuario.deleteUser(credential);
                             dialog.cancel();
                         }catch (IllegalArgumentException e){
                             Toast.makeText(requireActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();

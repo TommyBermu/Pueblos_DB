@@ -21,6 +21,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,6 +32,8 @@ import com.google.firebase.auth.EmailAuthProvider;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
@@ -38,9 +41,9 @@ import java.util.Locale;
 
 
 public class ProfileComuFragment extends Fragment {
-    private SharedPreferences prefs;
     private DatePickerDialog.OnDateSetListener mDateSetListener;
     private String birthday;
+    private User usuario;
 
     public ProfileComuFragment() {
         // Required empty public constructor
@@ -48,7 +51,6 @@ public class ProfileComuFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_profile_comu, container, false);
     }
 
@@ -57,15 +59,17 @@ public class ProfileComuFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         //Mi Perfil
-        prefs = requireActivity().getSharedPreferences(getString(R.string.prefs_file), MODE_PRIVATE);
+        SharedPreferences prefs = requireActivity().getSharedPreferences(getString(R.string.prefs_file), MODE_PRIVATE);
+        usuario = ((MainActivity) requireActivity()).getUsuario();
+
         TextView tv1 = view.findViewById(R.id.emailvisualizer);
-        tv1.setText(prefs.getString("email", "No hay datos"));
+        tv1.setText(usuario.getEmail());
         EditText tv2 = view.findViewById(R.id.namevisualizer);
-        tv2.setText(prefs.getString("name", "No hay datos"));
+        tv2.setText(usuario.getNombre());
         EditText tv3 = view.findViewById(R.id.surnamevisualizer);
-        tv3.setText(prefs.getString("surname", "No hay datos"));
+        tv3.setText(usuario.getApellidos());
         TextView tv4 = view.findViewById(R.id.showCargo);
-        tv4.setText(prefs.getString("cargo", "No hay datos"));
+        tv4.setText(usuario.getCargo().toString());
 
         //Otros Datos Personales
         EditText etv1 = view.findViewById(R.id.nameMother);
@@ -78,9 +82,24 @@ public class ProfileComuFragment extends Fragment {
         etv4.setText(prefs.getString("apellidos Padre", null));
         EditText etv5 = view.findViewById(R.id.profession);
         etv5.setText(prefs.getString("profesion", null));
-
         TextView birthDate = view.findViewById(R.id.birthdayDate);
         birthDate.setText(prefs.getString("fecha de nacimiento", null));
+
+        RadioGroup radioGroup = view.findViewById(R.id.radioGroup);
+        if (prefs.getString("sexo", "").equals("Femenino"))
+            radioGroup.check(R.id.radioButton);
+        else if (prefs.getString("sexo", "").equals("Masculino"))
+            radioGroup.check(R.id.radioButton2);
+        else if (prefs.getString("sexo", "").equals("Otro"))
+            radioGroup.check(R.id.radioButton3);
+
+        Spinner spinner = view.findViewById(R.id.clanSpinner);
+        String[] clanes = {"Seleccione", "clan1", "clan2", "clan3", "clan4", "clan5"}; // TODO Hacer que se pueda actualizar desde la nube
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(requireActivity(), android.R.layout.simple_spinner_item, clanes);
+        spinner.setAdapter(adapter);
+        spinner.setSelection(Integer.parseInt(prefs.getString("clan", "0")));
+
+        // para editar los datos
 
         birthDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,13 +134,6 @@ public class ProfileComuFragment extends Fragment {
             }
         };
 
-        Spinner spinner = view.findViewById(R.id.clanSpinner);
-        String[] clanes = {"clan1", "clan2", "clan3", "clan4", "clan5"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(requireActivity(), android.R.layout.simple_spinner_item, clanes);
-        spinner.setAdapter(adapter);
-
-        //spinner.setSelection(clanes.);
-
         Button saveChanges = view.findViewById(R.id.saveChanges);
         saveChanges.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -133,8 +145,9 @@ public class ProfileComuFragment extends Fragment {
                 String nombrePadre = etv3.getText().toString();
                 String apellidosPadre = etv4.getText().toString();
                 String profesion = etv5.getText().toString();
+                birthday = birthDate.getText().toString();
 
-                String clan = spinner.getSelectedItem().toString();
+                int clan = spinner.getSelectedItemPosition();
                 String sexo = "";
 
                 RadioButton rb1 = view.findViewById(R.id.radioButton);
@@ -149,11 +162,11 @@ public class ProfileComuFragment extends Fragment {
                     sexo = "Otro";
                 }
 
-                if (prefs.getString("cargo", User.Cargo.EXTERNO.toString()).equals(User.Cargo.EXTERNO.toString())) {
-                    User.updateInfo(nombre, apellidos);
+                if (usuario.getCargo().toString().equals(User.Cargo.EXTERNO.toString())) {
+                    usuario.updateInfo(nombre, apellidos);
 
-                } else if (!nombreMadre.isEmpty() && !apellidosMadre.isEmpty() && !nombrePadre.isEmpty() && !apellidosPadre.isEmpty() && birthday != null && !sexo.isEmpty() && !clan.isEmpty() && !profesion.isEmpty()) {
-                    User.updateInfo(requireActivity(), nombre, apellidos, nombreMadre, apellidosMadre, nombrePadre, apellidosPadre, birthday, sexo, clan, profesion);
+                } else if (!nombreMadre.isEmpty() && !apellidosMadre.isEmpty() && !nombrePadre.isEmpty() && !apellidosPadre.isEmpty() && birthday != null && !sexo.isEmpty() && clan != 0 && !profesion.isEmpty()) {
+                    usuario.updateInfo(nombre, apellidos, nombreMadre, apellidosMadre, nombrePadre, apellidosPadre, birthday, sexo, clan, profesion);
 
                 } else {
                     Toast.makeText(requireActivity(), "Debes llenar y/o seleccionar todos los campos", Toast.LENGTH_SHORT).show();
@@ -189,10 +202,11 @@ public class ProfileComuFragment extends Fragment {
         changePassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
-                View dialogView = getLayoutInflater().inflate(R.layout.dialog_change_password, null);
 
+                View dialogView = getLayoutInflater().inflate(R.layout.dialog_change_password, null);
+                AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
                 builder.setView(dialogView);
+
                 AlertDialog dialog = builder.create();
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialog.show();
@@ -229,7 +243,7 @@ public class ProfileComuFragment extends Fragment {
                         EditText ptv2 = dialogView.findViewById(R.id.password_dialog);
                         try{
                             AuthCredential credential = EmailAuthProvider.getCredential(etv1.getText().toString(), ptv2.getText().toString());
-                            User.deleteUser(requireActivity(), credential);
+                            usuario.deleteUser(credential);
                             dialog.cancel();
                         }catch (IllegalArgumentException e){
                             Toast.makeText(requireActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" >
 
     <uses-permission
@@ -19,11 +20,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PueblosDB"
         tools:targetApi="31" >
-        <activity
-            android:name=".WalletActivity"
-            android:exported="false"
-            android:label="@string/title_activity_wallet"
-            android:theme="@style/Theme.PueblosDB" />
         <activity
             android:name=".MainActivity"
             android:exported="false" />
@@ -51,7 +47,7 @@
         <meta-data
             android:name="com.facebook.sdk.ClientToken"
             android:value="@string/facebook_client_token" />
-
+        <!--
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation" />
@@ -67,6 +63,7 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
+        -->
     </application>
 
 </manifest>

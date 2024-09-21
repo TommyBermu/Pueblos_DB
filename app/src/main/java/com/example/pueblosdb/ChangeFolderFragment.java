@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import com.example.pueblosdb.clases.User;
 import com.example.pueblosdb.clases.putPDF;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -31,6 +32,7 @@ import com.google.firebase.storage.UploadTask;
 
 public class ChangeFolderFragment extends Fragment {
     SharedPreferences prefs;
+    private User usuario;
 
     EditText editText, editText2;
     Button btn, btnDialog;
@@ -58,6 +60,7 @@ public class ChangeFolderFragment extends Fragment {
 
         //Llamar a la info de la persona
         prefs = requireActivity().getSharedPreferences(getString(R.string.prefs_file), MODE_PRIVATE);
+        usuario = ((MainActivity) requireActivity()).getUsuario();
 
         editText = view.findViewById(R.id.etSelectFile);
         editText2 = view.findViewById(R.id.etSelectFileLetter);
@@ -77,10 +80,9 @@ public class ChangeFolderFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 dialog.cancel();
-                requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
+                usuario.replaceFragment(new HomeFragment());
             }
         });
-
 
         editText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -159,7 +161,7 @@ public class ChangeFolderFragment extends Fragment {
                         prefs.getString("surname", "No hay datos"),
                         prefs.getString("email", "No hay datos"));
                 String path = databaseReference.push().getKey();
-                assert path != null;
+                assert path != null : "Path is null";
                 databaseReference.child(path).setValue(putPDF);
             }
         });

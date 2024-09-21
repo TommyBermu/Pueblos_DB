@@ -1,6 +1,9 @@
 package com.example.pueblosdb;
 
+import android.app.AlertDialog;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,28 +13,35 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import android.content.Intent;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.Toast;
 
+import com.example.pueblosdb.clases.User;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class AuthActivity extends AppCompatActivity {
     SharedPreferences prefs;
-    FirebaseAuth mAuth;
+    FirebaseUser fUser;
+
+    public User usuario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        //quita el SplashScreen y pone el de la app
-        setTheme(R.style.Theme_PueblosDB);
-
         prefs = getSharedPreferences(getString(R.string.prefs_file), MODE_PRIVATE);
-        mAuth = FirebaseAuth.getInstance();
-        if (mAuth.getCurrentUser() != null && mAuth.getCurrentUser().isEmailVerified() && prefs.getString("email", null) != null){
+        fUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (fUser != null && fUser.isEmailVerified() && prefs.getString("email", null) != null) {
             Intent home = new Intent(this, MainActivity.class);
             startActivity(home);
         }
+
+        //quita el SplashScreen y pone el de la app
+        setTheme(R.style.Theme_PueblosDB);
+        usuario = new User(this);
 
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
@@ -57,9 +67,42 @@ public class AuthActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        if (mAuth.getCurrentUser() != null && mAuth.getCurrentUser().isEmailVerified() && prefs.getString("email", null) != null){
+        if (fUser != null && fUser.isEmailVerified() && prefs.getString("email", null) != null) {
             Intent home = new Intent(this, MainActivity.class);
             startActivity(home);
         }
+    }
+
+    public User getUsuario(){
+        return usuario;
+    }
+
+    public void createUser(String name, String surname) {
+        //se muestra el cuadro de dialogo
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_selection, null);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setView(dialogView);
+
+        AlertDialog dialog = builder.create();
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.show();
+
+        Button member = dialogView.findViewById(R.id.btnSoyMiembro);
+        member.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                usuario.createUser(User.Cargo.COMUNERO, name, surname, FirebaseAuth.getInstance().getCurrentUser().getEmail());
+                dialog.cancel();
+            }
+        });
+
+        Button nonMember = dialogView.findViewById(R.id.btnNOSoyMiembro);
+        nonMember.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                usuario.createUser(User.Cargo.EXTERNO, name, surname, FirebaseAuth.getInstance().getCurrentUser().getEmail());
+                dialog.cancel();
+            }
+        });
     }
 }

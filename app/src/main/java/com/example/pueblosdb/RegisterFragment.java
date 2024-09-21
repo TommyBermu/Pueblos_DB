@@ -1,6 +1,9 @@
 package com.example.pueblosdb;
 
+import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -70,17 +73,13 @@ public class RegisterFragment extends Fragment {
                                 // Sign up success
                                 Log.d(TAG, "createUserWithEmail:success");
 
+                                //sale el cuadro de díalogo para seleccionar la relacion con la comunidad
+                                ((AuthActivity) requireActivity()).createUser(name, surname);
+
                                 //enviar un código de verificación al email
-                                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                                user.sendEmailVerification();
+                                FirebaseAuth.getInstance().getCurrentUser().sendEmailVerification();
                                 Toast.makeText(getActivity(), "Verifique su correo electrónico con el link enviado al correo proporcionado y luego inicie sesión", Toast.LENGTH_LONG).show();
 
-                                //se crea el usuario el docuemnto en la base de datos
-                                Bundle bundle = new Bundle();
-                                bundle.putString("Nombres", name);
-                                bundle.putString("Apellidos", surname);
-                                getActivity().getSupportFragmentManager().setFragmentResult("key", bundle);
-                                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SelectionFragment()).commit();
                             } else {
                                 // If sign up fails, display a message to the user.
                                 Log.w(TAG, "createUserWithEmail:failure", task.getException());

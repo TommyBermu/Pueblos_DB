@@ -1,12 +1,8 @@
 package com.example.pueblosdb;
 
 import static android.app.Activity.RESULT_OK;
-import static android.content.Context.MODE_PRIVATE;
-
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
@@ -14,7 +10,6 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,16 +17,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
 import com.example.pueblosdb.clases.User;
-import com.facebook.CallbackManager;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
@@ -47,11 +39,11 @@ import java.util.Objects;
 public class LogInFragment extends Fragment {
     private EditText tv1;
     private TextInputLayout tv2;
-    private FirebaseAuth mAuth;
     private static final String TAG = "EmailPassword";
     private GoogleSignInClient gsc;
     private final FirebaseFirestore db  = FirebaseFirestore.getInstance();
-    private final CallbackManager callbackManager = CallbackManager.Factory.create();
+    //private final CallbackManager callbackManager = CallbackManager.Factory.create(); * para facebook *
+    private User usuario;
 
     public LogInFragment() {
         // Required empty public constructor
@@ -66,7 +58,8 @@ public class LogInFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mAuth = FirebaseAuth.getInstance();
+        usuario = ((AuthActivity)requireActivity()).getUsuario();
+
         tv1 = view.findViewById(R.id.email);
         tv2 = view.findViewById(R.id.password_container);
 
@@ -80,7 +73,7 @@ public class LogInFragment extends Fragment {
         enter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                User.logIn(requireActivity(), tv1.getText().toString(), tv2.getEditText().getText().toString());
+                usuario.logIn(tv1.getText().toString(), tv2.getEditText().getText().toString());
             }
         });
 
@@ -153,7 +146,7 @@ public class LogInFragment extends Fragment {
                     int result = o.getResultCode();
                     Intent data = o.getData();
 
-                    callbackManager.onActivityResult(1, result, data);
+                    //callbackManager.onActivityResult(1, result, data);  * para facebook *
 
                     if (result == RESULT_OK){
                         Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
@@ -183,11 +176,11 @@ public class LogInFragment extends Fragment {
                         @Override
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
                             if (documentSnapshot.exists()) {
-                                User.agregarPreferencias(documentSnapshot, Email, requireActivity());
+                                usuario.agregarPreferencias(documentSnapshot, Email);
                                 Intent main = new Intent(getActivity(), MainActivity.class);
                                 startActivity(main);
                             } else {
-                                User.replaceFragment(requireActivity(), new AppRegisterFragment());
+                                usuario.replaceFragment(new AppRegisterFragment());
                             }
                         }
                     });
@@ -201,6 +194,6 @@ public class LogInFragment extends Fragment {
     }
 
     public void signUp() {
-        User.replaceFragment(requireActivity(), new RegisterFragment());
+        usuario.replaceFragment(new RegisterFragment());
     }
 }
