@@ -34,6 +34,7 @@ googleFirebaseCrashlytics = "3.0.2"
 playServicesPay = "16.5.0"
 lifecycleViewmodelKtx = "2.8.4"
 lifecycleLivedataKtx = "2.8.4"
+billing = "5.1.0"
 
 [libraries]
 facebook-login = { module = "com.facebook.android:facebook-login", version.ref = "facebookLogin" }
@@ -73,6 +74,7 @@ threetenabp = { module = "com.jakewharton.threetenabp:threetenabp", version.ref 
 play-services-pay = { group = "com.google.android.gms", name = "play-services-pay", version.ref = "playServicesPay" }
 lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycleViewmodelKtx" }
 lifecycle-livedata-ktx = { group = "androidx.lifecycle", name = "lifecycle-livedata-ktx", version.ref = "lifecycleLivedataKtx" }
+billing = { module = "com.android.billingclient:billing", version.ref = "billing" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

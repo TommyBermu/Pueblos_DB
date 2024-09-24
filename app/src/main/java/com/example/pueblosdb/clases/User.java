@@ -68,7 +68,7 @@ public class User {
             this.carpeta = prefs.getString("carpeta", null);
             this.inscripciones = new HashMap<>();
             for (String s: prefs.getStringSet("inscripciones", new HashSet<>()))
-                inscripciones.put(s, false); //TODO se coloca false por facilidad, pero toca ver si es true o false xd
+                inscripciones.put(s, false); //TODO se coloca false por facilidad, pero toca ver si es true o false
             this.grupos = new HashMap<>();
             for (String s: prefs.getStringSet("grupos", new HashSet<>()))
                 grupos.put(s, false);
