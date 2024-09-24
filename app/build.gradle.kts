@@ -68,4 +68,5 @@ dependencies {
     implementation(libs.firebase.auth)
     implementation(libs.play.services.auth)
     implementation(libs.play.services.pay)
+    implementation(libs.billing)
 }
