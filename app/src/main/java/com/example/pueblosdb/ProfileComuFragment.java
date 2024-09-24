@@ -90,8 +90,6 @@ public class ProfileComuFragment extends Fragment {
             radioGroup.check(R.id.radioButton);
         else if (prefs.getString("sexo", "").equals("Masculino"))
             radioGroup.check(R.id.radioButton2);
-        else if (prefs.getString("sexo", "").equals("Otro"))
-            radioGroup.check(R.id.radioButton3);
 
         Spinner spinner = view.findViewById(R.id.clanSpinner);
         String[] clanes = {"Seleccione", "clan1", "clan2", "clan3", "clan4", "clan5"}; // TODO Hacer que se pueda actualizar desde la nube
@@ -152,14 +150,11 @@ public class ProfileComuFragment extends Fragment {
 
                 RadioButton rb1 = view.findViewById(R.id.radioButton);
                 RadioButton rb2 = view.findViewById(R.id.radioButton2);
-                RadioButton rb3 = view.findViewById(R.id.radioButton3);
 
                 if (rb1.isChecked()) {
                     sexo = "Femenino";
                 } else if (rb2.isChecked()) {
                     sexo = "Masculino";
-                } else if (rb3.isChecked()) {
-                    sexo = "Otro";
                 }
 
                 if (usuario.getCargo().toString().equals(User.Cargo.EXTERNO.toString())) {
@@ -190,7 +185,6 @@ public class ProfileComuFragment extends Fragment {
                 emailConfirm.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(requireActivity(), "info: " + prefs.getBoolean("completeInfo", false), Toast.LENGTH_SHORT).show();
                         Toast.makeText(requireActivity(), "Falta implementar el cambio de email :p", Toast.LENGTH_SHORT).show();
                         dialog.cancel();
                     }

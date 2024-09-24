@@ -1,7 +1,6 @@
 package com.example.pueblosdb;
 
 import android.annotation.SuppressLint;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -26,48 +25,48 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.HashMap;
 
-public class GroupsFragment extends Fragment implements RecyclerViewClickListener {
-    private ArrayList<Group> grupos;
+public class RequestGroupFragment extends Fragment implements RecyclerViewClickListener {
+    private ArrayList<HashMap> groups;
     private GroupAdapter adapter;
     private User usuario;
 
     private final DatabaseReference root = FirebaseDatabase.getInstance().getReference();
 
-    public GroupsFragment() {
+    public RequestGroupFragment() {
         // Required empty public constructor
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_groups, container, false);
+        return inflater.inflate(R.layout.fragment_request_group, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         usuario = ((MainActivity) requireActivity()).getUsuario();
 
-        RecyclerView recyclerView = view.findViewById(R.id.recyclerViewGrupos);
+        RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
 
-        grupos = new ArrayList<>();
-        adapter = new GroupAdapter(grupos, requireActivity(), this); //TODO
+        groups = new ArrayList<>();
+        /*
+        adapter = new GroupAdapter(groups, requireActivity(), this);
         recyclerView.setAdapter(adapter);
+        */
 
-        root.child("groups").addValueEventListener(new ValueEventListener() {
+        root.child("requests-groups").addValueEventListener(new ValueEventListener() {
             @SuppressLint("NotifyDataSetChanged") // solo hace que no se muestre un warning en en adapter.notifyDataSetChanged()
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()){
-                    Group grupo = dataSnapshot.getValue(Group.class);
-                    grupos.add(grupo);
+                    HashMap grupo = dataSnapshot.getValue(HashMap.class);
+                    groups.add(grupo);
                 }
                 adapter.notifyDataSetChanged();
             }
@@ -79,11 +78,6 @@ public class GroupsFragment extends Fragment implements RecyclerViewClickListene
 
     @Override
     public void onItemCliked(int position) {
-        Bundle bundle = new Bundle();
-        bundle.putString("nombre", grupos.get(position).getName());
-        bundle.putString("descripcion", grupos.get(position).getDescription());
-        bundle.putString("link", grupos.get(position).getLink_poster());
-        requireActivity().getSupportFragmentManager().setFragmentResult("data", bundle);
-        usuario.replaceFragment(new JoinGroupFragment());
+        Toast.makeText(requireActivity(), "Clicked: " + groups.get(position).toString(), Toast.LENGTH_SHORT).show();
     }
 }

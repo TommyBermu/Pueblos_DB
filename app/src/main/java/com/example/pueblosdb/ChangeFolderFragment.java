@@ -1,10 +1,8 @@
 package com.example.pueblosdb;
 
-import static android.content.Context.MODE_PRIVATE;
 import static android.app.Activity.RESULT_OK;
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -21,7 +19,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import com.example.pueblosdb.clases.User;
-import com.example.pueblosdb.clases.putPDF;
+import com.example.pueblosdb.clases.FolderChange;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
@@ -31,15 +29,14 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 public class ChangeFolderFragment extends Fragment {
-    SharedPreferences prefs;
     private User usuario;
 
     EditText editText, editText2;
     Button btn, btnDialog;
     AlertDialog dialog;
 
-    StorageReference storageReference = FirebaseStorage.getInstance().getReference("uploadPDF");
-    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("uploadPDF");
+    StorageReference storageReference = FirebaseStorage.getInstance().getReference("requests-folder_change");
+    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("requests-folder_change");
 
     private Uri selectedPdfUri1;
     private Uri selectedPdfUri2;
@@ -59,7 +56,6 @@ public class ChangeFolderFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         //Llamar a la info de la persona
-        prefs = requireActivity().getSharedPreferences(getString(R.string.prefs_file), MODE_PRIVATE);
         usuario = ((MainActivity) requireActivity()).getUsuario();
 
         editText = view.findViewById(R.id.etSelectFile);
@@ -130,8 +126,7 @@ public class ChangeFolderFragment extends Fragment {
                         public void onClick(View v) {
                             //uploadPDFFileFirebase(result.getData().getData());
                             if (selectedPdfUri1 != null && selectedPdfUri2 != null) {
-                                uploadPDFFileFirebase("documentos", selectedPdfUri1, editText);
-                                uploadPDFFileFirebase("cartas", selectedPdfUri2, editText2);
+                                uploadPDFFile(selectedPdfUri1, selectedPdfUri2);
 
                                 //muestra el dialogo de exito
                                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -146,23 +141,27 @@ public class ChangeFolderFragment extends Fragment {
             }
     );
 
-    private void uploadPDFFileFirebase(String path, Uri data, EditText editText) {
-
-        StorageReference reference = storageReference.child(path).child("uploadPDF" + System.currentTimeMillis() + ".pdf");
-        reference.putFile(data).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+    private void uploadPDFFile(Uri data1, Uri data2) {
+        storageReference.child("PDF" + System.currentTimeMillis() + ".pdf").putFile(data1).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
-                while(!uriTask.isComplete()); // Espera a que la URL esté disponible
-                Uri uri = uriTask.getResult();
+                Task<Uri> uriTask1 = taskSnapshot.getStorage().getDownloadUrl();
+                while(!uriTask1.isComplete()); // Espera a que la URL esté disponible
 
-                putPDF putPDF = new putPDF(editText.getText().toString(), uri.toString(),
-                        prefs.getString("name", "No hay datos"),
-                        prefs.getString("surname", "No hay datos"),
-                        prefs.getString("email", "No hay datos"));
                 String path = databaseReference.push().getKey();
                 assert path != null : "Path is null";
-                databaseReference.child(path).setValue(putPDF);
+                storageReference.child("PDF" + System.currentTimeMillis() + ".pdf").putFile(data2).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        Task<Uri> uriTask2 = taskSnapshot.getStorage().getDownloadUrl();
+                        while(!uriTask2.isComplete()); // Espera a que la URL esté disponible
+
+                        String path = databaseReference.push().getKey();
+                        assert path != null : "Path is null";
+
+                        databaseReference.child(path).setValue(new FolderChange(usuario.getEmail(), uriTask1.getResult().toString(), uriTask2.getResult().toString()));
+                    }
+                });
             }
         });
     }

@@ -1,13 +1,12 @@
 package com.example.pueblosdb;
 
 import static android.app.Activity.RESULT_OK;
-import android.app.DatePickerDialog;
+
 import android.content.ContentResolver;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
@@ -15,17 +14,17 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.TextView;
 import android.widget.Toast;
-import com.example.pueblosdb.clases.Publicacion;
+
+import com.example.pueblosdb.clases.Group;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -33,41 +32,35 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 
-public class PublishFragment extends Fragment {
+public class CreateGroupFragment extends Fragment {
     private ImageButton imageButton;
     private Uri imageUri;
     private EditText title, description;
-    private String end_date, titulo;
-    private TextView show_date;
-    private DatePickerDialog.OnDateSetListener mDateSetListener;
 
-    private final DatabaseReference root = FirebaseDatabase.getInstance().getReference("publications");
-    private final StorageReference reference = FirebaseStorage.getInstance().getReference("publications");
+    private final DatabaseReference root = FirebaseDatabase.getInstance().getReference("groups");
+    private final StorageReference reference = FirebaseStorage.getInstance().getReference("groups_posters");
 
-    public PublishFragment() {
+    public CreateGroupFragment() {
         // Required empty public constructor
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_publish, container, false);
+        return inflater.inflate(R.layout.fragment_create_group, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        title = view.findViewById(R.id.title);
+        title = view.findViewById(R.id.group_name);
         description = view.findViewById(R.id.description);
 
-        imageButton = view.findViewById(R.id.imagePublication);
+        imageButton = view.findViewById(R.id.PosterGroup);
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -78,52 +71,16 @@ public class PublishFragment extends Fragment {
             }
         });
 
-        Button publish = view.findViewById(R.id.publish);
-        publish.setOnClickListener(new View.OnClickListener() {
+        Button createGroup = view.findViewById(R.id.createGroup);
+        createGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                titulo = title.getText().toString();
-                if (imageUri != null && !titulo.isEmpty() && !description.getText().toString().isEmpty() && end_date != null){
+                if (!title.getText().toString().isEmpty() && !description.getText().toString().isEmpty() && imageUri != null)
                     uploadTofirebase(imageUri);
-                } else {
+                else
                     Toast.makeText(getContext(), "Please select an image or fill all the fields", Toast.LENGTH_SHORT).show();
-                }
             }
         });
-
-        show_date = view.findViewById(R.id.date);
-        show_date.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Calendar cal = Calendar.getInstance();
-                int year = cal.get(Calendar.YEAR);
-                int month = cal.get(Calendar.MONTH);
-                int day = cal.get(Calendar.DAY_OF_MONTH);
-
-                DatePickerDialog dialog = new DatePickerDialog(requireActivity(), android.R.style.Theme_Holo_Light_Dialog_MinWidth, mDateSetListener, year, month, day);
-                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                dialog.show();
-            }
-        });
-
-        mDateSetListener = new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                SimpleDateFormat sdf_end = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
-                end_date = dayOfMonth + "/" + (month+1) + "/" + year;
-                try {
-                    if (sdf_end.parse(end_date).after(new Date())){
-                        show_date.setText(end_date);
-                    } else {
-                        Toast.makeText(requireActivity(), "Seleccione una fecha a partir de mañana.", Toast.LENGTH_SHORT).show();
-                        show_date.setText("");
-                        end_date = null;
-                    }
-                } catch (ParseException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        };
     }
 
     private final ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
@@ -140,28 +97,29 @@ public class PublishFragment extends Fragment {
             });
 
     private void uploadTofirebase(Uri imageUri){
-        final StorageReference fileRef = reference.child(System.currentTimeMillis() + "." + getFileExtension(imageUri));
+        StorageReference fileRef = reference.child(System.currentTimeMillis() + "." + getFileExtension(imageUri));
         fileRef.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
-                        SimpleDateFormat sdf_start = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.US);
                         String modelId = root.push().getKey();
                         assert modelId != null;
 
-                        root.child(modelId).setValue(new Publicacion(
-                                titulo,
+                        root.child(modelId).setValue(new Group(
+                                title.getText().toString(),
                                 uri.toString(),
                                 description.getText().toString(),
-                                end_date,
-                                sdf_start.format(new Date())));
-
-                        Toast.makeText(getContext(), "Publicación creada", Toast.LENGTH_SHORT).show();
-                        imageButton.setImageResource(R.drawable.baseline_add_photo_alternate_270);
-                        title.setText("");
-                        description.setText("");
+                                new HashMap<>())).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void unused) {
+                                        Toast.makeText(getContext(), "Grupo creado", Toast.LENGTH_SHORT).show();
+                                        imageButton.setImageResource(R.drawable.baseline_add_photo_alternate_270_p);
+                                        title.setText("");
+                                        description.setText("");
+                              }
+                        });
                     }
                 });
             }

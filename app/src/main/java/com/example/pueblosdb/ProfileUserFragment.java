@@ -102,7 +102,7 @@ public class ProfileUserFragment extends Fragment {
         saveChanges.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(requireActivity(), usuario.getInscripciones().keySet().toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireActivity(), "Falta implementar el guardado de cambios para el externo :p", Toast.LENGTH_SHORT).show();
             }
         });
 

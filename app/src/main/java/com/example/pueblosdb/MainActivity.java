@@ -120,15 +120,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             replaceFragment(new ChangeFolderFragment());
         } else if (id == R.id.group_join_menu && canAccess()) {
             replaceFragment(new GroupsFragment());
-
         } else if (id == R.id.finance_status_menu && canAccess()) {
             replaceFragment(new FinanceFragment());
+        } else if (id == R.id.convs_requests_menu) {
+            replaceFragment(new RequestConvFragment());
+        } else if (id == R.id.groups_requests_menu) {
+            replaceFragment(new RequestGroupFragment());
+        } else if (id == R.id.folders_requests_menu) {
+            replaceFragment(new RequestFolderChangeFragment());
+        } else if (id == R.id.create_publication_menu) {
+            replaceFragment(new CreatePublishFragment());
+        } else if (id == R.id.create_group_menu) {
+            replaceFragment(new CreateGroupFragment());
         } else if (id == R.id.logout_menu) {
             usuario.logOut();
-        }else if (id == R.id.admin_options_menu) {
-            replaceFragment(new AdminOptionsFragment());
-        } else if (id == R.id.create_publication_menu) {
-            replaceFragment(new PublishFragment());
         }
 
         drawerLayout.closeDrawer(GravityCompat.START);

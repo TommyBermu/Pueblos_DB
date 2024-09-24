@@ -1,3 +1,6 @@
+import com.android.build.api.dsl.Lint
+import com.android.build.api.dsl.LintOptions
+
 plugins {
     alias(libs.plugins.androidApplication)
     id("com.google.gms.google-services")
@@ -27,10 +30,13 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+
+
 
     buildFeatures {
         viewBinding = true
@@ -38,7 +44,6 @@ android {
 }
 
 dependencies {
-    //implementation(libs.play.services.pay)
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
@@ -62,4 +67,5 @@ dependencies {
     implementation(libs.firebase.core)
     implementation(libs.firebase.auth)
     implementation(libs.play.services.auth)
+    implementation(libs.play.services.pay)
 }

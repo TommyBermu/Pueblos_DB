@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/light_beige"
-    tools:context=".GroupsFragment">
+    tools:context=".RequestFolderChangeFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -27,26 +27,30 @@
             android:orientation="vertical"
             app:layout_constraintGuide_percent="0.95" />
 
+
         <TextView
             android:id="@+id/textView2"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="Grupos Actuales"
+            android:text="Peticiones de Cambios de Carpeta"
             android:textColor="@color/dark_grey"
-            android:textSize="24dp"
+            android:textSize="20sp"
+            android:textAlignment="center"
             app:layout_constraintEnd_toEndOf="@+id/guideline4"
             app:layout_constraintStart_toStartOf="@id/guideline3"
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerViewGrupos"
+            android:id="@+id/recyclerView"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginTop="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/guideline4"
             app:layout_constraintStart_toStartOf="@+id/guideline3"
-            app:layout_constraintTop_toBottomOf="@+id/textView2"/>
+            app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </FrameLayout>

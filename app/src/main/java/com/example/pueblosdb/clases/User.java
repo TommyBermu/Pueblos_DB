@@ -22,7 +22,9 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Objects;
 
 public class User {
     // attributes
@@ -30,6 +32,8 @@ public class User {
     private String apellidos;
     private Cargo cargo;
     private HashMap<String, Boolean> inscripciones;
+    private HashMap<String, Boolean> grupos;
+    private String carpeta;
     private Boolean completeInfo;
     private String email;
 
@@ -41,7 +45,7 @@ public class User {
     private FirebaseFirestore db;
 
     /**
-     * empty constructor
+     * empty constructor (required for Firestore)
      */
     public User(){}
 
@@ -52,18 +56,23 @@ public class User {
     public User(@NonNull FragmentActivity context){
         mAuth = FirebaseAuth.getInstance();
         fUser = mAuth.getCurrentUser();
-        prefs = context.getSharedPreferences(context.getString(R.string.prefs_file), MODE_PRIVATE);;
+        prefs = context.getSharedPreferences(context.getString(R.string.prefs_file), MODE_PRIVATE);
         db = FirebaseFirestore.getInstance();
 
-        this.nombre = prefs.getString("name", "No hay datos");
-        this.apellidos = prefs.getString("surname", "No hay datos");
-        this.cargo = Cargo.valueOf(prefs.getString("cargo", "No hay datos"));
-        this.completeInfo = prefs.getBoolean("completeInfo", false);
         try {
             this.email = fUser.getEmail(); // si es null significa que está en la AuthActivity
-        } catch (NullPointerException E){
-            this.email = "No hay datos";
-        }
+            this.nombre = prefs.getString("name", "No hay datos");
+            this.apellidos = prefs.getString("surname", "No hay datos");
+            this.cargo = Cargo.valueOf(prefs.getString("cargo", "No hay datos"));
+            this.completeInfo = prefs.getBoolean("completeInfo", false);
+            this.carpeta = prefs.getString("carpeta", null);
+            this.inscripciones = new HashMap<>();
+            for (String s: prefs.getStringSet("inscripciones", new HashSet<>()))
+                inscripciones.put(s, false); //TODO se coloca false por facilidad, pero toca ver si es true o false xd
+            this.grupos = new HashMap<>();
+            for (String s: prefs.getStringSet("grupos", new HashSet<>()))
+                grupos.put(s, false);
+        } catch (NullPointerException ignored){}
         this.context = context;
     }
 
@@ -75,11 +84,13 @@ public class User {
      * @param inscripciones inscripciones del usuario
      * @param completeInfo si el usuario ha completado la información
      */
-    public User(String nombre, String apellidos, Cargo cargo, HashMap<String, Boolean> inscripciones, Boolean completeInfo, String email) {
+    public User(String nombre, String apellidos, Cargo cargo, HashMap<String, Boolean> inscripciones, HashMap<String, Boolean> grupos, String carpeta, Boolean completeInfo, String email) { //TODO si es externo no debería tener carpeta
         this.nombre = nombre;
         this.apellidos = apellidos;
         this.cargo = cargo;
         this.inscripciones = inscripciones;
+        this.grupos = grupos;
+        this.carpeta = carpeta;
         this.completeInfo = completeInfo;
         this.email = email;
     }
@@ -87,10 +98,6 @@ public class User {
 
     public Cargo getCargo() {
         return cargo;
-    }
-
-    public void setCargo(Cargo cargo) {
-        this.cargo = cargo;
     }
 
     public String getNombre() {
@@ -113,8 +120,25 @@ public class User {
         return inscripciones;
     }
 
-    public void setInscripciones(HashMap<String, Boolean> inscripciones) {
-        this.inscripciones = inscripciones;
+
+    public void addInscripcion(String titulo){
+        inscripciones.put(titulo, false);
+    }
+
+    public HashMap<String, Boolean> getGrupos() {
+        return grupos;
+    }
+
+    public void addGrupo(String nombre) {
+        grupos.put(nombre, false);
+    }
+
+    public String getCarpeta() {
+        return carpeta;
+    }
+
+    public void setCarpeta(String carpeta) {
+        this.carpeta = carpeta;
     }
 
     public Boolean isCompleteInfo() {
@@ -129,6 +153,10 @@ public class User {
         return email;
     }
 
+    public String getUserID(){
+        return fUser.getUid();
+    }
+
     public enum Cargo {
         EXTERNO,
         COMUNERO,
@@ -139,10 +167,16 @@ public class User {
         //TODO hacer que se inscriba en un grupo o en una convocatoria (debe pasar parámetros respectivos)
     }
 
-
+    /**
+     * Sube los datos del usuario en Firestore
+     * @param cargo el cargo
+     * @param name el nombre
+     * @param surname el apellido
+     * @param Email el email
+     */
     public void createUser(Cargo cargo, String name, String surname, String Email) {
         final String TAG = "CreateUser:EmailPassword";
-        db.collection("users").document(Email).set(new User(name, surname, cargo, new HashMap<String, Boolean>(), false, Email)).addOnCompleteListener(new OnCompleteListener<Void>() {
+        db.collection("users").document(Email).set(new User(name, surname, cargo, new HashMap<String, Boolean>(), new HashMap<String, Boolean>(), null, false, Email)).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()){
@@ -150,12 +184,16 @@ public class User {
                     logOut();
                 } else {
                     fUser.delete();
-                    Log.e(TAG, "onFailure, no se pudo crear el documento, se elimina el usuario : " + task.getException().getMessage());
+                    Log.e(TAG, "onFailure, no se pudo crear el documento, se elimina el usuario : " + Objects.requireNonNull(task.getException()).getMessage());
                 }
             }
         });
     }
 
+    /**
+     * Elimina la cuenta del usuario y su informacion en Firebase TODO (quitar de convocatorias y resto de informacion)
+     * @param credential credencial para reautentificar el usuario
+     */
     public void deleteUser(AuthCredential credential){
         fUser.reauthenticate(credential).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
@@ -176,6 +214,11 @@ public class User {
         });
     }
 
+    /**
+     * Actualiza la información del usuario externo en Firestore
+     * @param nombres nombres
+     * @param apellidos apellidos
+     */
     public void updateInfo(String nombres, String apellidos){
         DocumentReference docRef = db.collection("users").document(email);
         docRef.update("nombre", nombres);
@@ -185,6 +228,19 @@ public class User {
         setApellidos(apellidos);
     }
 
+    /**
+     * Actualiza la información del usuario comunero en Firestore
+     * @param nombres nombres
+     * @param apellidos apellidos
+     * @param naneMadre nombre de la madre
+     * @param surnameMadre apellido de la madre
+     * @param namePadre nombre del padre
+     * @param surnamePadre apellido del padre
+     * @param fechaNacimiento fecha de nacimiento
+     * @param sexo sexo
+     * @param clan clan
+     * @param prefesion profesion
+     */
     public void updateInfo(String nombres, String apellidos, String naneMadre, String surnameMadre, String namePadre, String surnamePadre, String fechaNacimiento, String sexo, int clan, String prefesion){
 
         Map<String, Object> info = new HashMap<>();
@@ -201,19 +257,24 @@ public class User {
             db.collection("info_comunero").document(email).update(info).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void unused) {
-                    addInfo(info, nombres, apellidos, completeInfo);
+                    addInfo(info, nombres, apellidos);
                 }
             });
         } else {
             db.collection("info_comunero").document(email).set(info).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void unused) {
-                    addInfo(info, nombres, apellidos, completeInfo);
+                    addInfo(info, nombres, apellidos);
                 }
             });
         }
     }
 
+    /**
+     * Inicia sesión con email y contraseña
+     * @param Email el email
+     * @param Password la contraseña
+     */
     public void logIn(@NonNull String Email, String Password){
         final String TAG = "LogIn:EmailPassword";
 
@@ -265,6 +326,9 @@ public class User {
 
     }
 
+    /**
+     * Cierra sesión
+     */
     public void logOut(){
         final String TAG = "LogOut";
 
@@ -283,12 +347,15 @@ public class User {
     public void agregarPreferencias(@NonNull DocumentSnapshot document, String email) {
         User user = document.toObject(User.class);
         SharedPreferences.Editor prefsEditor = prefs.edit();
-        prefsEditor.putString("email", email);
+        assert user != null: "Usuario nulo D:";
         prefsEditor.putString("name", user.getNombre());
         prefsEditor.putString("surname", user.getApellidos());
         prefsEditor.putString("cargo", user.getCargo().toString());
         prefsEditor.putStringSet("inscripciones", user.getInscripciones().keySet());
+        prefsEditor.putStringSet("grupos", user.getGrupos().keySet());
+        prefsEditor.putString("carpeta", user.getCarpeta());
         prefsEditor.putBoolean("completeInfo", user.isCompleteInfo());
+        prefsEditor.putString("email", email);
 
         if (!user.getCargo().equals(Cargo.EXTERNO) && user.isCompleteInfo()){
             db.collection("info_comunero").document(email).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -305,7 +372,7 @@ public class User {
         prefsEditor.apply();
     }
 
-    private void addInfo(@NonNull Map<String, Object> info, String nombres, String apellidos, boolean completeInfo) {
+    private void addInfo(@NonNull Map<String, Object> info, String nombres, String apellidos) {
         //edita el documento
         DocumentReference docRef = db.collection("users").document(email);
         docRef.update("nombre", nombres);

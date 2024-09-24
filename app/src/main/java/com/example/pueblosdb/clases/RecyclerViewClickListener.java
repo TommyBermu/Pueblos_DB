@@ -1,5 +1,5 @@
 package com.example.pueblosdb.clases;
 
-public interface PublicacionClickListener {
+public interface RecyclerViewClickListener {
     void onItemCliked(int position);
 }

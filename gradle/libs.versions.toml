@@ -11,6 +11,8 @@ firebaseUiFirestore = "4.1.0"
 firebaseUiFirestoreVersion = "8.0.2"
 firebaseUiStorage = "8.0.2"
 flexbox = "2.0.1"
+googlePlayServices = "17.0.0"
+gradle = "7.4.2"
 jodaTime = "2.10.10"
 junit = "4.13.2"
 junitVersion = "1.2.1"
@@ -50,6 +52,8 @@ firebase-ui-storage = { module = "com.firebaseui:firebase-ui-storage", version.r
 firebaseui-firebase-ui-database = { module = "com.firebaseui:firebase-ui-database", version.ref = "firebaseUiDatabaseVersion" }
 flexbox = { module = "com.google.android:flexbox", version.ref = "flexbox" }
 google-firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
+google-play-services = { module = "com.google.android.gms:play-services", version.ref = "googlePlayServices" }
+gradle = { module = "com.android.tools.build:gradle", version.ref = "gradle" }
 joda-time = { module = "joda-time:joda-time", version.ref = "jodaTime" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }

@@ -19,12 +19,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Locale;
 
-public class PublicacionAdapter extends RecyclerView.Adapter<PublicacionAdapter.PublicacionViewHolder> implements PublicacionClickListener{
+public class PublicacionAdapter extends RecyclerView.Adapter<PublicacionAdapter.PublicacionViewHolder> implements RecyclerViewClickListener{
     private ArrayList<Publicacion> mPublicaciones;
     private Context mContext;
-    private PublicacionClickListener listener;
+    private RecyclerViewClickListener listener;
 
-    public PublicacionAdapter(ArrayList<Publicacion> mPublicaciones, Context mContext, PublicacionClickListener listener) {
+    public PublicacionAdapter(ArrayList<Publicacion> mPublicaciones, Context mContext, RecyclerViewClickListener listener) {
         this.mPublicaciones = mPublicaciones;
         this.mContext = mContext;
         this.listener = listener;
@@ -60,13 +60,12 @@ public class PublicacionAdapter extends RecyclerView.Adapter<PublicacionAdapter.
 
 
     public static class PublicacionViewHolder extends RecyclerView.ViewHolder {
-        LinearLayout container;
         ImageView image;
         TextView title;
         TextView description;
         TextView fecha;
 
-        public PublicacionViewHolder(@NonNull View itemView, PublicacionClickListener listener) {
+        public PublicacionViewHolder(@NonNull View itemView, RecyclerViewClickListener listener) {
             super(itemView);
 
             title = itemView.findViewById(R.id.title_publication);

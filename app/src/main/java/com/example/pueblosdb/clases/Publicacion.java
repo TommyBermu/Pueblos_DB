@@ -1,8 +1,11 @@
 package com.example.pueblosdb.clases;
 
+import androidx.annotation.NonNull;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
+import java.util.Objects;
 
 public class Publicacion implements Comparable<Publicacion> {
     private String titulo, link_imagen, descripcion;
@@ -57,22 +60,21 @@ public class Publicacion implements Comparable<Publicacion> {
         this.fecha_finalizacion = fecha_finalizacion;
     }
 
+    public String getFecha_publicacion() {
+        return this.fecha_publicacion;
+    }
 
     public void setFecha_publicacion(String fecha_publicacion) {
         this.fecha_publicacion = fecha_publicacion;
     }
 
-    public String getFecha_publicacion() throws ParseException {
-        return this.fecha_publicacion;
-    }
-
     @Override
-    public int compareTo(Publicacion o) {
+    public int compareTo(@NonNull Publicacion o) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.US);
         try {
-            if (dateFormat.parse(this.getFecha_publicacion()).before(dateFormat.parse(o.getFecha_publicacion()))){
+            if (Objects.requireNonNull(dateFormat.parse(this.getFecha_publicacion())).before(dateFormat.parse(o.getFecha_publicacion()))){
                 return 1;
-            }else if (dateFormat.parse(this.getFecha_publicacion()).after(dateFormat.parse(o.getFecha_publicacion()))){
+            }else if (Objects.requireNonNull(dateFormat.parse(this.getFecha_publicacion())).after(dateFormat.parse(o.getFecha_publicacion()))){
                 return -1;
             }
         } catch (ParseException e) {
