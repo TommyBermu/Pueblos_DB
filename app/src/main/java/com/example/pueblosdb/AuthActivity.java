@@ -77,7 +77,7 @@ public class AuthActivity extends AppCompatActivity {
         return usuario;
     }
 
-    public void createUser(String name, String surname) {
+    public void createUser(String name, String surname, String email) {
         //se muestra el cuadro de dialogo
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_selection, null);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -91,7 +91,7 @@ public class AuthActivity extends AppCompatActivity {
         member.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                usuario.createUser(User.Cargo.COMUNERO, name, surname, FirebaseAuth.getInstance().getCurrentUser().getEmail());
+                usuario.createUser(User.Cargo.COMUNERO, name, surname, email);
                 dialog.cancel();
             }
         });
@@ -100,7 +100,7 @@ public class AuthActivity extends AppCompatActivity {
         nonMember.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                usuario.createUser(User.Cargo.EXTERNO, name, surname, FirebaseAuth.getInstance().getCurrentUser().getEmail());
+                usuario.createUser(User.Cargo.EXTERNO, name, surname, email);
                 dialog.cancel();
             }
         });

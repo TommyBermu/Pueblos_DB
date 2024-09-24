@@ -74,7 +74,7 @@ public class RegisterFragment extends Fragment {
                                 Log.d(TAG, "createUserWithEmail:success");
 
                                 //sale el cuadro de díalogo para seleccionar la relacion con la comunidad
-                                ((AuthActivity) requireActivity()).createUser(name, surname);
+                                ((AuthActivity) requireActivity()).createUser(name, surname, Email);
 
                                 //enviar un código de verificación al email
                                 FirebaseAuth.getInstance().getCurrentUser().sendEmailVerification();

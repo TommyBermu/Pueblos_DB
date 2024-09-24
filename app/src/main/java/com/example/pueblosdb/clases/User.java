@@ -72,7 +72,7 @@ public class User {
             this.grupos = new HashMap<>();
             for (String s: prefs.getStringSet("grupos", new HashSet<>()))
                 grupos.put(s, false);
-        } catch (NullPointerException ignored){}
+        } catch (NullPointerException | IllegalArgumentException ignore){}
         this.context = context;
     }
 
@@ -100,6 +100,10 @@ public class User {
         return cargo;
     }
 
+    public void setCargo(Cargo cargo) {
+        this.cargo = cargo;
+    }
+
     public String getNombre() {
         return nombre;
     }
@@ -120,6 +124,9 @@ public class User {
         return inscripciones;
     }
 
+    public void setInscripciones(HashMap<String, Boolean> inscripciones) {
+        this.inscripciones = inscripciones;
+    }
 
     public void addInscripcion(String titulo){
         inscripciones.put(titulo, false);
@@ -127,6 +134,10 @@ public class User {
 
     public HashMap<String, Boolean> getGrupos() {
         return grupos;
+    }
+
+    public void setGrupos(HashMap<String, Boolean> grupos) {
+        this.grupos = grupos;
     }
 
     public void addGrupo(String nombre) {
@@ -153,8 +164,8 @@ public class User {
         return email;
     }
 
-    public String getUserID(){
-        return fUser.getUid();
+    public void setEmail(String email){
+        this.email = email;
     }
 
     public enum Cargo {
@@ -176,7 +187,7 @@ public class User {
      */
     public void createUser(Cargo cargo, String name, String surname, String Email) {
         final String TAG = "CreateUser:EmailPassword";
-        db.collection("users").document(Email).set(new User(name, surname, cargo, new HashMap<String, Boolean>(), new HashMap<String, Boolean>(), null, false, Email)).addOnCompleteListener(new OnCompleteListener<Void>() {
+        db.collection("users").document(Email).set(new User(name, surname, cargo, new HashMap<>(), new HashMap<>(), null, false, Email)).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()){
@@ -316,7 +327,7 @@ public class User {
                     });
                 } else {
                     Log.e(TAG, "signInWithEmail: failure", task.getException());
-                    Toast.makeText(context, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -362,6 +373,7 @@ public class User {
                 @Override
                 public void onSuccess(DocumentSnapshot documentSnapshot) {
                     Map<String, Object> info = documentSnapshot.getData();
+                    assert info != null;
                     for (String key : info.keySet()){
                         prefsEditor.putString(key, "" + info.get(key));
                     }

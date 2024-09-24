@@ -15,7 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.android.gms.auth.api.Auth;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class AppRegisterFragment extends Fragment {
     private EditText tv1, tv2;
@@ -48,7 +48,7 @@ public class AppRegisterFragment extends Fragment {
                         throw new IllegalArgumentException("Requiere rellenar todos los campos");
 
                     //sale el cuadro de díalogo para seleccionar la relacion con la comunidad
-                    ((AuthActivity) requireActivity()).createUser(name, surname);
+                    ((AuthActivity) requireActivity()).createUser(name, surname, FirebaseAuth.getInstance().getCurrentUser().getEmail());
 
                 } catch (IllegalArgumentException e) {
                     Log.w("EmailPassword", "createDocument: failure", e);
