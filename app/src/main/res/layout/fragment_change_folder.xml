@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/light_blue"
+    android:background="@color/light_beige"
     tools:context=".ChangeFolderFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -17,209 +17,88 @@
             android:id="@+id/txtTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:background="@drawable/rounded_layout_5"
+            android:padding="15dp"
             android:text="Independización de Carpeta"
             android:textColor="@color/dark_blue"
             android:textSize="25sp"
             android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/txtDocumentoID"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginTop="10dp"
-            android:background="@color/light_beige"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/txtTitle">
+        <TextView
+            android:id="@+id/txtDocumentoID"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="30dp"
+            android:text="Carga aquí tu documento de identidad:"
+            android:textColor="@color/light_blue"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toTopOf="@id/etSelectFile"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txtTitle" />
 
+        <EditText
+            android:id="@+id/etSelectFile"
+            android:layout_width="220dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/rounded_button_4"
+            android:gravity="center_horizontal"
+            android:hint="Presiona aquí"
+            app:layout_constraintBottom_toTopOf="@id/txtCarta"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txtDocumentoID" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingBottom="30dp">
+        <TextView
+            android:id="@+id/txtCarta"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="30dp"
+            android:text="Carga aquí tu carta de motivación:"
+            android:textColor="@color/light_blue"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toTopOf="@+id/etSelectFileLetter"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/etSelectFile" />
 
-                <TextView
-                    android:id="@+id/txtDocumentoID"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="30dp"
-                    android:text="Carga aquí tu documento de identidad:"
-                    android:textColor="@color/light_blue"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toTopOf="@id/etSelectFile"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+        <EditText
+            android:id="@+id/etSelectFileLetter"
+            android:layout_width="220dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/rounded_button_4"
+            android:gravity="center_horizontal"
+            android:hint="Presiona aquí"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txtCarta"
+            app:layout_constraintBottom_toTopOf="@id/btnSendFile"/>
 
-                <EditText
-                    android:id="@+id/etSelectFile"
-                    android:layout_width="200dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:background="@drawable/rounded_button_5"
-                    android:gravity="center_horizontal"
-                    android:hint="Press here"
-                    app:layout_constraintBottom_toTopOf="@id/txtCarta"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/txtDocumentoID" />
-
-                <TextView
-                    android:id="@+id/txtCarta"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="30dp"
-                    android:layout_marginBottom="30dp"
-                    android:text="Carga aquí tu carta de motivación:"
-                    android:textColor="@color/light_blue"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toTopOf="@+id/etSelectFileLetter"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/etSelectFile" />
-
-                <EditText
-                    android:id="@+id/etSelectFileLetter"
-                    android:layout_width="200dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:background="@drawable/rounded_button_5"
-                    android:gravity="center_horizontal"
-                    android:hint="Presiona aquí"
-                    app:layout_constraintBottom_toTopOf="@id/txtArbol"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/txtCarta" />
-
-                <TextView
-                    android:id="@+id/txtArbol"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="30dp"
-                    android:text="Tu árbol genealógico principal:"
-                    android:textColor="@color/light_blue"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/etSelectFileLetter" />
-
-                <TextView
-                    android:id="@+id/txt1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="5dp"
-                    android:text="Mamá:"
-                    android:textColor="@color/black"
-                    android:textSize="20sp"
-                    android:textStyle="italic"
-                    app:layout_constraintBottom_toTopOf="@id/etMomName"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.2"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/txtArbol" />
-
-                <EditText
-                    android:id="@+id/etMomName"
-                    android:layout_width="150dp"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/etvisualizer"
-                    android:gravity="center_horizontal"
-                    android:hint="Nombre"
-                    android:textColor="@color/light_coffee"
-                    android:textSize="20sp"
-                    app:layout_constraintBottom_toTopOf="@id/txt2"
-                    app:layout_constraintEnd_toStartOf="@id/etMomSurname"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/txt1" />
-
-                <EditText
-                    android:id="@+id/etMomSurname"
-                    android:layout_width="150dp"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/etvisualizer"
-                    android:gravity="center_horizontal"
-                    android:hint="Apellido"
-                    android:textColor="@color/light_coffee"
-                    android:textSize="20sp"
-                    app:layout_constraintBottom_toBottomOf="@id/etMomName"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/etMomName"
-                    app:layout_constraintTop_toTopOf="@+id/etMomName" />
-
-
-                <TextView
-                    android:id="@+id/txt2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="5dp"
-                    android:text="Papá:"
-                    android:textColor="@color/black"
-                    android:textSize="20sp"
-                    android:textStyle="italic"
-                    app:layout_constraintBottom_toTopOf="@id/etFatherName"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.2"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/etMomName" />
-
-                <EditText
-                    android:id="@+id/etFatherName"
-                    android:layout_width="150dp"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/etvisualizer"
-                    android:gravity="center_horizontal"
-                    android:hint="Nombre"
-                    android:textColor="@color/light_coffee"
-                    android:textSize="20sp"
-                    app:layout_constraintBottom_toTopOf="@+id/btnSendFile"
-                    app:layout_constraintEnd_toStartOf="@id/etFatherSurname"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/txt2" />
-
-                <EditText
-                    android:id="@+id/etFatherSurname"
-                    android:layout_width="150dp"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/etvisualizer"
-                    android:gravity="center_horizontal"
-                    android:hint="Apellido"
-                    android:textColor="@color/light_coffee"
-                    android:textSize="20sp"
-                    app:layout_constraintBottom_toBottomOf="@+id/etFatherName"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/etFatherName"
-                    app:layout_constraintTop_toTopOf="@+id/etFatherName" />
-
-
-                <Button
-                    android:id="@+id/btnSendFile"
-                    android:layout_width="200dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="40dp"
-                    android:background="@drawable/rounded_button_1"
-                    android:text="Enviar Solicitud"
-                    android:textAllCaps="false"
-                    android:textColor="@color/white"
-                    android:textSize="20sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/etFatherSurname" />
-
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </ScrollView>
+        <Button
+            android:id="@+id/btnSendFile"
+            android:layout_width="220dp"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="40dp"
+            android:background="@drawable/rounded_button_1"
+            android:text="Enviar Solicitud"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/etSelectFileLetter"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
 </FrameLayout>

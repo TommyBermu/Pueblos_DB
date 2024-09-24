@@ -1,19 +1,15 @@
 package com.example.pueblosdb;
 
 import static android.app.Activity.RESULT_OK;
-import static android.content.Context.MODE_PRIVATE;
-
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,16 +17,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
 import com.example.pueblosdb.clases.User;
-import com.facebook.CallbackManager;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
@@ -43,53 +36,30 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Objects;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link LogInFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class LogInFragment extends Fragment {
     private EditText tv1;
     private TextInputLayout tv2;
-    private FirebaseAuth mAuth;
     private static final String TAG = "EmailPassword";
     private GoogleSignInClient gsc;
     private final FirebaseFirestore db  = FirebaseFirestore.getInstance();
-    private final CallbackManager callbackManager = CallbackManager.Factory.create();
-
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    private String mParam1;
-    private String mParam2;
+    //private final CallbackManager callbackManager = CallbackManager.Factory.create(); * para facebook *
+    private User usuario;
 
     public LogInFragment() {
         // Required empty public constructor
     }
 
-    public static LogInFragment newInstance(String param1, String param2) {
-        LogInFragment fragment = new LogInFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_login, container, false);
-        mAuth = FirebaseAuth.getInstance();
+        return inflater.inflate(R.layout.fragment_login, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        usuario = ((AuthActivity)requireActivity()).getUsuario();
+
         tv1 = view.findViewById(R.id.email);
         tv2 = view.findViewById(R.id.password_container);
 
@@ -103,7 +73,7 @@ public class LogInFragment extends Fragment {
         enter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                signIn();
+                usuario.logIn(tv1.getText().toString(), tv2.getEditText().getText().toString());
             }
         });
 
@@ -130,60 +100,6 @@ public class LogInFragment extends Fragment {
                 signUp();
             }
         });
-        return view;
-    }
-
-    public void signIn() throws IllegalArgumentException {
-
-        String Email = tv1.getText().toString();
-        String Password = Objects.requireNonNull(tv2.getEditText()).getText().toString();
-        try {
-            if (Email.isEmpty() || Password.isEmpty())
-                throw new IllegalArgumentException("Requiere rellenar todos los campos");
-
-            mAuth.signInWithEmailAndPassword(Email, Password).addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
-                @Override
-                public void onComplete(@NonNull Task<AuthResult> task) {
-                    if (task.isSuccessful()) {
-                        try {
-                            if (!FirebaseAuth.getInstance().getCurrentUser().isEmailVerified())
-                                throw new IllegalArgumentException("Verifique su correo electrónico");
-
-                            // Sign in success
-                            Log.d(TAG, "signInWithEmail: success");
-
-                            //a veces no se conecta pero es por el android studio xd
-                           db.collection("users").document(Email).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                @Override
-                                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                    Log.d(TAG, "onSuccess: added Preferences");
-                                    agregarPreferencias(documentSnapshot, Email);
-                                    //ir a la Main activity si se recuperó el docuemto correctamente
-                                    Intent main = new Intent(getActivity(), MainActivity.class);
-                                    startActivity(main);
-                                }
-                            }).addOnFailureListener(new OnFailureListener() {
-                               @Override
-                               public void onFailure(@NonNull Exception e) {
-                                   Log.d(TAG, "onFailure: Logging out");
-                                   Toast.makeText(getActivity(), "Error al iniciar sesión, verifique su conexión a internet o intente nuevamente", Toast.LENGTH_LONG).show();
-                                   FirebaseAuth.getInstance().signOut();
-                               }
-                           });
-                        } catch (IllegalArgumentException e) {
-                            Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    } else {
-                        // If sign in fails, display a message to the user.
-                        Log.w(TAG, "signInWithEmail: failure", task.getException());
-                        Toast.makeText(getActivity(), Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
-        } catch (IllegalArgumentException e) {
-            Log.w(TAG, "signInWithEmail:failure", e);
-            Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
     }
 
     public void googleSignIn(){
@@ -230,7 +146,7 @@ public class LogInFragment extends Fragment {
                     int result = o.getResultCode();
                     Intent data = o.getData();
 
-                    callbackManager.onActivityResult(1, result, data);
+                    //callbackManager.onActivityResult(1, result, data);  * para facebook *
 
                     if (result == RESULT_OK){
                         Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
@@ -248,7 +164,7 @@ public class LogInFragment extends Fragment {
             });
 
     private void authUser(AuthCredential credential){
-        FirebaseAuth.getInstance().signInWithCredential(credential).addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
+        FirebaseAuth.getInstance().signInWithCredential(credential).addOnCompleteListener(requireActivity(), new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
@@ -260,11 +176,11 @@ public class LogInFragment extends Fragment {
                         @Override
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
                             if (documentSnapshot.exists()) {
-                                agregarPreferencias(documentSnapshot, Email);
+                                usuario.agregarPreferencias(documentSnapshot, Email);
                                 Intent main = new Intent(getActivity(), MainActivity.class);
                                 startActivity(main);
                             } else {
-                                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AppRegisterFragment()).commit();
+                                usuario.replaceFragment(new AppRegisterFragment());
                             }
                         }
                     });
@@ -277,18 +193,7 @@ public class LogInFragment extends Fragment {
         });
     }
 
-    private void agregarPreferencias(DocumentSnapshot document, String email) {
-        User user = document.toObject(User.class);
-        SharedPreferences.Editor prefsEditor = getActivity().getSharedPreferences(getString(R.string.prefs_file), MODE_PRIVATE).edit();
-        prefsEditor.putString("email", email);
-        prefsEditor.putString("name", user.getNombre());
-        prefsEditor.putString("surname", user.getApellidos());
-        prefsEditor.putString("cargo", user.getCargo().toString());
-        prefsEditor.apply();
-        prefsEditor.commit();
-    }
-
     public void signUp() {
-        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new RegisterFragment()).commit();
+        usuario.replaceFragment(new RegisterFragment());
     }
 }

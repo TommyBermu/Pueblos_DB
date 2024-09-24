@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/light_beige"
-    tools:context=".PublishFragment">
+    tools:context=".CreatePublishFragment">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -22,7 +22,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="50dp"
-                android:src="@drawable/baseline_add_photo_alternate_270"
+                android:src="@drawable/baseline_add_photo_alternate_270_p"
                 android:background="@drawable/etvisualizer"
                 app:layout_constraintBottom_toTopOf="@+id/title_container"
                 app:layout_constraintEnd_toStartOf="@+id/guideline10"

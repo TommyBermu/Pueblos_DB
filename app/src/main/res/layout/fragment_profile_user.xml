@@ -6,29 +6,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/light_beige"
-    tools:context=".ProfileFragment">
+    tools:context=".ProfileUserFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.1" />
 
         <ImageView
-            android:id="@+id/imageView3"
-            android:layout_width="450dp"
+            android:id="@+id/image_logo"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="@+id/guideline1"
+            android:layout_marginTop="-27dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/pueblosdb_logo" />
+            app:srcCompat="@drawable/pueblosdb_half_logo" />
 
         <TextView
             android:id="@+id/Title"
@@ -37,103 +31,106 @@
             android:text="Mi Perfil"
             android:textColor="@color/dark_blue"
             android:textCursorDrawable="@color/light_blue"
-            android:textSize="30sp"
+            android:textSize="25sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/surnamevisualizer"
+            app:layout_constraintBottom_toTopOf="@+id/user_surnamevisualizer"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView3" />
+            app:layout_constraintTop_toBottomOf="@+id/image_logo" />
 
 
         <EditText
-            android:id="@+id/namevisualizer"
+            android:id="@+id/user_namevisualizer"
             android:layout_width="180dp"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:textSize="20dp"
-            app:layout_constraintEnd_toStartOf="@+id/surnamevisualizer"
+            app:layout_constraintEnd_toStartOf="@+id/user_surnamevisualizer"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/surnamevisualizer" />
+            app:layout_constraintTop_toTopOf="@+id/user_surnamevisualizer" />
 
         <EditText
-            android:id="@+id/surnamevisualizer"
+            android:id="@+id/user_surnamevisualizer"
             android:layout_width="180dp"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:textSize="20dp"
-            app:layout_constraintBottom_toTopOf="@+id/emailvisualizer"
+            app:layout_constraintBottom_toTopOf="@+id/user_emailvisualizer"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/namevisualizer"
+            app:layout_constraintStart_toEndOf="@+id/user_namevisualizer"
             app:layout_constraintTop_toBottomOf="@+id/Title" />
 
         <TextView
-            android:id="@+id/emailvisualizer"
-            android:layout_width="250dp"
+            android:id="@+id/user_emailvisualizer"
+            android:layout_width="wrap_content"
             android:layout_height="45dp"
             android:layout_marginTop="10dp"
             android:textAlignment="center"
-            android:textSize="20dp"
-            app:layout_constraintBottom_toTopOf="@+id/showCargo"
-            app:layout_constraintEnd_toStartOf="@+id/changeEmail"
+            android:minWidth="200dp"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toTopOf="@+id/user_showCargo"
+            app:layout_constraintEnd_toStartOf="@+id/user_changeEmail"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/surnamevisualizer" />
+            app:layout_constraintTop_toBottomOf="@+id/user_surnamevisualizer" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/changeEmail"
+            android:id="@+id/user_changeEmail"
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:background="@drawable/rounded_button_3"
-            android:drawableRight="@drawable/baseline_edit_24"
+            android:drawableBottom="@drawable/baseline_edit_24"
             android:drawableTint="@color/dark_blue"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/emailvisualizer"
-            app:layout_constraintTop_toTopOf="@+id/emailvisualizer" />
+            app:layout_constraintStart_toEndOf="@+id/user_emailvisualizer"
+            app:layout_constraintTop_toTopOf="@+id/user_emailvisualizer" />
 
         <TextView
-            android:id="@+id/showCargo"
+            android:id="@+id/user_showCargo"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             android:textAlignment="center"
-            app:layout_constraintBottom_toTopOf="@+id/saveChanges"
+            app:layout_constraintBottom_toTopOf="@+id/user_saveChanges"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/emailvisualizer" />
+            app:layout_constraintTop_toBottomOf="@+id/user_emailvisualizer" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/saveChanges"
+            android:id="@+id/user_saveChanges"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:background="@drawable/rounded_button_3"
             android:text="Guardar cambios"
-            app:layout_constraintBottom_toTopOf="@+id/changePassword"
+            app:layout_constraintBottom_toTopOf="@+id/user_changePassword"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.497"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/showCargo" />
+            app:layout_constraintTop_toBottomOf="@+id/user_showCargo" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/changePassword"
+            android:id="@+id/user_changePassword"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:background="@drawable/rounded_button_3"
             android:text="Cambiar Contraseña"
-            app:layout_constraintBottom_toTopOf="@+id/deleteAccount"
+            app:layout_constraintBottom_toTopOf="@+id/user_deleteAccount"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/saveChanges" />
+            app:layout_constraintTop_toBottomOf="@+id/user_saveChanges" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/deleteAccount"
+            android:id="@+id/user_deleteAccount"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/rounded_button_3"
+            android:background="@drawable/rounded_button_5"
             android:text="Eliminar Cuenta"
+            android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/changePassword" />
+            app:layout_constraintTop_toBottomOf="@+id/user_changePassword" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

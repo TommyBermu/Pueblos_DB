@@ -12,6 +12,8 @@ import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,59 +32,37 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 
-public class PublishFragment extends Fragment {
+public class CreatePublishFragment extends Fragment {
     private ImageButton imageButton;
     private Uri imageUri;
     private EditText title, description;
-
-    private Date date;
+    private String end_date;
     private TextView show_date;
     private DatePickerDialog.OnDateSetListener mDateSetListener;
 
-    private DatabaseReference root;
-    private StorageReference reference;
+    private final DatabaseReference root = FirebaseDatabase.getInstance().getReference("publications");
+    private final StorageReference reference = FirebaseStorage.getInstance().getReference("publications");
 
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    private String mParam1;
-    private String mParam2;
-
-    public PublishFragment() {
+    public CreatePublishFragment() {
         // Required empty public constructor
-    }
-
-    public static PublishFragment newInstance(String param1, String param2) {
-        PublishFragment fragment = new PublishFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_publish, container, false);
+        return inflater.inflate(R.layout.fragment_create_publish, container, false);
+    }
 
-        root = FirebaseDatabase.getInstance().getReference("publications");
-        reference = FirebaseStorage.getInstance().getReference("publications");
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
         title = view.findViewById(R.id.title);
         description = view.findViewById(R.id.description);
@@ -102,11 +82,10 @@ public class PublishFragment extends Fragment {
         publish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (imageUri != null && !title.getText().toString().isEmpty() && !description.getText().toString().isEmpty() && date != null){
+                if (imageUri != null && !title.getText().toString().isEmpty() && !description.getText().toString().isEmpty() && end_date != null)
                     uploadTofirebase(imageUri);
-                } else {
+                else
                     Toast.makeText(getContext(), "Please select an image or fill all the fields", Toast.LENGTH_SHORT).show();
-                }
             }
         });
 
@@ -128,16 +107,21 @@ public class PublishFragment extends Fragment {
         mDateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                SimpleDateFormat sdf_end = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
+                end_date = dayOfMonth + "/" + (month+1) + "/" + year;
                 try {
-                    date = new SimpleDateFormat("dd-MM-yyyy").parse(dayOfMonth + "-" + (month+1) + "-" + year);
+                    if (sdf_end.parse(end_date).after(new Date())){
+                        show_date.setText(end_date);
+                    } else {
+                        Toast.makeText(requireActivity(), "Seleccione una fecha a partir de mañana.", Toast.LENGTH_SHORT).show();
+                        show_date.setText("");
+                        end_date = null;
+                    }
                 } catch (ParseException e) {
                     throw new RuntimeException(e);
                 }
-                show_date.setText(dayOfMonth + "/" + (month+1) + "/" + year);
             }
         };
-
-        return view;
     }
 
     private final ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
@@ -161,11 +145,24 @@ public class PublishFragment extends Fragment {
                 fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
-                        Publicacion publicacion = new Publicacion(title.getText().toString(), uri.toString(), description.getText().toString(), date);
+                        SimpleDateFormat sdf_start = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.US);
                         String modelId = root.push().getKey();
-                        root.child(modelId).setValue(publicacion);
-                        Toast.makeText(getContext(), "Publicación creada", Toast.LENGTH_SHORT).show();
-                        imageButton.setImageResource(R.drawable.baseline_add_photo_alternate_270);
+                        assert modelId != null;
+
+                        root.child(modelId).setValue(new Publicacion(
+                                title.getText().toString(),
+                                uri.toString(),
+                                description.getText().toString(),
+                                end_date,
+                                sdf_start.format(new Date()))).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void unused) {
+                                        Toast.makeText(getContext(), "Publicación creada", Toast.LENGTH_SHORT).show();
+                                        imageButton.setImageResource(R.drawable.baseline_add_photo_alternate_270_p);
+                                        title.setText("");
+                                        description.setText("");
+                            }
+                        });
                     }
                 });
             }

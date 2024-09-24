@@ -3,11 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AdminOptionsFragment">
+    tools:context=".RequestConvFragment">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="hello_admin_options_fragment" />
+        android:text="hello_request_conv_fragment" />
 
 </FrameLayout>

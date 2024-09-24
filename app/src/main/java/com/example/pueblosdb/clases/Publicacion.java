@@ -1,19 +1,31 @@
 package com.example.pueblosdb.clases;
 
-import java.util.Date;
+import androidx.annotation.NonNull;
 
-public class Publicacion {
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+import java.util.Objects;
+
+public class Publicacion implements Comparable<Publicacion> {
     private String titulo, link_imagen, descripcion;
-    private Date fecha_finalizacion;
+    private String fecha_publicacion, fecha_finalizacion;
+    //private Tipo tipo; TODO implementar en el futuro
 
     public Publicacion() {
     }
 
-    public Publicacion(String titulo, String link_imagen, String descripcion, Date fecha_finalizacion) {
+    public Publicacion(String titulo, String link_imagen, String descripcion, String fecha_finalizacion, String fecha_publicacion) {
         this.titulo = titulo;
         this.link_imagen = link_imagen;
         this.descripcion = descripcion;
         this.fecha_finalizacion = fecha_finalizacion;
+        this.fecha_publicacion = fecha_publicacion;
+    }
+
+    public enum Tipo {
+        CONVOCATORIA,
+        ANUNCIO
     }
 
     public String getTitulo() {
@@ -40,11 +52,34 @@ public class Publicacion {
         this.descripcion = descripcion;
     }
 
-    public Date getFecha_finalizacion() {
+    public String getFecha_finalizacion() {
         return fecha_finalizacion;
     }
 
-    public void setFecha_finalizacion(Date fecha_finalizacion) {
+    public void setFecha_finalizacion(String fecha_finalizacion) {
         this.fecha_finalizacion = fecha_finalizacion;
+    }
+
+    public String getFecha_publicacion() {
+        return this.fecha_publicacion;
+    }
+
+    public void setFecha_publicacion(String fecha_publicacion) {
+        this.fecha_publicacion = fecha_publicacion;
+    }
+
+    @Override
+    public int compareTo(@NonNull Publicacion o) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.US);
+        try {
+            if (Objects.requireNonNull(dateFormat.parse(this.getFecha_publicacion())).before(dateFormat.parse(o.getFecha_publicacion()))){
+                return 1;
+            }else if (Objects.requireNonNull(dateFormat.parse(this.getFecha_publicacion())).after(dateFormat.parse(o.getFecha_publicacion()))){
+                return -1;
+            }
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+        return 0;
     }
 }
