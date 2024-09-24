@@ -114,7 +114,7 @@ public class CreateBookFragment extends Fragment {
                                 description.getText().toString())).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void unused) {
-                                Toast.makeText(getContext(), "Libro añadido", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), "Libro añadido a la Biblioteca", Toast.LENGTH_SHORT).show();
                                 imageButton.setImageResource(R.drawable.baseline_cloud_upload_24);
                                 title.setText("");
                                 description.setText("");

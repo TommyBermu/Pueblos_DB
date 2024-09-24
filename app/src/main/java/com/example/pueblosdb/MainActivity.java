@@ -132,6 +132,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             replaceFragment(new CreatePublishFragment());
         } else if (id == R.id.create_group_menu) {
             replaceFragment(new CreateGroupFragment());
+        } else if (id == R.id.add_book_menu) {
+            replaceFragment(new CreateBookFragment());
         } else if (id == R.id.logout_menu) {
             usuario.logOut();
         }
