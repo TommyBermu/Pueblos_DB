@@ -3,6 +3,10 @@ package com.example.pueblosdb.clases;
 public class Libro {
     private String titulo, link_libro, descripcion_libro, imagen_portada;
 
+    public Libro() {
+        // Firebase lo necesita para poder deserializar
+    }
+
     public Libro(String titulo, String link_libro, String descripcion_libro){
         this.titulo = titulo;
         this.link_libro = link_libro;

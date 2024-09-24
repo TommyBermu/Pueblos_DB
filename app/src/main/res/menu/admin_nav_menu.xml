@@ -41,6 +41,9 @@
                 <item android:id="@+id/create_group_menu"
                     android:icon="@drawable/baseline_group_add_24"
                     android:title="Crear un Grupo"/>
+                <item android:id="@+id/add_book_menu"
+                    android:icon="@drawable/baseline_library_add_24"
+                    android:title="Añadir un libro"/>
             </menu>
         </item>
         <item android:id="@+id/logout_menu"
