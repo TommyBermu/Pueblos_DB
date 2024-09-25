@@ -36,5 +36,9 @@ public class Libro {
     public void setDescripcion_libro(String descripcion_libro) {
         this.descripcion_libro = descripcion_libro;
     }
+
+    public void getPDFname(){
+
+    }
 }
 
