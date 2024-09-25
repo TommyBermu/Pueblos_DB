@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.widget.Toast;
 
@@ -37,19 +38,20 @@ public class FileDownloader {
                 // Encolar la descarga y obtener el ID
                 downloadId = downloadManager.enqueue(request);
                 Toast.makeText(context, "Descargando archivo...", Toast.LENGTH_SHORT).show();
-                // Registrar el BroadcastReceiver
 
-                context.registerReceiver(new BroadcastReceiver() {
-                    @Override
-                    public void onReceive(Context context, Intent intent) {
-                        long id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
-                        if (id == downloadId) {
-                            // La descarga se completó, abre el archivo
-                            openFile(context, fileName);
-                            context.unregisterReceiver(this); // Desregistrar el receiver
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    context.registerReceiver(new BroadcastReceiver() {
+                        @Override
+                        public void onReceive(Context context, Intent intent) {
+                            long id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
+                            if (id == downloadId) {
+                                // La descarga se completó, abre el archivo
+                                openFile(context, fileName);
+                                context.unregisterReceiver(this); // Desregistrar el receiver
+                            }
                         }
-                    }
-                }, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+                    }, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE), Context.RECEIVER_EXPORTED);
+                }
 
             } else {
                 Toast.makeText(context, "Error al obtener el gestor de descargas", Toast.LENGTH_SHORT).show();
