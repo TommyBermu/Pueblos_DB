@@ -43,24 +43,24 @@ public class LibroAdapter extends RecyclerView.Adapter<LibroAdapter.LibroViewHol
         holder.title.setText(libro.getTitulo());
         holder.description.setText(libro.getDescripcion_libro());
 
-        holder.button_download.setOnClickListener(v -> {
+        holder.button_download.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String linkLibro = libro.getLink_libro();
 
-            // Obtener la URL del libro (link_libro)
-            String linkLibro = libro.getLink_libro();
+                FileDownloader fileDownloader = new FileDownloader();
 
-            // Crear una instancia de FileDownloader y llamar al método downloadFile
-            FileDownloader fileDownloader = new FileDownloader();
+                // Extraer el nombre del archivo de la URL
+                String nombreArchivo = linkLibro.substring(linkLibro.lastIndexOf('/') + 1); // Ejemplo: "1630527012000.pdf"
 
-            // Extraer el nombre del archivo de la URL
-            String nombreArchivo = linkLibro.substring(linkLibro.lastIndexOf('/') + 1); // Ejemplo: "1630527012000.pdf"
-
-            if (ContextCompat.checkSelfPermission(v.getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions((Activity) v.getContext(),
-                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE);
-            } else {
-                fileDownloader.downloadFile(v.getContext(), libro.getLink_libro(), libro.getTitulo());
-                Toast.makeText(v.getContext(), "La descarga de "+libro.getTitulo()+" ha finalizado", Toast.LENGTH_LONG).show();
+                if (ContextCompat.checkSelfPermission(v.getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions((Activity) v.getContext(),
+                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE);
+                } else {
+                    fileDownloader.downloadFile(v.getContext(), libro.getLink_libro(), libro.getTitulo());
+                    Toast.makeText(v.getContext(), "La descarga de "+libro.getTitulo()+" ha finalizado", Toast.LENGTH_LONG).show();
+                }
             }
         });
     }
