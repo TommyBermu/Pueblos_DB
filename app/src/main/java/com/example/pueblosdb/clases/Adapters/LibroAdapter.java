@@ -1,5 +1,7 @@
 package com.example.pueblosdb.clases.Adapters;
 
+import static com.example.pueblosdb.clases.FileDownloader.REQUEST_CODE;
+
 import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.view.LayoutInflater;
@@ -21,8 +23,6 @@ import java.util.ArrayList;
 public class LibroAdapter extends RecyclerView.Adapter<LibroAdapter.LibroViewHolder> implements RecyclerViewClickListener {
     private ArrayList<Libro> mLibros;
     private RecyclerViewClickListener listener;
-    private static final int REQUEST_CODE = 101;
-
 
     public LibroAdapter(ArrayList<Libro> mLibros, RecyclerViewClickListener listener){
         this.mLibros = mLibros;
@@ -50,13 +50,9 @@ public class LibroAdapter extends RecyclerView.Adapter<LibroAdapter.LibroViewHol
 
                 FileDownloader fileDownloader = new FileDownloader();
 
-                // Extraer el nombre del archivo de la URL
-                String nombreArchivo = linkLibro.substring(linkLibro.lastIndexOf('/') + 1); // Ejemplo: "1630527012000.pdf"
+                if (ContextCompat.checkSelfPermission(v.getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions((Activity) v.getContext(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE);
 
-                if (ContextCompat.checkSelfPermission(v.getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                        != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions((Activity) v.getContext(),
-                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE);
                 } else {
                     fileDownloader.downloadFile(v.getContext(), libro.getLink_libro(), libro.getTitulo());
                     Toast.makeText(v.getContext(), "La descarga de "+libro.getTitulo()+" ha finalizado", Toast.LENGTH_LONG).show();

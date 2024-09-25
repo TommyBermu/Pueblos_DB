@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/light_beige"
-    tools:context=".RequestConvFragment">
+    tools:context=".ConvSolicitudesFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -33,7 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="Convocatorias con Peticiones"
+            android:text="Aspirantes a la convocatoria"
             android:textColor="@color/dark_grey"
             android:textSize="24dp"
             app:layout_constraintEnd_toEndOf="@+id/guideline4"
@@ -41,7 +41,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerViewRequestConv"
+            android:id="@+id/recyclerViewConvSolicitudes"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginTop="10dp"

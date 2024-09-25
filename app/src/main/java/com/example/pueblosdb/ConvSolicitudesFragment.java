@@ -19,8 +19,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.example.pueblosdb.clases.Adapters.FolderChangeAdapter;
 import com.example.pueblosdb.clases.Adapters.HashMapAdapter;
 import com.example.pueblosdb.clases.Adapters.RecyclerViewClickListener;
+import com.example.pueblosdb.clases.Adapters.StringAdapter;
+import com.example.pueblosdb.clases.FolderChange;
 import com.example.pueblosdb.clases.User;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -33,52 +36,51 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 
-public class GroupSolicitudesFragment extends Fragment implements RecyclerViewClickListener {
+public class ConvSolicitudesFragment extends Fragment implements RecyclerViewClickListener {
     private ArrayList<HashMap<String, Object>> peticion;
     private HashMapAdapter adapter;
-    private String group;
+    private String conv;
     private User usuario;
     private FragmentActivity context;
 
     private final DatabaseReference root = FirebaseDatabase.getInstance().getReference();
 
-    public GroupSolicitudesFragment() {
+    public ConvSolicitudesFragment() {
         // Required empty public constructor
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_group_solicitudes, container, false);
+        return inflater.inflate(R.layout.fragment_conv_solicitudes, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         context = requireActivity();
         usuario = ((MainActivity) context).getUsuario();
 
         if (getArguments() != null){
-            group = getArguments().getString("grupo");
-            Toast.makeText(context, group, Toast.LENGTH_SHORT).show();
+            conv = getArguments().getString("convocatoria");
+            Toast.makeText(context, conv, Toast.LENGTH_SHORT).show();
         }
 
-        RecyclerView recyclerView = view.findViewById(R.id.recyclerViewGroupSolicitudes);
+        RecyclerView recyclerView = view.findViewById(R.id.recyclerViewConvSolicitudes);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
         peticion = new ArrayList<>();
-        adapter = new HashMapAdapter(peticion, context, this, HashMapAdapter.Tipo.GRUPO, group);
+        adapter = new HashMapAdapter(peticion, context, this, HashMapAdapter.Tipo.CONVOCATORIA, conv);
         recyclerView.setAdapter(adapter);
 
-        root.child("requests-groups").child(group).addValueEventListener(new ValueEventListener() {
+        root.child("requests-convs").child(conv).addValueEventListener(new ValueEventListener() {
             @SuppressLint("NotifyDataSetChanged") // solo hace que no se muestre un warning en en adapter.notifyDataSetChanged()
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()){
                     GenericTypeIndicator<HashMap<String, Object>> typeIndicator = new GenericTypeIndicator<HashMap<String, Object>>() {};
                     HashMap<String, Object> hashmap = dataSnapshot.getValue(typeIndicator);
-                    assert hashmap != null : " hashmap es null en GroupSolicitudesFragment";
+                    assert hashmap != null : " hashmap es null en ConvSolicitudesFragment";
                     if (Objects.equals(hashmap.get("accepted"), null)) // TODO si se quiere filtrar por lo que ya están o por los que se rechazaron, se cambia entre true y false
                         peticion.add(hashmap);
                 }

@@ -71,7 +71,6 @@ public class ChangeFolderFragment extends Fragment {
 
         dialog = alertDialog.create();
 
-
         btnDialog = alertCustomDialog.findViewById(R.id.btnEntendido);
         btnDialog.setOnClickListener(new View.OnClickListener() {
             @Override

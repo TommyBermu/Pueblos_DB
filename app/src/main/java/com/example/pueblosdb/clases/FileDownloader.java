@@ -19,7 +19,7 @@ import java.io.File;
 
 public class FileDownloader {
     private long downloadId;
-    private BroadcastReceiver receiver;
+    public static final int REQUEST_CODE = 101;
 
     public void downloadFile(Context context, String url, String fileName) {
         try {

@@ -360,6 +360,7 @@ public class User {
         User user = document.toObject(User.class);
         SharedPreferences.Editor prefsEditor = prefs.edit();
         assert user != null: "Usuario nulo D:";
+
         prefsEditor.putString("name", user.getNombre());
         prefsEditor.putString("surname", user.getApellidos());
         prefsEditor.putString("cargo", user.getCargo().toString());

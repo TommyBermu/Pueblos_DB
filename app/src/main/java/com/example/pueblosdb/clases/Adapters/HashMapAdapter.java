@@ -18,63 +18,56 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
-public class FolderChangeAdapter extends RecyclerView.Adapter<FolderChangeAdapter.FolderChangeViewHolder> implements RecyclerViewClickListener {
-    private ArrayList<FolderChange> mChanges;
+public class HashMapAdapter extends RecyclerView.Adapter<HashMapAdapter.HashMapViewHolder> implements RecyclerViewClickListener{
+    private ArrayList<HashMap<String, Object>> mHashMaps;
     private RecyclerViewClickListener listener;
     private Context mContext;
+    private Tipo tipo;
+    private String folder;
     private final FirebaseFirestore db  = FirebaseFirestore.getInstance();
 
-    public FolderChangeAdapter(ArrayList<FolderChange> mChanges, Context context, RecyclerViewClickListener listener) {
-        this.mChanges = mChanges;
+    public HashMapAdapter(ArrayList<HashMap<String, Object>> mHashMaps, Context context, RecyclerViewClickListener listener, Tipo tipo, String folder) {
+        this.mHashMaps = mHashMaps;
         this.listener = listener;
         this.mContext = context;
+        this.tipo = tipo;
+        this.folder = folder;
     }
 
     @NonNull
     @Override
-    public FolderChangeAdapter.FolderChangeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public HashMapAdapter.HashMapViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_request, parent, false);
-        return new FolderChangeAdapter.FolderChangeViewHolder(view, listener);
+        return new HashMapAdapter.HashMapViewHolder(view, listener);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull FolderChangeAdapter.FolderChangeViewHolder holder, int position) {
-        FolderChange folderChange = mChanges.get(position);
+    public void onBindViewHolder(@NonNull HashMapAdapter.HashMapViewHolder holder, int position) {
+        HashMap<String, Object> hashMap = mHashMaps.get(position);
 
-        holder.nombre.setText(folderChange.getName());
-        holder.email.setText(folderChange.getEmail());
+        holder.nombre.setText(hashMap.get("name").toString());
+        holder.email.setText(hashMap.get("email").toString());
 
         holder.deny.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(v.getContext(), "Presione de nuevo para confirmar la denegación", Toast.LENGTH_SHORT).show();
-                holder.deny.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        actualizarPeticion(false, folderChange);
-                    }
-                });
+                actualizarPeticion(false, hashMap);
             }
         });
 
         holder.accept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(v.getContext(), "Presione de nuevo para confirmar la aceptación", Toast.LENGTH_SHORT).show();
-                holder.accept.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        actualizarPeticion(true, folderChange);
-                    }
-                });
+                actualizarPeticion(true, hashMap);
             }
         });
     }
 
     @Override
     public int getItemCount() {
-        return mChanges.size();
+        return mHashMaps.size();
     }
 
     @Override
@@ -83,35 +76,38 @@ public class FolderChangeAdapter extends RecyclerView.Adapter<FolderChangeAdapte
     @Override
     public void onItemLongCliked(int position) {}
 
-    private void actualizarPeticion(boolean accepted, @NonNull FolderChange folderChange) {
-        DatabaseReference root = FirebaseDatabase.getInstance().getReference();
-        root.child("requests-folder_change").child(folderChange.getRef()).removeValue();
-        FirebaseStorage storageReference = FirebaseStorage.getInstance();
-        storageReference.getReferenceFromUrl(folderChange.getDocument_url()).delete();
-        storageReference.getReferenceFromUrl(folderChange.getLetter_url()).delete();
-        mChanges.remove(folderChange);
-
+    private void actualizarPeticion(boolean accepted, @NonNull HashMap<String, Object> mapa) {
         if (accepted){
-            db.collection("users").document(folderChange.getEmail()).update("carpeta", folderChange.getCarpeta()).addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void unused) {
-                    String key = root.push().getKey();
-                    assert key != null;
-                    root.child("folders").child(folderChange.getCarpeta()).child(key).setValue(folderChange.getEmail());
-                    Toast.makeText(mContext, "Petición aceptada", Toast.LENGTH_SHORT).show();
-                }
-            });
+            Toast.makeText(mContext, "Petición aceptada", Toast.LENGTH_SHORT).show();
+            putDA(true, mapa);
         }
         else {
             Toast.makeText(mContext, "Petición denegada", Toast.LENGTH_SHORT).show();
+            putDA(false, mapa);
+        }
+        mHashMaps.remove(mapa);
+    }
+
+    private void putDA(boolean b, HashMap<String, Object> mapa){
+        DatabaseReference root = FirebaseDatabase.getInstance().getReference();
+        String reference = mapa.get("ref").toString();
+        if (tipo.equals(Tipo.CONVOCATORIA)){
+            root.child("requests-convs").child(folder).child(reference).child("accepted").setValue(b);
+        } else if (tipo.equals(Tipo.GRUPO)){
+            root.child("requests-groups").child(folder).child(reference).child("accepted").setValue(b);
         }
     }
 
-    public static class FolderChangeViewHolder extends RecyclerView.ViewHolder {
+    public enum Tipo{
+        CONVOCATORIA,
+        GRUPO
+    }
+
+    public static class HashMapViewHolder extends RecyclerView.ViewHolder{
         TextView nombre, email;
         Button deny, accept;
 
-        public FolderChangeViewHolder(@NonNull View itemView, RecyclerViewClickListener listener) {
+        public HashMapViewHolder(@NonNull View itemView, RecyclerViewClickListener listener) {
             super(itemView);
 
             nombre = itemView.findViewById(R.id.nombre_comunero);

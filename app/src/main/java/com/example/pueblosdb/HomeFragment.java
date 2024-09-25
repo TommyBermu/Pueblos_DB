@@ -108,10 +108,13 @@ public class HomeFragment extends Fragment implements RecyclerViewClickListener 
             public void onClick(View v) {
                 Map<String, Object> mapa = new HashMap<>();
                 mapa.put("email", usuario.getEmail());
-                mapa.put("accepted", false); //false porque, aunque se incriba, no significa que sea aceptado
+                mapa.put("name", usuario.getNombre() + " " + usuario.getApellidos());
+                mapa.put("accepted", null); // null porque, aunque se incriba, no significa que sea aceptado
 
                 String path = root.push().getKey();
                 assert path != null;
+
+                mapa.put("ref", path);
 
                 // se agrega la inscripcion a la convocatoria en la base de datos
                 root.child("requests-convs").child(titulo).child(path).setValue(mapa).addOnCompleteListener(new OnCompleteListener<Void>() {

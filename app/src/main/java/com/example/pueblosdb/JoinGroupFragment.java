@@ -74,10 +74,13 @@ public class JoinGroupFragment extends Fragment {
 
                 Map<String, Object> mapa = new HashMap<>();
                 mapa.put("email", usuario.getEmail());
-                mapa.put("accepted", false);//false porque, aunque se incriba, no significa que sea aceptado
+                mapa.put("name", usuario.getNombre() + " " + usuario.getApellidos());
+                mapa.put("accepted", null);// null porque, aunque se incriba, no significa que sea aceptado
 
                 String path = root.push().getKey();
                 assert path != null;
+
+                mapa.put("ref", path);
 
                 root.child(nombre_grupo).child(path).setValue(mapa).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
