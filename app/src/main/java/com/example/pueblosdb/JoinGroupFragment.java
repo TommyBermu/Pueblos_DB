@@ -40,20 +40,6 @@ public class JoinGroupFragment extends Fragment {
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        requireActivity().getSupportFragmentManager().setFragmentResultListener("data", this, new FragmentResultListener() {
-            @Override
-            public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
-                Glide.with(requireActivity()).load(result.getString("link")).into(imv_poster);
-                tv_name.setText(result.getString("nombre"));
-                tv_description.setText(result.getString("descripcion"));
-            }
-        });
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_join_group, container, false);
     }
@@ -61,11 +47,19 @@ public class JoinGroupFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        usuario = ((MainActivity) requireActivity()).getUsuario();
 
         imv_poster = view.findViewById(R.id.group_poster);
         tv_name = view.findViewById(R.id.group_name);
         tv_description = view.findViewById(R.id.group_descrption);
+
+        if (getArguments() != null){
+            Bundle result = getArguments();
+            Glide.with(requireActivity()).load(result.getString("link")).into(imv_poster);
+            tv_name.setText(result.getString("nombre"));
+            tv_description.setText(result.getString("descripcion"));
+        }
+
+        usuario = ((MainActivity) requireActivity()).getUsuario();
 
         Button btn_join = view.findViewById(R.id.join_group);
         btn_join.setOnClickListener(new View.OnClickListener() {

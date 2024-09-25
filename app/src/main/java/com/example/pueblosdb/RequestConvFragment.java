@@ -10,8 +10,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.pueblosdb.clases.Adapters.RecyclerViewClickListener;
 
-public class RequestConvFragment extends Fragment {
+
+public class RequestConvFragment extends Fragment implements RecyclerViewClickListener {
 
     public RequestConvFragment() {
         // Required empty public constructor
@@ -26,6 +28,16 @@ public class RequestConvFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+
+    }
+
+    @Override
+    public void onItemCliked(int position) {
+
+    }
+
+    @Override
+    public void onItemLongCliked(int position) {
 
     }
 }

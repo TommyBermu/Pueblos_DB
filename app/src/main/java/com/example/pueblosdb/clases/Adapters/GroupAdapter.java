@@ -1,26 +1,21 @@
-package com.example.pueblosdb.clases;
+package com.example.pueblosdb.clases.Adapters;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.pueblosdb.R;
-
+import com.example.pueblosdb.clases.Group;
 import java.util.ArrayList;
 
 public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHolder> implements RecyclerViewClickListener {
     private ArrayList<Group> mGroups;
-    private Context mContext;
     private RecyclerViewClickListener listener;
 
-    public GroupAdapter(ArrayList<Group> mGroups, Context mContext, RecyclerViewClickListener listener) {
+    public GroupAdapter(ArrayList<Group> mGroups, RecyclerViewClickListener listener) {
         this.mGroups = mGroups;
-        this.mContext = mContext;
         this.listener = listener;
     }
 
@@ -44,6 +39,9 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
     @Override
     public void onItemCliked(int position) {}
 
+    @Override
+    public void onItemLongCliked(int position) {}
+
     public static class GroupViewHolder extends RecyclerView.ViewHolder {
         TextView title;
 
@@ -61,6 +59,19 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
                             listener.onItemCliked(pos);
                         }
                     }
+                }
+            });
+
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    if (listener != null){
+                        int pos = getAbsoluteAdapterPosition();
+                        if (pos != RecyclerView.NO_POSITION){
+                            listener.onItemLongCliked(pos);
+                        }
+                    }
+                    return true;
                 }
             });
         }

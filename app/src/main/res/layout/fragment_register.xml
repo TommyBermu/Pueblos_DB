@@ -93,10 +93,9 @@
             android:textColorHint="@color/light_coffee"
             app:layout_constraintBottom_toTopOf="@+id/crear_registro"
             app:layout_constraintEnd_toEndOf="@id/guideline6"
-            app:layout_constraintHorizontal_bias="0.484"
             app:layout_constraintStart_toStartOf="@id/guideline5"
             app:layout_constraintTop_toTopOf="@id/view"
-            app:layout_constraintVertical_bias="0.223" />
+            app:layout_constraintVertical_bias="0.22" />
 
         <EditText
             android:id="@+id/apellidos"

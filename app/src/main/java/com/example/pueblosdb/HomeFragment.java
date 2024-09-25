@@ -19,8 +19,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 import com.example.pueblosdb.clases.Publicacion;
-import com.example.pueblosdb.clases.PublicacionAdapter;
-import com.example.pueblosdb.clases.RecyclerViewClickListener;
+import com.example.pueblosdb.clases.Adapters.PublicacionAdapter;
+import com.example.pueblosdb.clases.Adapters.RecyclerViewClickListener;
 import com.example.pueblosdb.clases.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -60,7 +60,7 @@ public class HomeFragment extends Fragment implements RecyclerViewClickListener 
         super.onViewCreated(view, savedInstanceState);
         usuario = ((MainActivity) requireActivity()).getUsuario();
 
-        RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
+        RecyclerView recyclerView = view.findViewById(R.id.recyclerViewHome);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
 
@@ -153,5 +153,10 @@ public class HomeFragment extends Fragment implements RecyclerViewClickListener 
                 dialog.cancel();
             }
         });
+    }
+
+    @Override
+    public void onItemLongCliked(int position) {
+        //TODO implementar algo xd
     }
 }

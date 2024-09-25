@@ -1,23 +1,20 @@
-package com.example.pueblosdb.clases;
+package com.example.pueblosdb.clases.Adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.pueblosdb.R;
+import com.example.pueblosdb.clases.Publicacion;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Locale;
 
 public class PublicacionAdapter extends RecyclerView.Adapter<PublicacionAdapter.PublicacionViewHolder> implements RecyclerViewClickListener{
     private ArrayList<Publicacion> mPublicaciones;
@@ -58,6 +55,9 @@ public class PublicacionAdapter extends RecyclerView.Adapter<PublicacionAdapter.
     @Override
     public void onItemCliked(int position) {}
 
+    @Override
+    public void onItemLongCliked(int position) {}
+
 
     public static class PublicacionViewHolder extends RecyclerView.ViewHolder {
         ImageView image;
@@ -82,6 +82,19 @@ public class PublicacionAdapter extends RecyclerView.Adapter<PublicacionAdapter.
                             listener.onItemCliked(pos);
                         }
                     }
+                }
+            });
+
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    if (listener != null){
+                        int pos = getAbsoluteAdapterPosition();
+                        if (pos != RecyclerView.NO_POSITION){
+                            listener.onItemLongCliked(pos);
+                        }
+                    }
+                    return true;
                 }
             });
         }

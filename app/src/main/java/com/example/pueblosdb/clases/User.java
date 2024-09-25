@@ -3,6 +3,7 @@ package com.example.pueblosdb.clases;
 import static android.content.Context.MODE_PRIVATE;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
@@ -408,6 +409,11 @@ public class User {
     }
 
     public void replaceFragment(Fragment fragment){
+        context.getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+    }
+
+    public void replaceFragment(Fragment fragment, Bundle bundle){
+        fragment.setArguments(bundle);
         context.getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
     }
 

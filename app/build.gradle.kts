@@ -1,6 +1,3 @@
-import com.android.build.api.dsl.Lint
-import com.android.build.api.dsl.LintOptions
-
 plugins {
     alias(libs.plugins.androidApplication)
     id("com.google.gms.google-services")

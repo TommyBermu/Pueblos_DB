@@ -7,7 +7,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
-        android:layout_height="300dp"
+        android:layout_height="200dp"
         android:background="@drawable/rounded_layout_5"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -22,31 +22,15 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="20dp"
             android:maxWidth="300dp"
-            android:text="¿Estas seguro que te quieres inscribir a esta convocatoria?"
+            android:text="¿Estas seguro que te quieres ver el perfil de este comunero?"
             android:textColor="@color/black"
-            android:textSize="22sp"
+            android:textSize="20sp"
+            android:textAlignment="center"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/textView6"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/textView6"
-            android:layout_width="260dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_margin="20dp"
-            android:gravity="center_horizontal"
-            android:maxWidth="260dp"
-            android:text="El personal de la administración estará revisando tu solicitud"
-            android:textSize="18sp"
             app:layout_constraintBottom_toTopOf="@+id/confirmar"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView7" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/confirmar"
@@ -61,7 +45,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/cancelar"
-            app:layout_constraintTop_toBottomOf="@+id/textView6" />
+            app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/cancelar"

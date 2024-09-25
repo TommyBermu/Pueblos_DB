@@ -1,7 +1,6 @@
 package com.example.pueblosdb;
 
 import android.annotation.SuppressLint;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,23 +12,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.example.pueblosdb.clases.Group;
-import com.example.pueblosdb.clases.GroupAdapter;
-import com.example.pueblosdb.clases.Publicacion;
-import com.example.pueblosdb.clases.PublicacionAdapter;
-import com.example.pueblosdb.clases.RecyclerViewClickListener;
+import com.example.pueblosdb.clases.Adapters.GroupAdapter;
+import com.example.pueblosdb.clases.Adapters.RecyclerViewClickListener;
 import com.example.pueblosdb.clases.User;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 public class GroupsFragment extends Fragment implements RecyclerViewClickListener {
     private ArrayList<Group> grupos;
@@ -58,7 +52,7 @@ public class GroupsFragment extends Fragment implements RecyclerViewClickListene
         recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
 
         grupos = new ArrayList<>();
-        adapter = new GroupAdapter(grupos, requireActivity(), this); //TODO
+        adapter = new GroupAdapter(grupos, this);
         recyclerView.setAdapter(adapter);
 
         root.child("groups").addValueEventListener(new ValueEventListener() {
@@ -83,7 +77,12 @@ public class GroupsFragment extends Fragment implements RecyclerViewClickListene
         bundle.putString("nombre", grupos.get(position).getName());
         bundle.putString("descripcion", grupos.get(position).getDescription());
         bundle.putString("link", grupos.get(position).getLink_poster());
-        requireActivity().getSupportFragmentManager().setFragmentResult("data", bundle);
-        usuario.replaceFragment(new JoinGroupFragment());
+
+        usuario.replaceFragment(new JoinGroupFragment(), bundle);
+    }
+
+    @Override
+    public void onItemLongCliked(int position) {
+        //TODO implementar algo xd
     }
 }

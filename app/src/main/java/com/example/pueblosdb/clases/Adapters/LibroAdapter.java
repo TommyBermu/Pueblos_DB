@@ -1,32 +1,21 @@
-package com.example.pueblosdb.clases;
+package com.example.pueblosdb.clases.Adapters;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.Manifest;
-
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.bumptech.glide.Glide;
 import com.example.pueblosdb.R;
-import com.google.android.material.snackbar.Snackbar;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-
-import java.io.File;
-import java.io.IOException;
+import com.example.pueblosdb.clases.FileDownloader;
+import com.example.pueblosdb.clases.Libro;
 import java.util.ArrayList;
 
 public class LibroAdapter extends RecyclerView.Adapter<LibroAdapter.LibroViewHolder> implements RecyclerViewClickListener {
@@ -85,6 +74,9 @@ public class LibroAdapter extends RecyclerView.Adapter<LibroAdapter.LibroViewHol
     @Override
     public void onItemCliked(int position) {}
 
+    @Override
+    public void onItemLongCliked(int position) {}
+
     public static class LibroViewHolder extends RecyclerView.ViewHolder {
         //ImageView image;  para caratula
         TextView title;
@@ -107,6 +99,19 @@ public class LibroAdapter extends RecyclerView.Adapter<LibroAdapter.LibroViewHol
                             listener.onItemCliked(pos);
                         }
                     }
+                }
+            });
+
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    if (listener != null){
+                        int pos = getAbsoluteAdapterPosition();
+                        if (pos != RecyclerView.NO_POSITION){
+                            listener.onItemLongCliked(pos);
+                        }
+                    }
+                    return true;
                 }
             });
         }

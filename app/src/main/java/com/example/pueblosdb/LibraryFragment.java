@@ -2,29 +2,23 @@ package com.example.pueblosdb;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.example.pueblosdb.clases.Group;
-import com.example.pueblosdb.clases.GroupAdapter;
+import com.example.pueblosdb.clases.Adapters.RecyclerViewClickListener;
 import com.example.pueblosdb.clases.Libro;
-import com.example.pueblosdb.clases.LibroAdapter;
-import com.example.pueblosdb.clases.RecyclerViewClickListener;
+import com.example.pueblosdb.clases.Adapters.LibroAdapter;
 import com.example.pueblosdb.clases.User;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
 import java.util.ArrayList;
 
 public class LibraryFragment extends Fragment implements RecyclerViewClickListener {
@@ -79,5 +73,10 @@ public class LibraryFragment extends Fragment implements RecyclerViewClickListen
         bundle.putString("link", grupos.get(position).getLink_poster());
         requireActivity().getSupportFragmentManager().setFragmentResult("data", bundle);
         usuario.replaceFragment(new JoinGroupFragment());*/
+    }
+
+    @Override
+    public void onItemLongCliked(int position) {
+        //TODO implementar algo xd
     }
 }

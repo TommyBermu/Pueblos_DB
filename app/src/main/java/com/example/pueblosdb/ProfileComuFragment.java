@@ -175,8 +175,8 @@ public class ProfileComuFragment extends Fragment {
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
                 View dialogView = getLayoutInflater().inflate(R.layout.dialog_change_email, null);
-
                 builder.setView(dialogView);
+
                 AlertDialog dialog = builder.create();
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialog.show();

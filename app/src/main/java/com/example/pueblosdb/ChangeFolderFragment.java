@@ -31,7 +31,7 @@ import com.google.firebase.storage.UploadTask;
 public class ChangeFolderFragment extends Fragment {
     private User usuario;
 
-    EditText editText, editText2;
+    EditText editText, editText2, editText3;
     Button btn, btnDialog;
     AlertDialog dialog;
 
@@ -60,6 +60,7 @@ public class ChangeFolderFragment extends Fragment {
 
         editText = view.findViewById(R.id.etSelectFile);
         editText2 = view.findViewById(R.id.etSelectFileLetter);
+        editText3 = view.findViewById(R.id.folder_to_change);
         btn = view.findViewById(R.id.btnSendFile);
         btn.setEnabled(false);
 
@@ -159,7 +160,13 @@ public class ChangeFolderFragment extends Fragment {
                         String path = databaseReference.push().getKey();
                         assert path != null : "Path is null";
 
-                        databaseReference.child(path).setValue(new FolderChange(usuario.getEmail(), uriTask1.getResult().toString(), uriTask2.getResult().toString()));
+                        databaseReference.child(path).setValue(new FolderChange(
+                                usuario.getNombre() + " " + usuario.getApellidos(),
+                                usuario.getEmail(),
+                                uriTask1.getResult().toString(),
+                                uriTask2.getResult().toString(),
+                                path,
+                                editText3.getText().toString()));
                     }
                 });
             }

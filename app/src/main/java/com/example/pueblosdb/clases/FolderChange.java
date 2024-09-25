@@ -1,15 +1,26 @@
 package com.example.pueblosdb.clases;
 
 public class FolderChange {
-    public String email, document_url, letter_url;
+    public String name, email, document_url, letter_url, ref, carpeta;
 
     public FolderChange() {
     }
 
-    public FolderChange(String email, String document_url, String letter_url) {  //Añadir tambien el nombre, apellido y correo
+    public FolderChange(String name, String email, String document_url, String letter_url, String ref, String carpeta) {  //Añadir tambien el nombre, apellido y correo
+        this.name = name;
         this.email = email;
         this.document_url = document_url;
         this.letter_url = letter_url;
+        this.ref = ref;
+        this.carpeta = carpeta;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getEmail() {
@@ -34,5 +45,21 @@ public class FolderChange {
 
     public void setLetter_url(String letter_url) {
         this.letter_url = letter_url;
+    }
+
+    public String getRef() {
+        return ref;
+    }
+
+    public void setRef(String ref) {
+        this.ref = ref;
+    }
+
+    public String getCarpeta() {
+        return carpeta;
+    }
+
+    public void setCarpeta(String carpeta) {
+        this.carpeta = carpeta;
     }
 }
